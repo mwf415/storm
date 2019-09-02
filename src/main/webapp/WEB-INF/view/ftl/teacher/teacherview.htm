@@ -1,0 +1,89 @@
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<#import "../decorators/spring.ftl" as spring />
+<html >
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+</head>
+<body>
+<!--right-->
+
+<#include "../decorators/left1.ftl" ><div class="main_right" id="right">
+ <div class="right_em_con">
+      <div class="title">
+        <ul>
+          <li class="on">基本信息</li>
+         </ul>
+       </div>
+      <div class="right_em_con2">
+       <table class="table table-bordered table-hover">
+           <tr>
+             <td width="15%" class="td_r">教师ID</td>
+             <td width="35%"><span>${user.id!}</span></td>
+             <td class="td_r">教师编号</td>
+             <td width="35%"><span>${user.loginName!}</span></td>
+          </tr>	
+          <tr>
+            <td class="td_r">教师名字</td>
+            <td width="35%"><span>${user.realName!}</span></td>
+            <td class="td_r">教师密码</td>
+            <td width="35%"><span>${user.userPass!}</span></td>
+          </tr>
+          <tr>
+            <td class="td_r">所在基地</td>
+            <td width="35%"><span>${user.baseName!}</span></td>
+            <td class="td_r">所在科室</td>
+            <td width="35%"><span>${user.roomName!}</span></td>
+          </tr>
+          <tr>
+            <td class="td_r">性别</td>
+            <td width="35%"><span>${user.sex!}</span></td>
+            <td class="td_r">执照编号</td>
+            <td width="35%"><span>${user.licenId!}</span></td>
+          </tr>
+          <tr>
+            <td class="td_r">毕业院校</td>
+            <td width="35%"><span>${user.gradSchool!}</span></td>
+            <td class="td_r">所学专业</td>
+            <td width="35%"><span>${user.major!}</span></td>
+          </tr>
+          <tr>
+            <td class="td_r">学历</td>
+            <td width="35%"><span>${user.degree!}</span></td>
+            <td class="td_r">学位</td>
+            <td width="35%"><span>${user.xuewei!}</span></td>
+          </tr>
+          <tr>
+            <td class="td_r">职称</td>
+            <td width="35%"><span>${user.staff!}</span></td>
+            <td class="td_r">获取职称时间</td>
+            <td width="35%"><span>${user.staffTime!}</span></td>
+          </tr>
+          <tr>
+            <td class="td_r">电话</td>
+            <td width="35%"><span>${user.telPhone!}</span></td>
+            <td class="td_r">手机</td>
+            <td width="35%"><span>${user.cellPhone!}</span></td>
+          </tr>
+          <tr>
+            <td class="td_r">QQ</td>
+            <td width="35%"><span>${user.qq!}</span></td>
+            <td class="td_r">微信</td>
+            <td width="35%"><span>${user.wechat!}</span></td>
+          </tr>
+           <tr>
+            <td class="td_r">邮箱</td>
+            <td width="35%"><span>${user.email!}</span></td>
+            <td class="td_r">家庭住址</td>
+            <td width="35%"><span>${user.address!}</span></td>
+          </tr>
+          <tr>
+            <td class="td_r">身份证号</td>
+            <td width="35%"><span>${user.cardId!}</span></td>            
+          </tr>
+        </table>
+      </div>
+      <br/><br/>
+</div>
+</div>

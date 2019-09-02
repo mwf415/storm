@@ -1,0 +1,414 @@
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<#import "../decorators/spring.ftl" as spring />
+<!DOCTYPE html>
+<html>
+<head>
+    <#include "../decorators/headtitle.ftl" >
+    <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+</head>
+<!-- 这个事相对于专业基地来说的，主要是为了专业基地修改来用的，还要做一个针对其他通用的查询 -->
+<body>
+<#include "../decorators/left0.ftl" >
+<div class="main_right" id="right">
+    <div class="right_con">
+        <div class="main_search">
+            <form id="searchform">
+                <div style="border: 0px solid silver;height: 30px;padding-top: 3px;">
+                    <input type="hidden" name="li" value="${li!}"/>
+                    <input type="hidden" name="div" value="${div!}"/>
+
+                    <input type="hidden" name="status" value="${status!}"/>
+                    <input type="hidden" name="type" value="${type!}"/>
+                    <input type="hidden" name="pageIndex" value="${pageIndex!'1'}"/>
+
+                    <button type="button" class="btn btn-danger btn-sm" style="float:right;margin-right: 10px"
+                            onclick="addScoreModel()">添 加
+                    </button>
+                </div>
+            </form>
+        </div>
+        <!-- 显示数据的div -->
+        <div id="dataDiv">
+            <div class="main_right" id="right">
+                <table id="tb" class="table table-hover table-bordered">
+                    <tr class="table_title">
+                        <td width="5%">序号</td>
+                        <td width="30%">模板名称</td>
+                        <td width="20%">备注</td>
+                        <td width="10%">操作</td>
+                    </tr>
+                    <#if page.list ?? && page.list ?size gt 0>
+                    <#list page.list as scoreModel>
+                    <tr class="table_td">
+                        <td style="text-align: center;">${((page.pageNum - 1) * page.pageSize) + (scoreModel_index+1)}</td>
+                        <td>${scoreModel.modelName!}</td>
+                        <td>${scoreModel.remark!}</td>
+                        <td style="text-align: center">
+                            <button type="button" class="btn btn-danger btn-sm" onclick="editScoreModel(${scoreModel.modelId})">修 改</button>
+                            <button type="button" class="btn btn-danger btn-sm" onclick="deleteScoreModel(${scoreModel.modelId})"
+                                    style="margin-left: 5px;">删 除
+                            </button>
+                        </td>
+                    </tr>
+                </#list>
+                <#else>
+                <tr class="table_td">
+                    <td colspan="12" align="center">没有符合条件的结果。</td>
+                </tr>
+            </#if>
+            </table>
+            <#include "../decorators/page.htm" />
+        </div>
+    </div>
+</div>
+
+
+<!--弹框内容-->
+<div id="editDialog" title="创建新用户" style="display: none;">
+        <span style="color: red">*</span>注：评分模板名称及评分项为必填项。
+            <span class="validateTips" style="color: red;text-align: center">
+            </span>
+        </span>
+
+    <form id="addScoreModel_form" method="post">
+        <fieldset>
+            <div class="input-group">
+                <span class="input-group-addon">评分模板名称</span>
+                <input type="text" name="modelName" id="modelName" class="form-control" placeholder="请输入评分模板名称！">
+            </div>
+            <div class="input-group">
+                <div style="display: table-cell;padding: 0;width: 90%;" class="scoreitem">
+                    <div>
+                        <span style="padding: 6px 12px;font-size: 14px;font-weight: 400;line-height: 1;color: #555;text-align: center;background-color: #eee;border: 1px solid #ccc;border-radius: 4px;">评分项：</span>
+                        <input type="text" name="itemName0" id="itemName" class="form-control" placeholder="请输入评分模板名称！" style="display: inline-block;width: 56%;float:none;">
+                        <span style="padding: 6px 12px;font-size: 14px;font-weight: 400;line-height: 1;color: #555;text-align: center;background-color: #eee;border: 1px solid #ccc;border-radius: 4px;">总分数：</span>
+                        <input type="text" name="itemScore0" id="itemScore" class="form-control" placeholder="总分数！" style="display: inline-block;width: 9%;float:none;" value="100"><span> 分</span>
+                    </div>
+                </div>
+                <div style="display: table-cell;width: 400px;text-align: right;">
+                    <button type="button" class="btn btn-danger btn-sm addscore" style=";margin-right: 10px;" onclick="">添加评分项</button>
+                </div>
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon">备注</span>
+                <input type="text" name="remark" id="remark" class="form-control" placeholder="请输入评分模板名称！">
+            </div>
+        </fieldset>
+    </form>
+</div>
+
+<script>
+    /*添加评分项条目*/
+    $("#editDialog").delegate(".addscore","click",function(){
+        var num = 1;
+        $(".scoreitem").append('<div>\n' +
+            '                        <span style="padding: 6px 12px;font-size: 14px;font-weight: 400;line-height: 1;color: #555;text-align: center;background-color: #eee;border: 1px solid #ccc;border-radius: 4px;">评分项：</span>\n' +
+            '                        <input type="text" name="itemName" id="itemName'+num+'" class="form-control" placeholder="请输入评分模板名称！" style="display: inline-block;width: 56%;float:none;">\n' +
+            '                        <span style="padding: 6px 12px;font-size: 14px;font-weight: 400;line-height: 1;color: #555;text-align: center;background-color: #eee;border: 1px solid #ccc;border-radius: 4px;">总分数：</span>\n' +
+            '                        <input type="text" name="itemScore" id="itemScore'+num+'" class="form-control" placeholder="总分数！" style="display: inline-block;width: 9%;float:none;" value="100"><span> 分</span>\n' +
+            '                    </div>');
+        num =  ++num;
+    })
+
+    //触发添加模板对话框
+    function addScoreModel() {
+        /*定义添加评分模板dialog*/
+
+        $("#editDialog").dialog({
+            title: "添加评分模板",
+            destroy: true,
+            autoOpen: false,
+            cache:false,
+            height: 610,
+            width: 950,
+            modal: true,
+            close:function(){
+                //$.data( this, 'ui-dialog' )._destroy();
+                //$.data( this, 'ui-dialog',null );
+                //$("#editDialog input[name!=itemScore]").val('');
+                $("#editDialog").html('<span style="color: red">*</span>注：评分模板名称及评分项为必填项。\n' +
+                    '            <span class="validateTips" style="color: red;text-align: center">\n' +
+                    '            </span>\n' +
+                    '        </span>\n' +
+                    '\n' +
+                    '    <form id="addScoreModel_form" method="post">\n' +
+                    '        <fieldset>\n' +
+                    '            <div class="input-group">\n' +
+                    '                <span class="input-group-addon">评分模板名称</span>\n' +
+                    '                <input type="text" name="modelName" id="modelName" class="form-control" placeholder="请输入评分模板名称！">\n' +
+                    '            </div>\n' +
+                    '            <div class="input-group">\n' +
+                    '                <div style="display: table-cell;padding: 0;width: 90%;" class="scoreitem">\n' +
+                    '                    <div>\n' +
+                    '                        <span style="padding: 6px 12px;font-size: 14px;font-weight: 400;line-height: 1;color: #555;text-align: center;background-color: #eee;border: 1px solid #ccc;border-radius: 4px;">评分项：</span>\n' +
+                    '                        <input type="text" name="itemName0" id="itemName" class="form-control" placeholder="请输入评分模板名称！" style="display: inline-block;width: 56%;float:none;">\n' +
+                    '                        <span style="padding: 6px 12px;font-size: 14px;font-weight: 400;line-height: 1;color: #555;text-align: center;background-color: #eee;border: 1px solid #ccc;border-radius: 4px;">总分数：</span>\n' +
+                    '                        <input type="text" name="itemScore0" id="itemScore" class="form-control" placeholder="总分数！" style="display: inline-block;width: 9%;float:none;" value="100"><span> 分</span>\n' +
+                    '                    </div>\n' +
+                    '                </div>\n' +
+                    '                <div style="display: table-cell;width: 400px;text-align: right;">\n' +
+                    '                    <button type="button" class="btn btn-danger btn-sm addscore" style=";margin-right: 10px;" onclick="">添加评分项</button>\n' +
+                    '                </div>\n' +
+                    '            </div>\n' +
+                    '            <div class="input-group">\n' +
+                    '                <span class="input-group-addon">备注</span>\n' +
+                    '                <input type="text" name="remark" id="remark" class="form-control" placeholder="请输入评分模板名称！">\n' +
+                    '            </div>\n' +
+                    '        </fieldset>\n' +
+                    '    </form>');
+            },
+            buttons: {
+                "提交": function () {
+                    var flog = true;
+
+                    var itemNameEles = [];
+                    var itemScoreEles = [];
+                    var param = {};
+                    var itemNamePra = "";
+                    var itemScorePra = "";
+                    $(".scoreitem div").each(function(){
+                        itemNamePra =  $(this).find("input:eq(0)").val().trim();
+                        itemScorePra = $(this).find("input:eq(1)").val().trim();
+
+                        flog = checkParam(flog,itemNamePra,"评分项名称");
+                        flog = checkParam(flog,itemScorePra,"评分项总分数");
+
+                        itemNameEles.push(itemNamePra);
+                        itemScoreEles.push(itemScorePra);
+                    });
+                    var modelName = $("#modelName").val();
+                    var remark = $("#remark").val();
+
+                    flog = checkParam(flog,modelName,"评分模板名称");
+
+                    if(!flog){
+                        $( ".validateTips" ).html(errorMessage);
+                        errorMessage=[];
+                    }else{
+                        param.remark = remark;
+                        param.modelName = modelName;
+                        param.itemNames = itemNameEles;
+                        param.itemScores = itemScoreEles;
+                        $.ajax({
+                            type: "POST",
+                            cache: false,
+                            traditional: true,
+                            datatType: 'json',
+                            url: "<@spring.url '/overallScore/addScoreModel.htm'/>",
+                            data: param,
+                            success:function(data){
+                                alert(data.rspMessage);
+                                window.location.href = "<@spring.url '/overallScore/index.htm'/>";
+                            },
+                            error:function(data){
+                                alert("保存失败，请重试！");
+                            }
+                        });
+                    }
+                },
+                "取消": function () {
+                    $(this).dialog("close");
+                }
+            }
+        }).dialog("open");
+    }
+
+    //修改验证信息
+    var errorMessage = [];
+    function updateTips( t ) {
+        t = "<p style=\"color:red;\">"+t+"</p>";
+        errorMessage.push(t);
+    }
+
+    //校验参数
+    function checkParam(flog,o,Name) {
+        var sta = true;
+        var slength = o.length;
+        if (o == null || slength < 1) {
+            updateTips(Name + "不能为空！");
+            sta = false;
+        }
+        if(flog) {
+            flog = sta;
+        }
+        return flog;
+    }
+
+
+    //触发修改模板对话框
+    function editScoreModel(modelId) {
+        /*修改评分模板*/
+        var edit = $("#editDialog").dialog({
+            title:"修改评分模板",
+            destroy: true,
+            autoOpen: false,
+            cache:false,
+            height: 610,
+            width: 950,
+            modal: true,
+
+            buttons: {
+                "保存": function () {
+                    var flog = true;
+
+                    var itemNameEles = [];
+                    var itemScoreEles = [];
+                    var param = {};
+                    var itemNamePra = "";
+                    var itemScorePra = "";
+                    $(".scoreitem div").each(function(){
+                        itemNamePra =  $(this).find("input:eq(0)").val().trim();
+                        itemScorePra = $(this).find("input:eq(1)").val().trim();
+
+                        flog = checkParam(flog,itemNamePra,"评分项名称");
+                        flog = checkParam(flog,itemScorePra,"评分项总分数");
+
+                        itemNameEles.push(itemNamePra);
+                        itemScoreEles.push(itemScorePra);
+                    });
+                    var modelName = $("#modelName").val();
+                    var remark = $("#remark").val();
+
+                    flog = checkParam(flog,modelName,"评分模板名称");
+
+                    if(!flog){
+                        $( ".validateTips" ).html(errorMessage);
+                        errorMessage=[];
+                    }else{
+                        param.modelId = modelId;
+                        param.remark = remark;
+                        param.modelName = modelName;
+                        param.itemNames = itemNameEles;
+                        param.itemScores = itemScoreEles;
+                        $.ajax({
+                            type: "POST",
+                            cache: false,
+                            traditional: true,
+                            datatType: 'json',
+                            url: "<@spring.url '/overallScore/editScoreModel.htm'/>",
+                            data: param,
+                            success:function(data){
+                                alert(data.rspMessage);
+                                window.location.href = "<@spring.url '/overallScore/index.htm'/>";
+                            },
+                            error:function(data){
+                                alert("修改保存失败，请重试！");
+                            }
+                        });
+                    }
+                },
+                "取消": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+        //请求后端服务获取数据
+        var param1 = {};
+        param1.modelId = modelId;
+        $.ajax({
+            type: "POST",
+            cache: false,
+            traditional: true,
+            datatType: 'json',
+            url: "<@spring.url '/overallScore/findScoreModelById.htm'/>",
+            data: param1,
+            success:function(data){
+                if(data.reqMessage == null || data.reqMessage.trim().length < 1) {
+                    edit.dialog("open");
+                    $("#modelName").val(data.modelName);
+
+                    $(".scoreitem div").each(function () {
+                        $(this).remove();
+                    });
+                    var itemNames = [];
+                    itemNames = data.itemNames;
+                    for (var i = 0; i < itemNames.length; i++) {
+                        var num = 0;
+                        $(".scoreitem").append('<div>\n' +
+                            '                        <span style="padding: 6px 12px;font-size: 14px;font-weight: 400;line-height: 1;color: #555;text-align: center;background-color: #eee;border: 1px solid #ccc;border-radius: 4px;">评分项：</span>\n' +
+                            '                        <input type="text" name="itemName" id="itemName' + num + '" class="form-control" placeholder="请输入评分模板名称！" style="display: inline-block;width: 56%;float:none;" value="' + data.itemNames[i] + '">\n' +
+                            '                        <span style="padding: 6px 12px;font-size: 14px;font-weight: 400;line-height: 1;color: #555;text-align: center;background-color: #eee;border: 1px solid #ccc;border-radius: 4px;">总分数：</span>\n' +
+                            '                        <input type="text" name="itemScore" id="itemScore' + num + '" class="form-control" placeholder="总分数！" style="display: inline-block;width: 9%;float:none;"  value="' + data.itemScores[i] + '"><span> 分</span>\n' +
+                            '                    </div>');
+                        ++num;
+                    }
+                    $("#remark").val(data.remark);
+                }else{
+                    alert(data.rspMessage);
+                }
+            },
+            error:function(data){
+                alert("请求失败，请重试！");
+                window.location.href = "<@spring.url '/overallScore/index.htm'/>";
+            }
+        });
+    }
+
+
+    //删除评分模板
+    function deleteScoreModel(modelId) {
+        var param = {};
+        param.modelId = modelId;
+        if(confirm("您确定删除此模板吗？")) {
+            $.ajax({
+                type: "POST",
+                cache: false,
+                traditional: true,
+                datatType: 'json',
+                url: "<@spring.url '/overallScore/deleteScoreModel.htm'/>",
+                data: param,
+                success: function (data) {
+                    alert(data.rspMessage);
+                    window.location.href = "<@spring.url '/overallScore/index.htm'/>";
+                },
+                error: function (data) {
+                    alert("删除失败，请重试！");
+                }
+            });
+        }
+    }
+
+    function queryUser() {
+        var url = "<@spring.url '/singleArrTurnCont/index.htm'/>";
+        $("#searchform5").attr("action", url).submit();
+    }
+
+    function showArrTurn(id) {
+        var url = '<@spring.url "/singleArrTurnCont/detail.htm?li=${li!}&div=${div!}&baseName=${baseNamed!}&realName=${userNamed!}&grade=${grade!}&type=${type!}&menuOrder=${menuOrder!}&loginName=' + id + '"/>';
+        showView(id, url);
+    }
+
+    //分页按钮调用方法
+    function targetPage(pageIndex) {
+        window.location = '<@spring.url "/overallScore/index.htm?li=${li!}&type=${type!}&baseName=${baseName!}&grade=${grade!}&div=${div!}&menuOrder=${menuOrder!}&pageIndex=' + pageIndex + '"/>';
+    }
+
+    function editArrTurn() {
+        var param = null;
+        var postmethod = "POST";
+        var param = $("#addform3").serialize();
+        var url = "<@spring.url '/arrTurnOneController/arrturnRuleSum.htm'/>";
+        $.ajax({
+            type: postmethod,
+            cache: false,
+            url: url,
+            data: param,
+            success: function (data) {
+                if (data == 'true') {
+                    alert("修改完成");
+                } else if (data == 'false') {
+                    alert("修改失败");
+                    return;
+                }
+            },
+            error: function (xhr, err) {
+                window.location.href = url;
+            }
+        });
+    }
+</script>
+</body>
+</html>

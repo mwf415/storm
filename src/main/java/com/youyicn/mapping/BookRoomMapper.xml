@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youyicn.dao.cycle.BookRoomMapper">
+
+	<insert id="addRoom" parameterType="com.youyicn.entity.cycle.BookRoom"	useGeneratedKeys="true" keyProperty="id">
+	    insert into bookroom (id,classRoomId,roomName,startTime,endTime,activityId,activityName,bookPeople) values (#{id},#{roomName})
+	</insert>
+	
+	<select id="queryAllRoom" resultType="com.youyicn.entity.cycle.BookRoom">
+		select * from bookroom order by startTime asc
+	</select>
+	
+	<select id="queryByName" parameterType="com.youyicn.entity.cycle.BookRoom" resultType="com.youyicn.entity.cycle.BookRoom">
+		select * from bookroom where  roomName=#{roomName} order by startTime asc
+	</select>
+	
+	<delete id="del" parameterType="com.youyicn.entity.cycle.BookRoom" >
+		delete  from bookroom where classRoomId = #{classRoomId}
+	</delete>
+	
+</mapper>

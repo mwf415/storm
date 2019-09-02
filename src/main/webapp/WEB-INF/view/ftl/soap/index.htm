@@ -1,0 +1,102 @@
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<#import "../decorators/spring.ftl" as spring />
+<html >
+<head>
+<#include "../decorators/headtitle.ftl" >
+</head>
+<body>
+<#include "../decorators/left1.ftl" >
+<div class="main_right" id="right">
+	<div class="right_con">
+			<div class="main_search">
+				<form id="searchform" style="height: 30px;">
+					考生姓名 <input name="ksName" type="text" id="ksName" maxlength="18"/> &nbsp; 
+					考生工号 <input name="ksNum" type="text"  size="14" id="ksNum"  />&nbsp; 
+						<input  type="button" value="搜 索" class="look_02" onclick="querySerchList();"/>
+				</form>
+			</div>
+	
+		<div>
+     	<table class="table table-bordered table-hover">
+     	  <tr class="table_title">
+     	   <td width="5%">编号</td>
+     	   	<td width="15%">考生姓名</td>
+	        <td width="15%">考生工号</td>
+	        <td width="15%">考官姓名</td>
+	        <td width="35%" >操作1</td>
+   	      </tr>
+	       	<#if page.list?? && page.list?size gt 0>
+  			<#list page.list as cex>
+    		<tr class="table_td">
+	       	    <td>${cex.activesId!}</td>
+	       	    <td>${cex.ksName!}</td>
+	       	    <td>${cex.ksNum!}</td>
+	       	    <td>${cex.kgName!}</td> 
+	       	    <td>
+	       	    	<#if cex.flag ?? && cex.flag == "1">
+			       	    	<button type="button" class="btn btn-primary btn-xs" onclick="soapview('${cex.id}')">
+				       	    	查看 	
+							</button>
+	       	    		<#if type ?? && type=="r" > 
+			       	    	<button type="button" class="btn btn-warning btn-xs" onclick="updatesoap(${cex.id})">
+		       	    			修改 SOAP
+		       	    		</button>
+		       	    	</#if>      
+	       	    	<#else > 
+		       	    	<#if type ?? && type=="r" > 
+			       	    	<button type="button" class="btn btn-danger btn-xs" onclick="addSoap('${cex.id!}')">
+			       	    		添加SOAP
+			       	    	</button>
+		       	    	<#else>
+		       	    		没有SOAP考评
+       	    		</#if> 
+       	    		</#if>
+	       	    </td>
+     	    </tr>
+     	    <tr class="contentTr">
+      	    	<td colspan="6" ><div id="${cex.id}" class="showViewStyle"></div></td>
+   	 		</tr>
+  			</#list>
+  		<#else>
+  			<tr class="table_td"><td colspan="6" align="center">没有符合条件的结果。</td></tr>
+     	</#if>
+     	 
+   	  </table>
+   	  <#include "../decorators/page.htm" />
+</div>
+ </div>
+</div>      
+  <script type="text/javascript">		
+	function addSoap(id){
+	   window.location = '<@spring.url "/soapController/add_soap.htm?li=${li!}&div=${div!}&menuOrder=${menuOrder!}&type=${type!}&id='+id+'"/>';
+	}
+	function soapview(id){
+		   window.location = '<@spring.url "/soapController/soapview.htm?li=${li!}&div=${div!}&menuOrder=${menuOrder!}&id='+id+'"/>';
+		}	
+
+	function updatesoap(id){
+		   window.location = '<@spring.url "/soapController/toupdatesoap.htm?li=${li!}&div=${div!}&menuOrder=${menuOrder!}&id='+id+'"/>';
+		}
+	
+	function queryRoleList(){
+		window.location = "<@spring.url '/soapController/list.htm?li=li913&div=div_9&menuOrder=0'/>";
+	}
+	
+	function targetPage(pageIndex){
+		var ksName = $("#ksName").val();
+		var ksNum = $("#ksNum").val();
+		var gradeDate = $("#gradeDate").val();				
+		window.location = '<@spring.url "/soapController/list.htm?li=li913&div=div_9&menuOrder=0&pageIndex='+pageIndex+'&ksName='+ksName+'&ksNum='+ksNum+'&gradeDate='+gradeDate+'"/>';
+	}
+   
+   function querySerchList(){
+		if(!$("#searchform").validationEngine("validateField","#ksName")){
+			var ksName = $("#ksName").val();
+			var ksNum = $("#ksNum").val();
+			var gradeDate = $("#gradeDate").val();
+			window.location = '<@spring.url "/soapController/list.htm?li=li913&div=div_9&menuOrder=0&ksName='+ksName+'&ksNum='+ksNum+'&gradeDate='+gradeDate+'"/>';
+			}
+	}
+
+       </script>

@@ -1,0 +1,122 @@
+<#import "../decorators/spring.ftl" as spring />
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html >
+<head><#include "../decorators/headtitle.ftl" >
+</head>
+<body>
+<!--right-->
+<#include "../decorators/left1.ftl" ><div class="main_right" id="right">
+<div class="rig_tab">
+	<div class="rig_tab2">
+		<h1>新增书写病例 <span>(注：带*为必填项)</span></h1>
+		<form id="addform">
+			<table class="table table-hover  table-bordered" >
+				<tr>
+					<td width="15%" class="td_right"><em>*</em> 病人姓名</td>
+					<td width="35%"><input name="illName" id="illName" type="text" class="validate[required,maxSize[50]] text-input"/><a></a></td>
+					<td width="15%" class="td_right"><em>*</em>病人性别</td>
+					<td width="35%"><input name="illSex" id="" type="text" class="validate[required,maxSize[50]] text-input"/><a></a></td>						
+				</tr>
+ 				<tr>
+					<td width="15%" class="td_right"><em>*</em>病人年龄</td>
+					<td width="35%"><input name="illAge" id="illAge" type="text" class="validate[required,maxSize[50]] text-input"/><a></a></td>
+					<td width="15%" class="td_right"><em>*</em>住院号</td>
+					<td width="35%"><input name="illNum" id="illNum" type="text" class="validate[required,maxSize[50]] text-input"/><a></a></td>
+				</tr>
+			
+				<tr>
+					<td width="15%" class="td_right"><em>*</em>病人病室</td>
+					<td width="35%"><input name="illRoom" id="illRoom" type="text" class="validate[required,maxSize[50]] text-input"/><a></a></td>
+					<td width="15%" class="td_right"><em>*</em>病人床号</td>
+					<td width="35%"><input name="illBedNum" id="illBedNum" type="text" class="validate[required,maxSize[50]] text-input"/><a></a></td>
+				</tr>
+				
+				<tr>
+	               <td  class="td_right"><em>*</em>长期医嘱</td>
+	               <td ><textarea name="longAdvice" id="longAdvice"  cols="60" rows="7" class="validate[required,maxSize[250]] text-input"></textarea><a></a></td>
+	            </tr>
+					
+			</table>
+			<div class="rig_tab2" style="margin-left: 100px ">
+				<span><em>*</em>短期医嘱:</span>	
+				<br />
+				<textarea id="shortAdvice" name="shortAdvice" ></textarea>
+				<script type="text/javascript">CKEDITOR.replace('shortAdvice');</script>
+				</br>
+				<span><em>*</em>书写病例</span>
+				</br>
+					<textarea id="caseText" name="caseText"></textarea>
+					<script type="text/javascript">CKEDITOR.replace('caseText');</script>
+	            <br />
+	            <table class="table table-hover  table-bordered" >	
+	            	<tr class="button_tr">
+	                	<td>&nbsp;</td>
+	               	 	<td>
+		 	              	<input  type="button" onclick="addwritecase()" value="新 建" class="main_button"/>&nbsp;&nbsp;
+	              	 	</td>
+					</tr>   
+				</table>
+			</div>
+		</form>
+	</div>
+</div>
+
+
+<div style="display: none;">
+        	<a id="addSuccessed" href="#" onclick="showMessageDialog(event,'书写病例新建成功','<@spring.url '/swriteCaseCont/writeCaseindex.htm?li=li511&div=div_5&menuOrder=0'/>','closeWindow();');" ></a>
+        	<a id="addFailed" href="#" onclick="showMessageDialog(event,'书写病例新建失败','','');" ></a>
+ </div>
+
+<script>
+	function addwritecase(){
+		CKupdate();
+		var param = null;
+		var postmethod = "POST";
+		var url ="<@spring.url '/swriteCaseCon/writeCasesubmit.htm'/>";
+		var param = $("#addform").serialize();
+		$.ajax({
+			   type: postmethod,
+			   cache: false,
+			   url: url,
+			   data : param,
+			   success: function(data){
+			    if(!validateFieldMs(data)){
+					return;
+				}
+				if(data == 'true'){
+					tip(1,true);
+					return;
+				}else if(data == 'false'){
+					tip(1,false);
+					return;
+				}
+				showMessageDialog(null,data,'','');
+			   },
+			   error:function(xhr,err){
+				   window.location.href=url; 
+			}
+		});
+	}
+
+	function tip(type,bool){
+		if(type == 1){
+			if(bool){
+				document.getElementById("addSuccessed").click();
+				return;
+			}
+			document.getElementById("addFailed").click();
+		}
+	}
+
+	
+	function CKupdate() {
+	       for (instance in CKEDITOR.instances)
+	           CKEDITOR.instances[instance].updateElement();
+	   }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.youyicn.dao.RolePermissionMapper" >
+  <resultMap id="BaseResultMap" type="com.youyicn.entity.RolePermission" >
+  <result column="id" property="id" jdbcType="BIGINT" />
+    <result column="rid" property="rid" jdbcType="BIGINT" />
+    <result column="pid" property="pid" jdbcType="BIGINT" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id,rid, pid
+  </sql>
+  
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.youyicn.entity.RolePermission" >
+    insert into cycle_role_permission (rid, pid)
+    values (#{rid,jdbcType=BIGINT}, #{pid,jdbcType=BIGINT})
+    </insert>
+    
+	  <!-- 根据角色ID && 权限ID删除-->
+	  <delete id="delete">
+	  	delete from cycle_role_permission where rid =  #{rid,jdbcType=BIGINT}
+	  	and  pid =  #{pid,jdbcType=BIGINT}
+	  </delete>
+	  
+	  <delete id="deleteByRid" parameterType="java.lang.Long">
+	  	delete from cycle_role_permission where rid =  #{rid,jdbcType=BIGINT}
+	  </delete>
+	  
+	  <select id="findByPid" resultMap="BaseResultMap" parameterType="java.lang.Long">
+	  	select <include refid="Base_Column_List"/>
+	  	from cycle_role_permission
+	  	where pid =  #{pid,jdbcType=BIGINT}
+	  </select> 
+	  
+	   <select id="findByRid" resultMap="BaseResultMap" parameterType="java.lang.Long">
+	  	select <include refid="Base_Column_List"/>
+	  	from cycle_role_permission
+	  	where rid =  #{rid,jdbcType=BIGINT}
+	  </select>
+	  
+	   <select id="find" resultMap="BaseResultMap">
+	  	select <include refid="Base_Column_List"/>
+	  	from cycle_role_permission
+	  	where rid =  #{rid,jdbcType=BIGINT} and  pid =  #{pid,jdbcType=BIGINT}
+	  </select>
+	  
+	   <select id="findAll" resultMap="BaseResultMap">
+	  	select <include refid="Base_Column_List"/>
+	  	from cycle_role_permission
+	  </select>
+	  
+	  
+ 
+</mapper>

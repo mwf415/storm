@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.youyicn.dao.cycle.CyleNoteMapper" >
+  <resultMap id="BaseResultMap" type="com.youyicn.entity.cycle.CyleNote" >
+    <result column="id" property="id" jdbcType="INTEGER" />
+    <result column="arrTurnId" property="arrturnid" jdbcType="INTEGER" />
+    <result column="sickNum" property="sicknum" jdbcType="VARCHAR" />
+    <result column="inDate" property="indate" jdbcType="TIMESTAMP" />
+    <result column="sickDes" property="sickdes" jdbcType="VARCHAR" />
+    <result column="skillName" property="skillname" jdbcType="VARCHAR" />
+    <result column="startTime" property="starttime" jdbcType="TIMESTAMP" />
+    <result column="sickDetail" property="sickdetail" jdbcType="VARCHAR" />
+    <result column="actRole" property="actrole" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, arrTurnId, sickNum, inDate, sickDes, skillName, startTime, sickDetail, actRole, 
+    status
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.youyicn.entity.cycle.CyleNoteExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from cyle_note
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="com.youyicn.entity.cycle.CyleNoteExample" >
+    delete from cyle_note
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.youyicn.entity.cycle.CyleNote" >
+    insert into cyle_note (id, arrTurnId, sickNum, 
+      inDate, sickDes, skillName, 
+      startTime, sickDetail, actRole, 
+      status)
+    values (#{id,jdbcType=INTEGER}, #{arrturnid,jdbcType=INTEGER}, #{sicknum,jdbcType=VARCHAR}, 
+      #{indate,jdbcType=TIMESTAMP}, #{sickdes,jdbcType=VARCHAR}, #{skillname,jdbcType=VARCHAR}, 
+      #{starttime,jdbcType=TIMESTAMP}, #{sickdetail,jdbcType=VARCHAR}, #{actrole,jdbcType=VARCHAR}, 
+      #{status,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.youyicn.entity.cycle.CyleNote" >
+    insert into cyle_note
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="arrturnid != null" >
+        arrTurnId,
+      </if>
+      <if test="sicknum != null" >
+        sickNum,
+      </if>
+      <if test="indate != null" >
+        inDate,
+      </if>
+      <if test="sickdes != null" >
+        sickDes,
+      </if>
+      <if test="skillname != null" >
+        skillName,
+      </if>
+      <if test="starttime != null" >
+        startTime,
+      </if>
+      <if test="sickdetail != null" >
+        sickDetail,
+      </if>
+      <if test="actrole != null" >
+        actRole,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="arrturnid != null" >
+        #{arrturnid,jdbcType=INTEGER},
+      </if>
+      <if test="sicknum != null" >
+        #{sicknum,jdbcType=VARCHAR},
+      </if>
+      <if test="indate != null" >
+        #{indate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sickdes != null" >
+        #{sickdes,jdbcType=VARCHAR},
+      </if>
+      <if test="skillname != null" >
+        #{skillname,jdbcType=VARCHAR},
+      </if>
+      <if test="starttime != null" >
+        #{starttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sickdetail != null" >
+        #{sickdetail,jdbcType=VARCHAR},
+      </if>
+      <if test="actrole != null" >
+        #{actrole,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.youyicn.entity.cycle.CyleNoteExample" resultType="java.lang.Integer" >
+    select count(*) from cyle_note
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update cyle_note
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.arrturnid != null" >
+        arrTurnId = #{record.arrturnid,jdbcType=INTEGER},
+      </if>
+      <if test="record.sicknum != null" >
+        sickNum = #{record.sicknum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.indate != null" >
+        inDate = #{record.indate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.sickdes != null" >
+        sickDes = #{record.sickdes,jdbcType=VARCHAR},
+      </if>
+      <if test="record.skillname != null" >
+        skillName = #{record.skillname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.starttime != null" >
+        startTime = #{record.starttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.sickdetail != null" >
+        sickDetail = #{record.sickdetail,jdbcType=VARCHAR},
+      </if>
+      <if test="record.actrole != null" >
+        actRole = #{record.actrole,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update cyle_note
+    set id = #{record.id,jdbcType=INTEGER},
+      arrTurnId = #{record.arrturnid,jdbcType=INTEGER},
+      sickNum = #{record.sicknum,jdbcType=VARCHAR},
+      inDate = #{record.indate,jdbcType=TIMESTAMP},
+      sickDes = #{record.sickdes,jdbcType=VARCHAR},
+      skillName = #{record.skillname,jdbcType=VARCHAR},
+      startTime = #{record.starttime,jdbcType=TIMESTAMP},
+      sickDetail = #{record.sickdetail,jdbcType=VARCHAR},
+      actRole = #{record.actrole,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+</mapper>

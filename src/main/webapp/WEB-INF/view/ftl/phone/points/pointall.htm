@@ -1,0 +1,89 @@
+<#import "../../decorators/uri.ftl" as uri />
+<#import "../../decorators/util.ftl" as util />
+<#import "../../decorators/spring.ftl" as spring />
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"> 
+	<title>日常教学活动</title>
+	<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0" />
+	<link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body style="margin:20px;">
+<#include "../../decorators/phonetop.ftl" >
+<#include "../../decorators/phonemenu.ftl" >
+	
+
+
+
+<ul id="myTab" class="nav nav-tabs">
+	<li class="active"><a href="#home" data-toggle="tab">学习积分详情</a></li>
+	<li><a href="#ios" data-toggle="tab">学习积分汇总</a></li>	
+</ul>
+<div id="myTabContent" class="tab-content">
+	<div class="tab-pane fade in active" id="home">				
+		<table class="table">
+			<thead>
+				<tr>
+					<th>活动类型</th>
+					<th>时间</th>
+					<th>绩效分</th>
+				</tr>
+			</thead>
+			<tbody>
+				<#if pointList?? && pointList?size gt 0>
+				<#list pointList as point>
+					<tr class="table_td">
+						<td>${point.status_name!}</td>
+						<td>${point.create_time?string("yyyy-MM-dd HH:mm")}</td>
+						<td>${point.score!}</td>
+					</tr>	
+				</#list>
+			<#else>
+				没有符合条件的结果
+			</#if>
+			</tbody>
+		</table>		
+	</div>
+	
+	<div class="tab-pane fade" id="ios">			
+		<table class="table table-bordered table-hover">
+			<tr class="table_title">
+				<td width="7%">项目</td>
+				<td width="7%">积分</td>							
+			</tr>
+			<#if pointVolist?? && pointVolist?size gt 0>
+				<#list pointVolist as pointVo>
+					<tr class="table_td">
+						<td>${pointVo.status_name!}</td>
+						<td>${pointVo.point_score!}</td>
+					</tr>	
+				</#list>
+			<#else>
+				没有符合条件的结果
+			</#if>
+			<tr>
+				<td>汇总</td>
+				<td>${sumScore!}</td>
+			</tr>
+			</table>
+	</div>
+	
+</div>
+<script>
+$(function(){
+	$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+		// 获取已激活的标签页的名称
+		var activeTab = $(e.target).text(); 
+		// 获取前一个激活的标签页的名称
+		var previousTab = $(e.relatedTarget).text(); 
+		$(".active-tab span").html(activeTab);
+		$(".previous-tab span").html(previousTab);
+	});
+});
+</script>
+
+</body>
+</html>

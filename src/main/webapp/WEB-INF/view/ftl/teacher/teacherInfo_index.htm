@@ -1,0 +1,28 @@
+<#import "../decorators/uri.ftl" as uri /> <#import "../decorators/util.ftl" as
+util /> <#import "../decorators/spring.ftl" as spring />
+<!DOCTYPE html>
+<html >
+<head>
+<#include "../decorators/headtitle.ftl" >
+	<script type="text/javascript">
+	 function getvl(){
+		 var fileName = $("#fileBrowser").val();
+		 alert(fileName);
+	 }
+	</script>
+</head>
+<body>
+	<!--right-->
+	<#include "../decorators/left1.ftl" ><div class="main_right" id="right">
+		<div class="right_con">
+			<div class="main_search">
+				<form id="searchform" style="height: 30px;">
+					请选择要上传的文件：<input type="file" id="fileBrowser" name="fileBrowser"
+						size="50"/> <input type="submit"
+						value="提交" onclick="getvl()">
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

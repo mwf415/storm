@@ -1,0 +1,176 @@
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<#import "../decorators/spring.ftl" as spring />
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html >
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+</head>
+<body>
+<!--right-->
+<#include "../decorators/left1.ftl" ><div class="main_right" id="right">
+	<div class="rig_tab">
+		<div class="rig_tab2">
+			<form id="upform">
+			    <h1>教师修改 <span>(注：带*为必填项)</span></h1>
+				<table class="table table-hover  table-bordered" >
+					<tr style="display: none;">
+						<td colspan="2"><input type="text" name="userId" value="${user.id!}" /></td>
+					</tr>
+					<tr>
+						<td width="15%" class="td_right">教师名称</td>
+						<td width="35%">${user.realName!} </td>
+						<td width="15%" class="td_right">教师编号</td>
+						<td width="35%">${user.loginName!}</td>
+					</tr>
+					<tr>
+						<td width="15%" class="td_right">所在基地</td>
+						<td width="35%"><select name="baseName"> 
+											<#if user.baseName?? >
+												<option value="${user.baseName!}">${user.baseName!}</option>
+												<#list baseValues as baseValue>
+												<option value="${baseValue.value}">${baseValue.value}</option></#list>
+												<#else>
+												<option value="">请选择</option> <#list baseValues as baseValue>
+				
+												<option value="${baseValue.value}">${baseValue.value}</option>
+												</#list>
+											 </#if>
+											</select>
+						</td>
+						<td width="15%" class="td_right">所在科室</td>
+						<td width="35%"><select name="roomName"> 
+											<#if user.roomName??>
+												<option value="${user.roomName!}">${user.roomName!}</option>
+												<#list roomValues as roomValue>
+												<option value="${roomValue.value}">${roomValue.value}</option></#list>
+												<#else>
+												<option value="">请选择</option> <#list roomValues as roomValue>
+				
+												<option value="${roomValue.value}">${roomValue.value}</option>
+												</#list> 	
+											</#if>
+										</select>
+						</td>
+					</tr>
+					<tr>						
+						<td width="15%" class="td_right">职位</td>
+						<td width="35%"><input type="text" name="staff" id="staff" value="${user.staff!}" /><a></a></td>
+						<td width="15%" class="td_right">获取职称时间</td>
+						<td width="35%"><input type="text" readonly name="staffTime" id="staffTime" value="${user.staffTime!}"   /><img onclick="WdatePicker({el:'staffTime',dateFmt:'yyyy-MM-dd HH:mm',maxDate:'%y-%M-%d'})" 
+						src="${uri.jssite}/My97DatePicker/skin/datePicker.gif" width="16" height="22" align="absmiddle">
+						</td>
+					</tr>
+					<tr>
+						<td width="15%" class="td_right">性别</td>
+						<td width="35%"><input type="text" name="sex" id="sex" value="${user.sex!}" /><a></a></td>
+						<td width="15%" class="td_right">执照编号</td>
+						<td width="35%"><input type="text" name="licenId" id="licenId" value="${user.licenId!}" /><a></a></td>
+					</tr>
+					<tr>
+						<td width="15%" class="td_right">毕业院校</td>
+						<td width="35%"><input type="text" name="gradSchool" id="gradSchool" value="${user.gradSchool!}" /><a></a></td>
+						<td width="15%" class="td_right">专业</td>
+						<td width="35%"><input type="text" name="major" id="major" value="${user.major!}" /><a></a></td>
+					</tr>
+					<tr>
+						<td width="15%" class="td_right">学位</td>
+						<td width="35%"><input type="text" name="xuewei" id="xuewei" value="${user.xuewei!}" /><a></a></td>
+						<td width="15%" class="td_right">学历</td>
+						<td width="35%"><input type="text" name="degree" id="degree" value="${user.degree!}" /><a></a></td>
+					</tr>
+					<tr>
+						<td width="15%" class="td_right">电话</td>
+						<td width="35%"><input type="text" name="telPhone" id="telPhone" value="${user.telPhone!}" /><a></a></td>
+						<td width="15%" class="td_right">手机</td>
+						<td width="35%"><input type="text" name="cellPhone" id="cellPhone" value="${user.cellPhone!}" /><a></a></td>
+					</tr>
+					<tr>
+						<td width="15%" class="td_right">邮箱</td>
+						<td width="35%"><input type="text" name="email" id="email" value="${user.email!}" /><a></a></td>
+						<td width="15%" class="td_right">微信</td>
+						<td width="35%"><input type="text" name="wechat" id="wechat" value="${user.wechat!}" /><a></a></td>
+					</tr>
+					<tr>
+						<td width="15%" class="td_right">家庭住址</td>
+						<td width="35%"><input type="text" name="address" id="address" value="${user.address!}" /><a></a></td>
+						<td width="15%" class="td_right">身份证号</td>
+						<td width="35%"><input type="text" name="cardId" id="cardId" value="${user.cardId!}" /><a></a></td>
+					</tr>
+					<tr>
+						<td width="15%" class="td_right">QQ</td>
+						<td width="35%"><input type="text" name="qq" id="qq" value="${user.qq!}" /><a></a></td>
+						<td width="15%" class="td_right">密码</td>
+						<td width="35%"><input type="text" name="userPass" id="userPass" value="${user.userPass!}" /><a></a></td>				
+					</tr>
+	                
+	            	<tr class="button_tr">
+	                	<td>&nbsp;</td>
+	               	 	<td>
+		               	 	<input name="submit" type="submit" value="修 改" class="main_button"/> 	 
+		               	 	<input name="reset" type="button" value="重 置" class="main_button" onclick="window.location=('<@spring.url '/teacherController/teacher_edit.htm?userId=${user.id}&li=li10&div=div_1&menuOrder=0'/>')"/> 
+	               	 	</td>
+					</tr>   
+				</table>
+			</form>
+		 </div>
+	</div>
+</div>
+
+ <div style="display: none;">
+        	<a id="updateSuccessed" href="#" onclick="showMessageDialog(event,'教师修改成功','<@spring.url '/teacherController/teacher_index.htm?li=li10&div=div_1&menuOrder=0'/>','closeWindow();');" ></a>
+        	<a id="updateFailed" href="#" onclick="showMessageDialog(event,'操作失败','','');" ></a>
+ </div>
+
+<script>
+	function update(){
+		var param = null;
+		var postmethod = "POST";
+		var url ="<@spring.url '/teacherController/teacher_update.htm'/>";
+		var param = $("#upform").serialize();
+		$.ajax({
+			   type: postmethod,
+			   cache: false,
+			   url: url,
+			   data : param,
+			   success: function(data){
+				if(data == 'true'){
+					tip(1,true);
+					return;
+				}
+				tip(1,false);
+			   },
+			   error:function(xhr,err){
+				   window.location.href=url; 
+			}
+		});
+	}
+
+
+	function tip(type,bool){
+		if(type == 1){
+			if(bool){
+				document.getElementById("updateSuccessed").click();
+				return;
+			}
+			document.getElementById("updateFailed").click();
+		}
+	}
+
+
+   jQuery(document).ready(function(){
+          jQuery("#upform").validationEngine('attach', {
+        	  isOverflown: true,
+  	        overflownDIV: "#right",
+            onValidationComplete: function(form, status){
+                if(status == true)
+                	update();
+            }  
+          })
+    });
+</script>
+
+</body>
+</html>

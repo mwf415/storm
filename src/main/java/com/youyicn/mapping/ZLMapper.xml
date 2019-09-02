@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youyicn.dao.cycle.ZLMapper">	
+	<insert id="addZL" parameterType="com.youyicn.entity.cycle.ZiLiao" useGeneratedKeys="true" keyProperty="id">
+		insert into cycle_ziliao (roomName,content) 	values	(#{roomName},#{content}) 
+	</insert>
+	
+	<select id="getZLByRoomName" parameterType="com.youyicn.entity.cycle.ZiLiao" resultType="com.youyicn.entity.cycle.ZiLiao">
+		select * from cycle_ziliao where 1=1 
+		<if test="roomName!=null"><!-- 专业基地查询 -->
+			and roomName=#{roomName}
+		</if>		
+		order by id desc
+	</select>
+	
+	<update id="updateZL" parameterType="com.youyicn.entity.cycle.ZiLiao">
+		 update cycle_ziliao set content=#{content} where id=#{id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,142 @@
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<#import "../decorators/spring.ftl" as spring />
+<!DOCTYPE html>
+<html >
+<head><#include "../decorators/headtitle.ftl" >
+</head>
+<body>
+<!--right-->
+<#include "../decorators/left1.ftl" ><div class="main_right" id="right">
+		<div class="main_search">
+			<form id="searchform" style="height: 30px;">
+				<span style="float: right;"><a href="<@spring.url '/swriteCaseCont/writecaseadd.htm?li=li511&div=div_5&menuOrder=0'/>"><img src="${uri.imgsite}/xiugai.png" title="添加书写病例"/>添加书写病例</a></span>
+	
+			</form>
+		</div>
+	<div class="right_con">
+		<table class="table table-bordered table-hover">
+		<tr class="table_title">
+			<td width="4%">病人姓名</td>
+			<td width="8%">性别</td>
+			<td width="8%">年龄</td>
+			<td width="8%">病房</td>
+			<td width="8%">床号</td>
+			<td width="8%">病号</td>
+			<td width="30%">操作</td>
+		</tr>
+		<#if page.list?? && page.list?size gt 0>
+		<#list page.list as writeCase>
+		<tr class="table_td">
+			<td>${writeCase.illName!}</td>
+			<td>${writeCase.illSex!}</td>
+			<td>${writeCase.illAge!}</td>
+			<td>${writeCase.illRoom!}</td>
+			<td>${writeCase.illBedNum!}</td>
+			<td>${writeCase.illNum!}</td>
+			
+			<td>
+			 <button onclick="showLong('${writeCase.longAdvice!}')">长期医嘱</button>
+ 			<button  onclick="showShort(this)" value="${writeCase.shortAdvice!}">短期医嘱</button>
+			
+			<a href="#" onclick="showConfirmDialog(event,'你确定要删除该教师信息吗？','javaScript:closeWindow()','delwriteCase(|${writeCase.id}|);');">删除</a>  
+		</tr>
+		</#list>
+		<#else>
+  			<tr class="table_td"><td colspan="12" align="center">没有符合条件的结果。</td></tr>
+		</#if>
+	</table>
+	<#include "../decorators/page.htm" />
+
+</div>
+
+	 <div style="display: none;">
+	 	<a id="delSuccessed" href="#" onclick="showMessageDialog(event,'书写病例删除成功！','javaScript:queryRoleList();','closeWindow();');" ></a>
+	 	<a id="delFailed" href="#" onclick="showMessageDialog(event,'书写病历删除失败！','','');" ></a>
+	 </div>
+	</div>
+</div>
+
+
+
+<!--right end-->
+<script type="text/javascript">
+
+function showLong(str){
+	layer.open({
+		  type: 1,
+		  skin: 'layui-layer-rim', //加上边框
+		  area: ['420px', '240px'], //宽高
+		  content:str
+		});
+}
+
+function showShort(obj){
+	var str = obj.value;
+	layer.open({
+		  type: 1,
+		  skin: 'layui-layer-rim', //加上边框
+		  area: ['420px', '240px'], //宽高
+		  content:str
+		});
+}
+
+
+function delwriteCase(tId){
+	var param = null;
+	var postmethod = "get";
+	var url ="<@spring.url '/writeCase/writeCaseDel.htm?id="+tId+"'/>";
+	$.ajax({
+		   type: postmethod,
+		   cache: false,
+		   url: url,
+		   data : param,
+		   success: function(data){
+			if(data == 'true'){
+				tip(1,true);
+				return;
+			}
+			if(data == 'false'){
+				tip(1,false);
+				return;
+			}
+			showMessageDialog(null,data,'','');
+		   },
+		   error:function(xhr,err){ 
+		}
+	});
+}
+
+function tip(type,bool){
+	if(type == 1){
+		if(bool){
+			document.getElementById("delSuccessed").click();
+			return;
+		}
+		document.getElementById("delFailed").click();
+	}
+}
+
+function queryRoleList(){
+	window.location = '<@spring.url "/swriteCaseCont/writeCaseindex.htm?li=li10&div=div_1&menuOrder=0"/>';
+}
+
+function targetPage(pageIndex){
+	var loginName = $("#loginName").val();
+	var baseName = $("#baseName").val();
+	window.location = '<@spring.url "/writeCaseCont/writeCaseindex.htm?li=li511&div=div_5&menuOrder=0&pageIndex='+pageIndex+'&loginName='+loginName+'&baseName='+baseName+'"/>';
+}
+
+function querySerchList(){
+	//var url = '<@spring.url "/writeCaseController/writeCase_index.htm?li=li10&div=div_1&menuOrder=0"/>';
+		var loginName = $("#loginName").val();
+		var baseName = $("#baseName").val();
+		window.location = '<@spring.url "/writeCaseCont/writeCaseindex.htm?li=li511&div=div_5&menuOrder=0&loginName='+loginName+'&baseName='+baseName+'"/>';
+}
+
+</script>
+<!--right end-->
+
+
+</body>
+</html>

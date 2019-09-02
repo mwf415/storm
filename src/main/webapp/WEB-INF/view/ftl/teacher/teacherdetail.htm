@@ -1,0 +1,76 @@
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<#import "../decorators/spring.ftl" as spring />
+<div>
+	<table class="main_table">
+		<tr id="box1">
+			<td colspan="8">
+				<div class="right_em_con">
+					<div class="title">
+						<ul>
+							<li id="con_0">基本信息</li>
+						</ul>
+					</div>
+				</div>
+			</td>
+		</tr>
+		<table class="tab_open01" id="tours_0">
+			<tr>
+				<td width="15%" class="td_r">用户Id：</td>	<td width="30%"><span>${user.id!}</span></td>
+				<td width="15%" class="td_r">医院编号：</td>	<td width="30%"><span>${user.hospitalId!}</span></td>
+			</tr>
+			<tr>
+				<td class="td_r">用户名字 ：</td>   <td><span>${user.realName!} </span></td>
+				<td class="td_r">密码：</td>	<td><span> ${user.userPass!} </span></td>
+			</tr>
+			<tr>
+				<td class="td_r">所在基地 ：</td>   <td><span>${user.baseName!} </span></td>
+				<td class="td_r">所在科室：</td>	<td><span> ${user.roomName!} </span></td>
+			</tr>
+			</tr>
+			<tr class="add_td_border">
+				<td colspan="4" class="td_r"></td>
+			</tr>
+			<tr>
+				<td class="td_r">用户性别 ：</td>   <td><span>${user.sex!} </span></td>
+			</tr>
+			<tr>
+				<td class="td_r">毕业院校：</td>  	<td><span>${user.gradSchool!}</span></td>
+				<td class="td_r">毕业专业：</td>   <td><span>${user.major!}</span></td>
+			</tr>
+			<tr>
+				<td class="td_r">学历：</td>  	<td><span>${user.degree!}</span></td>
+				<td class="td_r">学位：</td>    <td><span>${user.xuewei!}</span></td>
+			</tr>
+			<tr>
+				<td class="td_r">执照编号：</td>  	<td><span>${user.licenId!}</span></td>
+			</tr><tr>
+				<td class="td_r">职称：</td>  	<td><span>${user.staff!}</span></td>
+				<!-- <td class="td_r">获取职称时间：</td>    <td><span>${user.staffTime!}</span></td> -->
+				<#if user.staffTime??>
+					<td class="td_r">获取职称时间：</td>  	<td><span>${user.staffTime?date}</span></td>
+				<#else> 
+					<td class="td_r">获取职称时间：</td>  	<td><span></span></td>
+				</#if>
+			</tr>
+			<tr class="add_td_border">
+				<td colspan="4" class="td_r"></td>
+			</tr>
+			<tr class="button_tr">
+				<td width="15%" class="td_r">电话 ：</td>		<td width="30%"><span>${user.telPhone!}</span></td>
+				<td width="16%" class="td_r">手机：</td>		<td width="39%"><span>${user.cellPhone!}</span></td>
+			</tr>
+			<tr>
+				<td class="td_r">QQ号：</td>			<td><span>${user.qq!}</span></td>
+				<td class="td_r">微信号 ：</td>			<td><span>${user.wechat!}</span></td>
+			</tr>
+			<tr>
+				<td class="td_r">邮箱：</td>			<td><span>${user.email!}</span></td>
+			</tr>
+			<tr>
+				<td width="15%" class="td_r">家庭住址 ：</td>			<td width="30%"><span>${user.address!}</span></td>
+				<td width="15%" class="td_r">身份证号 ：</td>			<td width="30%"><span>${user.cardId!}</span></td>
+			</tr>
+		</table>
+	</table>
+</div>

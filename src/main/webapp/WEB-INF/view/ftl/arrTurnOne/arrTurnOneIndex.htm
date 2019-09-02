@@ -1,0 +1,59 @@
+<#import "../decorators/uri.ftl" as uri /> <#import "../decorators/util.ftl" as
+util /> <#import "../decorators/spring.ftl" as spring />
+<!DOCTYPE html>
+<html >
+<head>
+<#include "../decorators/headtitle.ftl" >
+</head>
+<body>
+	<#include "../decorators/left1.ftl" ><div class="main_right" id="right">
+		<div class="right_con">
+			<div class="main_search">
+				<form action="<@spring.url '/arrTurnOneController/add.htm'/>"
+							 method="post"  onsubmit="return check(this)">
+					<input type="text" value="${li!}" name="li" style="display: none"/>
+					<input type="text" value="${div}" name="div" style="display: none"/>
+					<input type="text" value="${type}" name="type" style="display: none"/>
+					选择年级 ：
+
+					2015<input type="radio" value="2015" name="grade" />&nbsp;&nbsp;
+					2016<input type="radio" value="2016" name="grade" />&nbsp;&nbsp;
+					2017 <input type="radio" value="2017" name="grade"/>&nbsp;&nbsp;
+					2018<input type="radio" value="2018" name="grade"/>&nbsp;&nbsp;
+					2019<input type="radio" value="2019" name="grade"/>&nbsp;&nbsp;
+					2020<input type="radio" value="2020" name="grade"/>&nbsp;&nbsp;
+					2021<input type="radio" value="2021" name="grade"/>&nbsp;&nbsp;
+					请选择基地：<select name="baseName"  >
+					<#if baseValues?? && baseValues?size gt 0>
+						<option value="">请选择</option>
+						<#list baseValues as baseValue>
+								<option value="${baseValue.value}" >${baseValue.value!}</option>
+						</#list>
+					</#if>
+					</select>
+					<input type="text" name ="li" value="${li!}" style="display: none;"/>
+					<input type="text" name ="div" value="${div!}" style="display: none;"/>
+					<input type="text" name ="type" value="${type!}" style="display: none;"/>
+					<button type="submit" class="btn btn-danger" >提交</button>
+				</form>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+         function check(form) {
+	          if(form.grade.value=='') {
+	                alert("请选择年级!");
+	                form.grade.focus();
+	                return false;
+	           }
+	       if(form.baseName.value==''){
+	                alert("请选择基地!");
+	                form.baseName.focus();
+	                return false;
+	         }
+	         return true;
+         }
+	</script>
+
+</body>
+</html>

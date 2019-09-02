@@ -1,0 +1,167 @@
+<#import "../decorators/uri.ftl" as uri /> 
+<#import "../decorators/util.ftl" as util /> 
+<#import "../decorators/spring.ftl" as spring />
+<!DOCTYPE html>
+<html >
+<head>
+<style>
+.table_td td {
+	padding-left: 3px;
+}
+</style>
+</head>
+<body>
+	<div style="margin-top: 10px">
+		<form id="planAdd" name="planAdd">
+			<input type="hidden" name="li" value="${li!}"/>
+			<input type="hidden" name="div" value="${div!}"/>
+			
+			<input type="hidden" name="status" value="${status!}"/>
+			<input type="hidden" name="type" value="${type!}"/>
+			<table class="table table-hover" style="width: 600px; margin: auto;">
+			<caption> <button  type="button" style="width: 400px; margin: auto;" class="btn btn-default btn-block">出科考试安排</button>
+				</caption>
+				<tbody >
+					<tr>
+						<td class="td_right">承办科室:</td>
+						<td>${roomName!}<input type="hidden" name="roomName" value="${roomName!}" />&nbsp;&nbsp;&nbsp;&nbsp;</td>
+					</tr>
+					<tr>
+						<td class="td_right">责任教师1:(必选)</td>
+						<td><select name="teacher1" id="teacher1" > 
+								<#if teacherList?? && teacherList ? size gt 0>
+									<option value="">请选择</option> 
+									<#list teacherList as teacher>
+										<option value="${teacher.id!}:${teacher.realName!}">${teacher.realName!}</option>
+									</#list> 
+								</#if>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td class="td_right">责任教师2:(选填)</td>
+						<td><select name="teacher2" > 
+								<#if teacherList?? && teacherList ? size gt 0>
+									<option value="">请选择</option> 
+									<#list teacherList as teacher>
+										<option value="${teacher.id!}:${teacher.realName!}">${teacher.realName!}</option>
+									</#list> 
+								</#if>
+							</select>
+						</td>
+						</tr>
+					<tr>
+						<td class="td_right">责任教师3:(选填)</td>
+						<td><select name="teacher3" > 
+								<#if teacherList?? && teacherList ? size gt 0>
+									<option value="">请选择</option> 
+									<#list teacherList as teacher>
+										<option value="${teacher.id!}:${teacher.realName!}">${teacher.realName!}</option>
+									</#list> 
+								</#if>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td class="td_right">日期：</td>
+						<td><input id="startTime" type="text" name="startTime" />
+							<img onclick="WdatePicker({el:'startTime',dateFmt:'yyyy-MM-dd HH:mm'})" src="${uri.jssite}/My97DatePicker/skin/datePicker.gif" width="16" height="22" align="absmiddle">	
+						</td>
+					</tr>
+					
+					<tr>
+						<td class="td_right"><em>*</em>考试时长：</td>
+	                    <td>
+							<input id="takeTime" type="text" name="takeTime"  />
+				        	(小时，不带单位)
+				         <br>
+						</td>
+					</tr>
+					
+					<tr>
+						<td class="td_right"><em>*</em>地点：</td>
+	                    <td>
+							<input id="address" type="text" name="address" />
+				         <br>
+						</td>
+					</tr>
+					
+					<tr>
+	                	<td class="td_right"><em>*</em>选择学生出科时间:</td>
+	                    <td>
+							<input id="searchT" type="text" name="searchT" />
+							<img onclick="WdatePicker({el:'searchT',dateFmt:'yyyy-MM-dd HH:mm'})" src="${uri.jssite}/My97DatePicker/skin/datePicker.gif" width="16" height="22" align="absmiddle">	
+							<button type="button" class="btn btn-info btn-xs" onclick="searchS()">查找</button>
+						</td>
+	                </tr>
+				</tbody>
+			</table>
+		
+				<table id="tb" class="table table-hover table-bordered" style="width: 600px;margin: auto;"> 
+					<tr> 
+						<th>序列</th> 
+						<th>姓名</th> 
+						<th>编号</th> 
+						<th>本科室开始时间</th> 
+						<th>本科室结束时间</th> 
+					</tr> 
+					<tr> 
+						<td colspan="5"> 
+						</td> 
+					</tr> 
+				</table>
+				<hr></hr>
+				<span style="margin-left:500px;">
+				<button type ="button" onclick="addRole()" class="btn btn-danger">提交</button></span>
+		</form>
+	</div>
+	<div style="display: none;">
+        	<a id="addSuccessed" href="#" onclick="showMessageDialog(event,'新建成功','<@spring.url '/activesCont/index.htm?li=li34&div=div_3&menuOrder=0&type=r'/>','closeWindow();');" ></a>
+        	<a id="addFailed" href="#" onclick="showMessageDialog(event,'新建失败','','');" ></a>
+ </div>
+<script type="text/javascript">
+	function addRole(){
+		var teacher1 = $("#teacher1").val();
+		if(teacher1 == '') {
+			  alert("请至少选择一个老师");
+			  return false;
+		}
+		var param = null;
+		var postmethod = "POST";
+		var url ="<@spring.url '/outexam/sum.htm'/>";
+		var param = $("#planAdd").serialize();
+		$.ajax({
+			   type: postmethod,
+			   cache: false,
+			   url: url,
+			   data : param,
+			   success: function(data){
+			    if(!validateFieldMs(data)){
+					return;
+				}
+				if(data == 'true'){
+					tip(1,true);
+					return;
+				}else if(data == 'false'){
+					tip(1,false);
+					return;
+				}
+				showMessageDialog(null,data,'','');
+			   },
+			   error:function(xhr,err){
+				   window.location.href=url; 
+			}
+		});
+	}
+	function tip(type,bool){
+		if(type == 1){
+			if(bool){
+				document.getElementById("addSuccessed").click();
+				return;
+			}
+			document.getElementById("addFailed").click();
+		}
+	}
+</script>
+</body>
+</html>

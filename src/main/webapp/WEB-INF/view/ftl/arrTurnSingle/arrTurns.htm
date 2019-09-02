@@ -1,0 +1,207 @@
+<#import "../decorators/uri.ftl" as uri /> 
+<#import "../decorators/util.ftl" as util /> 
+<#import "../decorators/spring.ftl" as spring />
+<!DOCTYPE html>
+<html >
+<head><#include "../decorators/headtitle.ftl" >
+
+</head>
+<body>
+	<#include "../decorators/left1.ftl" >
+		<div class="main_right" id="right">
+		<div class="right_con">
+			<form id="addform4" >
+				<input type="text" value="${loginName!}" name="loginName" style="display: none"/>
+				<table class="table table-hover table-bordered" >
+					<tr>
+						<td  >设置 <em>${userName!}</em>单个轮转</td>
+						<td >科室
+							<select name="roomName"> 
+								<#if roomValues?? && roomValues?size gt 0>
+									<option value="">请选择</option> 
+									<#list roomValues as baseRoom>
+										<option value="${baseRoom.roomName!}">${baseRoom.roomName!}</option>
+									</#list> 
+								</#if>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td ><em>*</em> 轮转开始时间
+						<input id="startTime" type="text" name="startTime" /> 
+						<img onclick="WdatePicker({el:'startTime',dateFmt:'yyyy-MM-dd'})"	
+							src="${uri.jssite}/My97DatePicker/skin/datePicker.gif" width="16"	height="22" align="absmiddle">
+							
+						<td  ><em>*</em> 轮转结束时间
+						<input id="endTime" type="text" name="endTime" /> 
+						<img onclick="WdatePicker({el:'endTime',dateFmt:'yyyy-MM-dd'})"	
+							src="${uri.jssite}/My97DatePicker/skin/datePicker.gif" width="16"	height="22" align="absmiddle">
+					</tr>
+		           	<tr >
+		              	 	<td colspan="2">
+		              			<button type="button" class="btn btn-danger btn-xs"  onclick="doSubArrTurn()">新建</button>
+		              	 	</td>
+					</tr>   
+				</table>
+			</form>
+				
+		
+		
+			<form id="addForm1">
+				<input type="hidden" name="li" value="${li!}"/>
+				<input type="hidden" name="div" value="${div!}"/>
+				<input type="hidden" name="type" value="${type!}"/>
+				<input type ="hidden" name ="loginName" value="${loginName!}" id="loginName"/>
+				
+			
+			
+				<div id="dataDiv">
+				<table id="tb" class="table table-hover table-bordered" > 
+					<tr class="table_title">
+						<td width="7%">学生姓名</td>
+						<td width="7%">学生编号</td>
+						<td width="4%">年级</td>
+						<td width="7%">科室</td>
+						<td width="10%">开始时间</td>
+						<td width="10%">结束时间</td>
+						<td width="8%">安排形式</td>
+						<td width="8%">带教老师1</td>
+						<td width="8%">带教老师2</td>
+						<td width="8%">操作</td>
+					</tr>
+				<#if arrTurnList?? && arrTurnList?size gt 0>
+				<#list arrTurnList as arrTurn>
+					<tr class="table_td">
+						<td>${arrTurn.realName!}</td>
+						<td>${arrTurn.loginName!}</td>
+						<td>${arrTurn.grade!}</td>
+						<td>${arrTurn.roomName!}</td>
+						<td>${arrTurn.startTime[0..10]!}</td>
+						<td>${arrTurn.endTime[0..10]!}</td>
+						<td>
+							<#if arrTurn.batch=='0'>
+								自动化安排
+							<#elseif arrTurn.batch=='1'>
+								手动添加
+							</#if>
+						</td>
+						<td>
+							<#if !arrTurn.teacherNum1?? &&  !arrTurn.teacherNum2?? >
+									<select name="${arrTurn.arrTurnId}t1" > 
+									<#if arrTurn.teacherList?? && arrTurn.teacherList ? size gt 0>
+										<option value="">请选择</option> 
+										<#list arrTurn.teacherList as teacher>
+											<option value="${teacher.loginName!}:${teacher.realName!}">${teacher.realName!}</option>
+										</#list> 
+									</#if>
+									</select>
+								<#else>
+								${arrTurn.teacherName1!}
+							</#if>
+						</td>
+						<td>
+							<#if !arrTurn.teacherNum1?? &&  !arrTurn.teacherNum2?? >
+								<select name="${arrTurn.arrTurnId}t2" > 
+								<#if arrTurn.teacherList?? && arrTurn.teacherList ? size gt 0>
+									<option value="">请选择</option> 
+									<#list arrTurn.teacherList as teacher>
+										<option value="${teacher.loginName!}:${teacher.realName!}">${teacher.realName!}</option>
+									</#list> 
+								</#if>
+							<#else>
+								${arrTurn.teacherName2!}
+							</#if>
+						</select>&nbsp;&nbsp;&nbsp;&nbsp;
+						</td>
+						<td><a onclick="arrTeacher(${arrTurn.arrTurnId!})">指派老师</a></td>
+					</tr>
+				</#list>
+				<#else>
+		  			<tr class="table_td"><td colspan="12" align="center">还未安排轮转信息</td></tr>
+				</#if>
+				</table>
+				</div>
+			</form>
+		</div>
+		
+		
+	</div>
+	<div style="display: none;">
+		<a id="delSuccessed" href="#" onclick="showMessageDialog(event,'成功','<@spring.url '/singleArrTurnCont/index.htm?li=li50&div=div_5&menuOrder=0&type=s'/>','closeWindow();');" ></a>
+	 	<a id="delFailed" href="#" onclick="showMessageDialog(event,'失败！','','');" ></a>
+	 </div>
+	
+	
+<script type="text/javascript">
+
+function arrTeacher(id){
+	var param = null;
+	var postmethod = "POST";
+	var param = $("#addForm1").serialize();
+	var url = "<@spring.url '/arrTeacherCont/arrTeachersum.htm?arrTurnId="+id+"'/>";
+	$.ajax({
+		   type: postmethod,
+		   cache: false,
+		   url: url,
+		   data : param,
+		   success: function(data){
+		    if(!validateFieldMs(data)){
+				return;
+			}
+			if(data == 'true'){
+				tip(1,true);
+				return;
+			}else if(data == 'false'){
+				tip(1,false);
+				return;
+			}
+			showMessageDialog(null,data,'','');
+		   },
+		   error:function(xhr,err){
+			   window.location.href=url; 
+		}
+	});
+}
+
+function tip(type,bool){
+	if(type == 1){
+		if(bool){
+			document.getElementById("delSuccessed").click();
+			return;
+		}
+		document.getElementById("delFailed").click();
+	}
+}
+
+function doSubArrTurn(){
+	var param = null;
+	var postmethod = "POST";
+	var param = $("#addform4").serialize();
+	var url = "<@spring.url '/singleArrTurnCont/Insert.htm'/>";
+	$.ajax({
+		   type: postmethod,
+		   cache: false,
+		   url: url,
+		   data : param,
+		   success: function(data){
+		    if(!validateFieldMs(data)){
+				return;
+			}
+			if(data == 'true'){
+				tip(1,true);
+				return;
+			}else if(data == 'false'){
+				tip(1,false);
+				return;
+			}
+			showMessageDialog(null,data,'','');
+		   },
+		   error:function(xhr,err){
+			   window.location.href=url; 
+		}
+	});
+}
+</script>
+</body>
+
+</html>

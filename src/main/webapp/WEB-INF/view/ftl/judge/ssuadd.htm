@@ -1,0 +1,89 @@
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<#import "../decorators/spring.ftl" as spring />
+<div style="margin: 30px;">
+	<form id="addSelfSum" name="addSelfSum">
+		<input type="hidden" name="id" id="id" value="${ssu.id!}" />
+		<input type="hidden" name="activesId" id="activesId" value="${ssu.activesId!}" />
+		<input type="hidden" name="loginName" id="loginName" value="${ssu.loginName!}" />
+		<input type="hidden" name="judgeT2sId" id="judgeT2sId" value="${judgeT2sId!}" />
+		<table id="tb" class="table table-hover table-bordered" > 
+			<tr>
+				<td colspan="2">学号/工号:&nbsp;&nbsp;${ssu.loginName!}
+				</td>
+			</tr>
+			<tr>
+				<td width="20%">本月最大的进步是什么:&nbsp;&nbsp;</td>
+				<td>
+					<textarea id="zdjb" cols="100"  name="zdjb"></textarea>
+				</td>
+			</tr>
+			<tr>
+				<td>印象最深的教学查房:&nbsp;&nbsp;</td>
+				<td>
+					<textarea id="yyjxcf" cols="100"  name="yyjxcf"></textarea>
+				</td>
+			</tr>
+			<tr>
+				<td>你认为怎样查房效果好:&nbsp;&nbsp;</td>
+				<td>
+					<textarea id="ghjxcf" cols="100"  name="ghjxcf"></textarea>
+				</td>
+			</tr>
+			<tr>
+				<td>最有意义的病例讨论:&nbsp;&nbsp;</td>
+				<td>
+					<textarea id="yybltl" cols="100"  name="yybltl"></textarea>
+				</td>
+			</tr>
+			<tr>
+				<td>努力的方向</td>
+				<td>
+					<textarea id="nlfx" cols="100"  name="nlfx"></textarea>
+					
+				</td>
+			</tr>
+			<tr>
+				<td>误区或不足</td>
+				<td>
+					<textarea id="wqbz" cols="100"  name="wqbz"></textarea>
+					
+				</td>
+			</tr>
+			<tr>
+				<td>科内讲座</td>
+				<td>
+					<textarea id="knjz" cols="100"  name="knjz"></textarea>
+					
+				</td>
+			</tr>
+			<tr>
+				<td>出科考试的内容</td>
+				<td>
+					<textarea id="ckksnr" cols="100"  name="ckksnr"></textarea>
+					
+				</td>
+			</tr>
+			<tr>
+				<td>最深刻的教训</td>
+				<td>
+					<textarea id="jx" cols="100"  name="jx"></textarea>
+					
+				</td>
+			</tr>
+			<tr>
+				<td>备注</td>
+				<td>
+					<textarea id="ext01" cols="100" name="ext01"></textarea>
+					
+				</td>
+			</tr>
+			<tr>
+              	 <td colspan="2">
+               	 <button  class="btn btn-primary"  type="button" onclick="selfSum()">提交</button>
+              	 </td>
+			</tr> 
+		</table>
+	</form>
+</div>
+

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youyicn.dao.cycle.SumScoreMapper">
+
+	<!-- 添加教学查房安排 -->
+	<insert id="addSumScore" parameterType="com.youyicn.entity.cycle.SumScore" useGeneratedKeys="true" keyProperty="id">
+		insert into cycle_sumscore 
+		(activesId,userNum ,  userName , teacherName  , teacherNum  , absenceMount  , onDetyMount  , sickMount  , mngMount  ,uploadFileCount ,  writeQuality ,
+		  operateMount , thinking  , virtues  , teachAbility  ,	learnAmount	   ,  science ,  mistake , mini_cex  , theoryExam  ,
+		   practiceExam  , soap , nurseDes  ,sickDes   ,  createTime ,roomName,createName,createNum,theoryscore) 
+			values	
+		( #{activesId},#{userNum},#{userName},#{teacherName},#{teacherNum},#{absenceMount},#{onDetyMount},#{sickMount},#{mngMount},#{uploadFileCount},#{writeQuality},
+		#{operateMount},#{thinking},#{virtues},#{teachAbility},		#{learnAmount},#{science},#{mistake},#{mini_cex},#{theoryExam},
+		#{practiceExam},#{soap},#{nurseDes},#{sickDes},#{createTime},#{roomName},#{createName},#{createNum}, #{theoryscore} )
+	</insert>
+	
+	<!--  查询条件，根据科室，教师，和学员查询 -->
+	<select id="getSumScore" parameterType="com.youyicn.entity.cycle.SumScore" resultType="com.youyicn.entity.cycle.SumScore">
+		select * from cycle_sumscore where 1=1
+		<if test="teacherNum!=null">
+			and teacherNum=#{teacherNum} 
+		</if>
+		<if test="userNum!=null">
+			and userNum=#{userNum} 
+		</if>
+		
+		<if test="roomName!=null and roomName!=''">
+			and roomName=#{roomName}
+		</if> 
+		<if test="searchStart!=null and searchEnd!=null">
+			and createTime <![CDATA[>=]]> #{searchStart} and createTime <![CDATA[<=]]> #{searchEnd} 
+		</if>
+		
+		
+		
+		order by id desc 
+	</select>
+	
+	<!-- 删除 -->
+	<delete id="delSumScore" parameterType="com.youyicn.entity.cycle.SumScore">
+		delete from cycle_sumscore where id=#{id}
+	</delete>
+	
+	<delete id="delByActivesId" parameterType="Integer">
+		delete from cycle_sumscore where activesId=#{activesId}
+	</delete>
+	
+	<select id="getSumScoreById" parameterType="com.youyicn.entity.cycle.SumScore" resultType="com.youyicn.entity.cycle.SumScore">
+		select * from cycle_sumscore where id =#{id}
+	</select>
+	<!-- 添加教学查房安排 -->
+	<update id="updateSumScore" parameterType="com.youyicn.entity.cycle.SumScore">
+		update  cycle_sumscore set  userNum =#{userNum} ,userName =#{userName} ,
+			teacherName = #{teacherName},teacherNum= #{teacherNum},absenceMount= #{absenceMount},onDetyMount=#{onDetyMount},
+			sickMount=#{sickMount},mngMount=#{mngMount},uploadFileCount=#{uploadFileCount},writeQuality=#{writeQuality},
+			operateMount=#{operateMount},thinking=#{thinking},virtues=#{virtues},teachAbility=#{teachAbility},
+			learnAmount=#{learnAmount},science=#{science},mistake=#{mistake},mini_cex=#{mini_cex},theoryExam=#{theoryExam},
+			practiceExam=#{practiceExam},soap=#{soap},nurseDes=#{nurseDes},sickDes=#{sickDes},createTime=#{createTime},
+			roomName=#{roomName},createName=#{createName},createNum=#{createNum}, theoryscore = #{theoryscore} 
+		where id =#{id}
+	</update>
+</mapper>

@@ -1,0 +1,53 @@
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<#import "../decorators/spring.ftl" as spring />
+<style>
+.checkbox {
+ width: 16px;
+ height: 25px;
+ padding: 0 5px 0 0;
+}
+
+.table_td td{
+	padding-left:3px;
+}
+</style>
+<div>
+<form id="planAdd" name="planAdd">
+	公告标题：<input type="text" name="messageTitle" value=""/><p>
+	<a style="font-size:18px;">专业基地接收：</a></p>
+			<#if baseValues?? && baseValues?size gt 0>
+				<#list baseValues as baseValue>
+					 <input class="checkbox" type="checkbox" name="${baseValue.name}" value="${baseValue.value}" />
+					 	<a style="color:green;font-size:15px;">${baseValue.value!}</a> &nbsp;  
+				 </#list>
+			</#if>
+			<br><br>
+	<a style="font-size:18px;">临床科主任：</a></p>
+		<#if roomValues?? && roomValues?size gt 0>
+				<#list roomValues as romeValue>
+					 <input class ="checkbox" type="checkbox" name="${romeValue.name}" value="${romeValue.value}" />
+					 	<a style="color:green; font-size:15px;">${romeValue.value!} </a>>&nbsp;   
+				 </#list>
+			</#if>
+	<br><br>
+	公告内容：<input type="textarea" style="width:300px;height:100px；scrollbar-arrow-color:yellow;scrollbar-base-color:lightsalmon" name="messageTxt" value=""/><br><br>
+	
+	
+	<input type="button" value="提交" onclick="addMessage();">&nbsp;&nbsp;&nbsp;&nbsp;
+	<input type="button" value="返回" onclick="toblack()">
+</form>
+</div>
+
+<script type="text/javascript">
+
+function addMessage(){
+	 var result = confirm('是否添加！');  
+	if(result){  
+		var url = "<@spring.url '/messageController/message_addsubmit.htm?targetID=dataDiv&formID=searchform'/>";
+		ajaxFormRequest("{url:'"+url+"',id:'dataDiv',form:'planAdd'}"); 
+	}else{  
+		alert('不添加');  
+	}  
+}
+</script>

@@ -1,0 +1,213 @@
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<#import "../decorators/spring.ftl" as spring />
+<!DOCTYPE html>
+<html >
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link href="${uri.csssite}/validationEngine.jquery.css" rel="stylesheet" type="text/css" />
+<script src="${uri.jssite}/jquery.js" type="text/javascript" ></script>
+<link href="${uri.csssite}/jquery.loadmask.css" rel="stylesheet" type="text/css" />
+<script src="${uri.jssite}/js02.js" type="text/javascript" ></script>
+<script src="${uri.jssite}/base.js" type="text/javascript" ></script>
+<script src="${uri.jssite}/js05.js" type="text/javascript" ></script>
+<script src="${uri.jssite}/common.js" type="text/javascript" ></script>
+<script src="${uri.jssite}/ckeditor/ckeditor.js" type="text/javascript" ></script>
+<script src="${uri.jssite}/jquery.loadmask.js" type="text/javascript" ></script>
+<script src="${uri.jssite}/jquery.loadmask.min.js" type="text/javascript" ></script>
+<script src="${uri.jssite}/My97DatePicker/WdatePicker.js" type="text/javascript" ></script>
+<script src="${uri.jssite}/jquery.validationEngine-cn.js" type="text/javascript"></script>
+<script src="${uri.jssite}/jquery.validationEngine.js" type="text/javascript"></script>
+<link rel="stylesheet" href="${uri.bssite}/css/bootstrap.css">
+<script src="${uri.bssite}/js/bootstrap.min.js"></script>
+</head>
+<body>
+<!--right-->
+<#include "../decorators/left1.ftl" ><div class="main_right" id="right">
+	<div class="right_con">
+		<div class="main_search">
+			<form id="searchform">
+				<div style="border: 0px solid silver;height: 30px;padding-top: 3px;">
+					责任教师:<select name="teachernum" > 
+					<#if teacherList?? && teacherList ? size gt 0>
+						<option value="">请选择</option> 
+						<#list teacherList as teacher>
+							<option value="${teacher.loginName!}" <#if teacher.loginName==teachernum!>selected="selected"</#if> >${teacher.realName!}</option>
+						</#list> 
+					</#if>
+					</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp; 
+					开始时间：
+						<input id="searchStart" type="text" name="searchStart" />
+							<img onclick="WdatePicker({el:'searchStart',dateFmt:'yyyy-MM-dd'})" 
+									src="${uri.jssite}/My97DatePicker/skin/datePicker.gif" width="16" height="22" align="absmiddle">	
+									
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp; 	
+					结束时间：
+						<input id="searchEnd" type="text" name="searchEnd" />
+							<img onclick="WdatePicker({el:'searchEnd',dateFmt:'yyyy-MM-dd'})" 
+									src="${uri.jssite}/My97DatePicker/skin/datePicker.gif" width="16" height="22" align="absmiddle">	
+					&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="hidden" name="li" value="${li!}"/>
+						<input type="hidden" name="div" value="${div!}"/>
+						
+						<input type="hidden" name="status" value="${status!}"/>
+						<input type="hidden" name="type" value="${type!}"/>
+						<input type="hidden" name="pageIndex" value="${pageIndex!'1'}"/>
+						
+						
+						<button type="button" class="btn btn-danger btn-sm" onclick="queryList()" >搜 索</button>
+						
+						
+						
+						<span style="float: right;">
+						<a href="#" onclick="AddCheRoom()" >	
+							<button type="button" class="btn btn-primary btn-sm">添加出科考试</button>
+						</a>
+						</span>
+				</div>
+			</form>
+		</div>
+		<!-- 显示数据的div -->
+		<div id="dataDiv">
+		 <div style="border: 1px solid #ccc ;margin-top: 10px;" >
+	<div class="main_right" id="right">
+	<table id="tb" class="table table-hover table-bordered" > 
+			<tr class="table_title">
+				<td width="8%">科室</td>
+				<td width="8%">责任老师</td>
+				<td width="7%">开始时间</td>
+				<td width="4%">时长</td>
+				<td width="25%">学生</td>
+				<td width="7%">创建时间</td>
+			</tr>
+			<#if page.list ?? && page.list ?size gt 0>
+			<#list page.list  as cheRoom>
+			<tr class="table_td">
+				<td>${cheRoom.roomName!}</td>
+				<td>${cheRoom.teacherName!}</td>
+				<td>${cheRoom.startTime!}</td>
+				<td>${cheRoom.takeTime!}</td>
+				<td>${cheRoom.ext01!}</td>
+				<td>${cheRoom.createTime[0..10]}</td>
+			</tr>
+			</#list>
+			<#else>
+	  			<tr class="table_td"><td colspan="12" align="center">没有符合条件的结果。</td></tr>
+			</#if>
+		</table>
+	<#include "../decorators/page.htm" />
+	</div>
+</div>
+<div style="display: none;">
+        	<a id="addSuccessed" href="#" onclick="showMessageDialog(event,'新建成功','<@spring.url '/activesCont/index.htm?li=li316&div=div_3&menuOrder=0'/>','closeWindow();');" ></a>
+        	<a id="addFailed" href="#" onclick="showMessageDialog(event,'新建失败','','');" ></a>
+ </div>
+		</div>
+	</div>
+</div>
+<!--right end-->
+
+<script type="text/javascript">
+		
+function queryList(){
+	/* var url ="<@spring.url '/outexam/list.htm?targetID=dataDiv&formID=searchform'/>";
+	ajaxFormRequest("{url:'"+url+"',id:'dataDiv',form:'searchform'}"); */
+	window.location = '<@spring.url "/activesCont/index.htm?type=${type!}&li=${li!}&div=${div!}&menuOrder=0&teachernum=${teachernum!}&searchEnd=${searchEnd!}&searchStart=${searchStart!}"/>';
+}	
+	
+function AddCheRoom(){
+	var url ="<@spring.url '/outexam/add.htm'/>";
+	ajaxFormRequest("{url:'"+url+"',id:'dataDiv',form:'searchform'}");
+}
+
+
+function searchS(){
+	$("#tb  tr:not(:first)").empty("");
+	var url ="<@spring.url '/outexam/searchS.htm'/>";
+	var time =  $("#searchT").val();
+	var postmethod = "POST";
+	$.ajax({
+		   type: postmethod,
+		   cache: false,
+		   url: url,
+		   data : {time:time},
+		   success: function(data){
+			   	tab = document.getElementById("tb"); 
+			    if(null == data && ""==data.trim()){
+			    	var tr = tab.insertRow(tab.rows.length - 1);//插入到末二行，最后一行要给全选那一行保留着 
+					var td1 = tr.insertCell(-1); 
+						td1.innerHTML = "<p >本科室本月没有换科学员</p>"; 
+					
+			    }else{
+					//把data循环遍历方式以tr的方式加入表格中 
+					for (var i = 0; i < data.length; i++) { 
+						var tr = tab.insertRow(tab.rows.length - 1);//插入到末二行，最后一行要给全选那一行保留着 
+						var td1 = tr.insertCell(-1); 
+						td1.innerHTML = "<input type='checkbox' name='userP' value="+data[i].ext01+":"+data[i].realName+">"; 
+						var td2 = tr.insertCell(-1); 
+						td2.innerHTML = data[i].realName; 
+						var td3 = tr.insertCell(-1); 
+						td3.innerHTML = data[i].ext01; 
+						var td4 = tr.insertCell(-1); 
+						td4.innerHTML = data[i].ext02; 
+						var td5 = tr.insertCell(-1); 
+						td5.innerHTML = data[i].ext03; 
+					} 
+			    }
+			}
+		})
+	}
+	
+
+function toDetailView(id, num){
+	var url ="<@spring.url '/cancelTicketController/cancelTicketDetail.htm?auditId=" + num + "'/>";
+	showView(id, url);
+}
+
+function targetPage(pageIndex){
+	window.location = '<@spring.url "/activesCont/index.htm?li=${li!}&div=${div!}&menuOrder=0&teachernum=${teachernum!}&searchEnd=${searchEnd!}&searchStart=${searchStart!}&pageIndex='+pageIndex+'"/>';
+}
+
+function cheFile(id){
+	var url ="<@spring.url '/file/filelist.htm?paramPath=" + id + "'/>";
+	ajaxFormRequest("{url:'"+url+"',id:'dataDiv',form:'searchform'}");
+}
+
+function toDelcheRoom(tId){
+	var param = null;
+	var postmethod = "get";
+	var url ="<@spring.url '/rcheroomController/cheroomDel.htm?cheRoomId="+tId+"'/>";
+	$.ajax({
+		   type: postmethod,
+		   cache: false,
+		   url: url,
+		   data : param,
+		   success: function(data){
+			if(data == 'true'){
+				tip(1,true);
+				return;
+			}
+			if(data == 'false'){
+				tip(1,false);
+				return;
+			}
+			showMessageDialog(null,data,'','');
+		   },
+		   error:function(xhr,err){ 
+		}
+	});
+}
+
+function tip(type,bool){
+	if(type == 1){
+		if(bool){
+			document.getElementById("delSuccessed").click();
+			return;
+		}
+		document.getElementById("delFailed").click();
+	}
+}
+	
+</script> 
+</body>
+</html>

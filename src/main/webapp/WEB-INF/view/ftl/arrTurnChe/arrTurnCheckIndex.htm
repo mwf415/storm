@@ -1,0 +1,240 @@
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<#import "../decorators/spring.ftl" as spring />
+<!DOCTYPE html>
+<html >
+<head><#include "../decorators/headtitle.ftl" >
+<style>
+.table_td td{
+	border-left:1px solid #FFF;
+}
+.td_table {
+	width: "2000px";
+	border: "0px";
+	cellspacing: "0";
+	cellpadding: "0";
+}
+.big_table {
+	width: "2000px";
+	border: "0px";
+	cellspacing: "0";
+	cellpadding: "0";
+}
+</style>
+</head>
+<body>
+<#include "../decorators/left1.ftl" ><div class="main_right" id="right">
+	<div class="right_con">
+<!-- 因为是重新发送的，所以这里又写了一遍查询条件 -->
+		<div class="main_search">
+			<form id="searchform" >
+				<input type="text" value="${li!}" name="li" style="display: none"/>
+				<input type="text" value="${div!}" name="div" style="display: none"/>
+				<input type="text" value="${type!}" name="type" style="display: none"/>
+				选择年级：
+
+				2015<input type="radio" value="2015" name="grade" />&nbsp;&nbsp;
+				2016<input type="radio" value="2016" name="grade" />&nbsp;&nbsp;
+				2017 <input type="radio" value="2017" name="grade"/>&nbsp;&nbsp;
+				2018<input type="radio" value="2018" name="grade"/>&nbsp;&nbsp;
+				2019<input type="radio" value="2019" name="grade"/>&nbsp;&nbsp;
+				2020<input type="radio" value="2020" name="grade"/>&nbsp;&nbsp;
+				2021<input type="radio" value="2021" name="grade"/>&nbsp;&nbsp;
+				基地：<select id="baseName" name="baseName" style="width: 105px;" >
+					<#if baseValues?? && baseValues?size gt 0>
+						<option value="">请选择</option>
+						<#list baseValues as baseValue>
+								<option value="${baseValue.value!}" <#if baseValue.value==baseName!>selected="selected"</#if> >${baseValue.value}</option>
+						</#list>
+					</#if>
+					</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<input  type="button" value="未审核" onclick="ifCheck('0')" class="look_02"/>	&nbsp;&nbsp;&nbsp;
+					<input  type="button" value="已审核" onclick="ifCheck('1')" class="look_02"/>
+			</form>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+		</div>
+			<div id="dataDiv" style="word-spacing: normal;">
+				<p  style="color:red;font-size:14px;" >
+					<#if baseName?? > ${baseName!} :${grade!} <#else></#if>
+					<#if type?? && type=="3">本科生(专科生)<#elseif type?? && type=="2">研究生</#if>
+					<#if checkStatus?? && checkStatus=="0" >未审核 <#elseif checkStatus?? && checkStatus=="1"> 已审核</#if>列表
+				</p>
+				<table class="table table-bordered table-hover">
+					<tr class="table_title">
+						<td width="30%">用户姓名</td>
+						<td width="30%">基地名称</td>
+						<#if checkStatus?? && checkStatus=="0">
+						<td width="40%">操作</td>
+						<#else>
+						<td width="40%">详情</td>
+						</#if>
+					</tr>
+					<#if resultMap?? && resultMap?size gt 0 >
+						<#list resultMap as at>
+							<tr class="table_td">
+								<td>${at.realName}</td>
+								<td>${at.basename}</td>
+								<#if checkStatus?? && checkStatus=="0">
+								<td>
+									<a href="#"  onclick="onCheck('${at.loginName!}')" style="cursor: pointer;" >通过</a>&nbsp;&nbsp;
+									<a href="#"  onclick="del('${at.loginName!}')" style="cursor: pointer;" >删除</a>&nbsp;&nbsp;
+								</td>
+								<#else>
+									<td> ${at.startTime[0..10]}&nbsp;&nbsp;${at.roomName}</td>
+								</#if>
+							</tr>
+						</#list>
+
+					<#else>
+			  			<tr class="table_td"><td colspan="12" align="center">没有符合条件的结果。</td></tr>
+					</#if>
+					</table>
+				</div>
+			<br />
+			<!--轮转详情  -->
+			<div id="dataDiv1" style="word-spacing: normal;">
+				开始时间：
+				<input id="startTime" type="text" name="startTime" />
+				<img onclick="WdatePicker({el:'startTime',dateFmt:'yyyy-MM-dd HH:mm:ss'})"
+					 src="${uri.jssite}/My97DatePicker/skin/datePicker.gif" width="16" height="22" align="absmiddle">
+			    <input type="button" onclick="queryDetail()" value="查询"/>
+				<table id="arrturnTable" cellpadding="0px" cellspacing="1px" class="main_table" style="white-space:nowrap">
+				</table>
+			</div>
+
+	</div>
+</div>
+<div style="display: none;">
+		<a id="delSuccessed" href="#" onclick="showMessageDialog(event,'成功','<@spring.url '/arrTurnCheckController/arrTurnIndex.htm?li=${li!}&div=${div!}&type=${type!}&baseName=${baseName!}&checkStatus=${checkStatus!}&grade=${grade!}'/>','closeWindow();');" ></a>
+	 	<a id="delFailed" href="#" onclick="showMessageDialog(event,'失败！','','');" ></a>
+	</div>
+<input type="hidden" id="tmpBaseName" value="${baseName!}"/>
+<script type="text/javascript">
+//确认审核通过
+function onCheck(id){
+	var param = null;
+	var postmethod = "POST";
+	var param = $("#searchform").serialize();
+	var url = "<@spring.url '/arrTureCheck/update.htm?loginName="+id+"'/>";
+	$.ajax({
+		   type: postmethod,
+		   cache: false,
+		   url: url,
+		   data : param,
+		   success: function(data){
+		    if(!validateFieldMs(data)){
+				return;
+			}
+			if(data == 'true'){
+				tip(1,true);
+				return;
+			}else if(data == 'false'){
+				tip(1,false);
+				return;
+			}
+			showMessageDialog(null,data,'','');
+		   },
+		   error:function(xhr,err){
+			   window.location.href=url;
+		}
+	});
+}
+//删除
+function del(id){
+	var param = null;
+	var postmethod = "POST";
+	var param = $("#searchform").serialize();
+	var url = "<@spring.url '/arrTureCheckCon/delete.htm?loginName="+id+"'/>";
+	$.ajax({
+		   type: postmethod,
+		   cache: false,
+		   url: url,
+		   data : param,
+		   success: function(data){
+		    if(!validateFieldMs(data)){
+				return;
+			}
+			if(data == 'true'){
+				tip(1,true);
+				return;
+			}else if(data == 'false'){
+				tip(1,false);
+				return;
+			}
+			showMessageDialog(null,data,'','');
+		   },
+		   error:function(xhr,err){
+			   window.location.href=url;
+		}
+	});
+}
+function tip(type,bool){
+	if(type == 1){
+		if(bool){
+			document.getElementById("delSuccessed").click();
+			return;
+		}
+		document.getElementById("delFailed").click();
+	}
+}
+function ifCheck(id){
+	 var baseName = $('#baseName option:selected').val();
+	var grade ='';
+	var radionum = document.getElementById("searchform").grade;
+	for(var i=0;i<radionum.length;i++){
+		if(radionum[i].checked){
+		 grade = radionum[i].value
+	 }
+	}
+	if(grade==''||grade==undefined){
+		alert("请选择年级！");
+		return;
+	}
+	window.location = '<@spring.url "/arrTurnCheckController/arrTurnIndex.htm?li=${li!}&div=${div!}&type=${type!}&baseName='+baseName+'&grade='+grade+'&checkStatus='+id+'"/>';
+}
+
+function queryDetail(){
+	var baseName = $("#tmpBaseName").val();
+	var startTime = $("#startTime").val();
+	if(baseName == null || baseName == ""){
+		alert("无记录！请先查看未审核的轮转记录");
+		return;
+	}
+	if(startTime == null || startTime == ""){
+		alert("请选择开始时间");
+		return;
+	}
+	$.ajax({
+		url:"<@spring.url '/arrTurnCheckController/detail.htm'/>",
+		type:"get",
+		data:"startTime="+startTime+"&baseName="+baseName,
+		success:function(data){
+			$("#arrturnTable").html("");
+			var baseRoomList = data.baseRoomList;
+			var nameMap = data.nameMap;
+			var roomRow = document.getElementById(
+					"arrturnTable").insertRow();
+			var timeRemarkCell = roomRow.insertCell();
+			timeRemarkCell.innerHTML = "时间";
+			for (var i = 0; i < baseRoomList.length; i++) {
+				var roomCell = roomRow.insertCell();
+				roomCell.innerHTML = baseRoomList[i].roomName;
+			}
+			for(var key in nameMap){
+				var nameRow = document.getElementById("arrturnTable").insertRow();
+				var timeCell = nameRow.insertCell();
+				timeCell.innerHTML = key;
+				var nameList = nameMap[key];
+				for(var j=0;j<nameList.length;j++){
+					var nameCell = nameRow.insertCell();
+					nameCell.innerHTML = nameList[j];
+				}
+			}
+		}
+	});
+}
+</script>
+<!--right end-->
+</body>

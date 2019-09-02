@@ -1,0 +1,127 @@
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<#import "../decorators/spring.ftl" as spring />
+<!DOCTYPE html>
+<html >
+<head><#include "../decorators/headtitle.ftl" >
+</head>
+<body>
+<!--right-->
+<#include "../decorators/left1.ftl" ><div class="main_right" id="right">
+		<div class="main_search">
+			<form id="searchform" style="height: 30px;">
+				用户编号 <input name="loginName" type="text" value=""  id="loginName"class="validate[custom[chineseAndLetterAndNumber]]" maxlength="18"/> &nbsp; 
+				专业基地 <select name="baseName" id="baseName"> 
+					<#if baseNamed??>
+						<option value="${baseNamed}" selected="selected">${baseNamed}</option>
+					</#if>
+						<option value="">请选择</option>											
+						<#list baseValues as baseValue>
+						<option value="${baseValue.value}">${baseValue.value}</option>
+						</#list>					
+					  </select>&nbsp; 
+					  &nbsp; 
+						<button type="button" class="btn btn-danger btn-sm" onclick="querySerchList()" >搜 索</button>
+					
+				</form>
+		</div>
+		<table class="table table-bordered table-hover">
+		<tr class="table_title">
+			<td width="8%">医师姓名</td>
+			<td width="8%">病人姓名</td>
+			<td width="4%">性别</td>
+			<td width="4%">年龄</td>
+			<td width="4%">病房</td>
+			<td width="4%">床号</td>
+			<td width="8%">病案号</td>
+			<td width="30%">操作</td>
+		</tr>
+		<#if page.list?? && page.list?size gt 0>
+		<#list page.list as writeCase>
+		<tr class="table_td">
+			<td>${writeCase.userName!}</td>
+			<td>${writeCase.illName!}</td>
+			<td>${writeCase.illSex!}</td>
+			<td>${writeCase.illAge!}</td>
+			<td>${writeCase.illRoom!}</td>
+			<td>${writeCase.illBedNum!}</td>
+			<td>${writeCase.illNum!}</td>
+			<td>
+			<!-- <a href="<@spring.url '/writeCaseController/showDetail.htm?id=${writeCase.id}&li=li511&div=div_5&menuOrder=0'/>">查看短期医嘱</a> 
+			<a href="<@spring.url '/writeCaseController/writeCase_edit.htm?id=${writeCase.id}&li=li511&div=div_5&menuOrder=0'/>">查看长期医嘱</a>
+		 -->	
+		 	<input type="button" onclick="showLong(${writeCase.shortAdvice!})" value="短期医嘱">
+			<input type="button" onclick="showLong(${writeCase.longAdvice!})" value="长期医嘱">
+		
+		</tr>
+		</#list>
+		<#else>
+  			<tr class="table_td"><td colspan="12" align="center">没有符合条件的结果。</td></tr>
+		</#if>
+	</table>
+	<#include "../decorators/page.htm" />
+
+</div>
+
+<!--right end-->
+<script type="text/javascript">
+
+function showLong(msg){
+	alert("msg");
+}
+
+
+function delwriteCase(tId){
+	var param = null;
+	var postmethod = "get";
+	var url ="<@spring.url '/writeCase/writeCaseDel.htm?id="+tId+"'/>";
+	$.ajax({
+		   type: postmethod,
+		   cache: false,
+		   url: url,
+		   data : param,
+		   success: function(data){
+			if(data == 'true'){
+				tip(1,true);
+				return;
+			}
+			if(data == 'false'){
+				tip(1,false);
+				return;
+			}
+			showMessageDialog(null,data,'','');
+		   },
+		   error:function(xhr,err){ 
+		}
+	});
+}
+
+function tip(type,bool){
+	if(type == 1){
+		if(bool){
+			document.getElementById("delSuccessed").click();
+			return;
+		}
+		document.getElementById("delFailed").click();
+	}
+}
+
+function targetPage(pageIndex){
+	var loginName = $("#loginName").val();
+	var baseName = $("#baseName").val();
+	window.location = '<@spring.url "/twriteCaseCont/writeCaseindex.htm?li=li511&div=div_5&menuOrder=0&pageIndex='+pageIndex+'&loginName='+loginName+'&baseName='+baseName+'"/>';
+}
+
+function querySerchList(){
+	//var url = '<@spring.url "/writeCaseController/writeCase_index.htm?li=li10&div=div_1&menuOrder=0"/>';
+		var loginName = $("#loginName").val();
+		var baseName = $("#baseName").val();
+		window.location = '<@spring.url "/twriteCaseCont/writeCaseindex.htm?li=li511&div=div_5&menuOrder=0&loginName='+loginName+'&baseName='+baseName+'"/>';
+		}
+
+</script>
+<!--right end-->
+
+
+</body>
+</html>

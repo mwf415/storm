@@ -1,0 +1,405 @@
+<#import "../decorators/spring.ftl" as spring />
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html >
+<head><#include "../decorators/headtitle.ftl" >
+</head>
+<body>
+<!--right-->
+<#include "../decorators/left1.ftl" ><div class="main_right" id="right">
+	<div class="rig_tab">
+		<div class="rig_tab2">
+			<form id="addform" name="form1">
+			<input type="hidden" name="id" value="${soap.id!}"/>
+			<table class="table table-bordered table-hover">
+					<tr>
+						<td colspan="2">考官姓名:&nbsp;&nbsp;${soap.kgName!}</td>
+					</tr>
+					<tr>
+						<td colspan="2">考生姓名:${soap.ksName!}</td>
+					</tr>
+					<tr>
+						<td>日&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;期:&nbsp;&nbsp;<input type="text" name="gradeDate" id="gradeDate" readonly/><img onclick="WdatePicker({el:'gradeDate',dateFmt:'yyyy-MM-dd'})" 
+						src="${uri.jssite}/My97DatePicker/skin/datePicker.gif" width="16" height="22" align="absmiddle">&nbsp;&nbsp;&nbsp;&nbsp;
+						</td><td>时间段:&nbsp;&nbsp;<input name="gradeTime" type="radio" value="1" />上午  &nbsp;&nbsp;
+					    				<input name="gradeTime" type="radio" value="2"/>下午 &nbsp;&nbsp;
+					    				<input name="gradeTime" type="radio" value="3"/>晚上 &nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>考生身份:
+						</td><td>&nbsp;&nbsp;<input name="ksIdentity" type="radio" value="1" />见习&nbsp;&nbsp;
+							     <input name="ksIdentity" type="radio" value="2"/>实习&nbsp;&nbsp;
+							     <input name="ksIdentity" type="radio" value="3"/>第一年住院医 &nbsp;&nbsp;
+							     <input name="ksIdentity" type="radio" value="4"/>第二年住院医&nbsp;&nbsp;
+							     <input name="ksIdentity" type="radio" value="5"/>住院总&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>考核地点:&nbsp;&nbsp;</td><td>
+						<input name="khaddress" type="radio" value="1" />门诊&nbsp;&nbsp;
+							     <input name="khaddress" type="radio" value="2"/>急诊&nbsp;&nbsp;
+							     <input name="khaddress" type="radio" value="3"/>住院 &nbsp;&nbsp;
+							     <input name="khaddress" type="radio" value="4"/>其他&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>考核目的:&nbsp;&nbsp;
+								</td><td><input name="khmudi" type="radio" value="1" />资料收集&nbsp;&nbsp;
+							     <input name="khmudi" type="radio" value="2"/>诊断&nbsp;&nbsp;
+							     <input name="khmudi" type="radio" value="3"/>治疗&nbsp;&nbsp;
+							     <input name="khmudi" type="radio" value="4"/>病情资讯建议&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2"></td>
+					</tr>
+					<tr>
+						<td colspan="2">病历号:&nbsp;&nbsp;<input type="text" name="blh" id="blh"  style="width:100px;"/>&nbsp;&nbsp;
+							年龄:&nbsp;&nbsp;<input type="text" name="bage" id="bage" style="width:100px;"/>&nbsp;&nbsp;
+							性别:&nbsp;&nbsp;<input type="text" name="bsex" id="bsex" style="width:100px;"/>&nbsp;&nbsp;
+							病房:&nbsp;&nbsp;<input type="text" name="bfh" id="bfh" style="width:100px;"/>&nbsp;&nbsp;
+							床号:&nbsp;&nbsp;<input type="text" name="bch" id="bch" style="width:100px;"/>&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>病例复杂程度:&nbsp;&nbsp;
+						</td><td>
+						<input name="complexDegree" type="radio" value="1" />低&nbsp;&nbsp;
+							     <input name="complexDegree" type="radio" value="2"/>中&nbsp;&nbsp;
+							     <input name="complexDegree" type="radio" value="3"/>高&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr><td colspan="2"></td></tr>
+					<tr><td colspan="2">评分标准：&nbsp;&nbsp;&nbsp;&nbsp;缺项(1分)&nbsp;&nbsp;&nbsp;&nbsp;遗漏重要内容(2分) &nbsp;&nbsp;&nbsp;&nbsp;未遗漏重要内容(3分)&nbsp;&nbsp;&nbsp;&nbsp; 内容完整但条理性稍差(4分)&nbsp;&nbsp;&nbsp;&nbsp; 内容完整且有条理(5分)</td></tr>
+					<tr>
+						<td colspan="2">Subjective</td>
+					</tr>
+					
+					<tr>
+						<td>1、主要症状和体征描述:&nbsp;&nbsp;
+						</td>
+						<td>
+								<input name="mtjq" type="radio" value="1" />1&nbsp;&nbsp;
+								<input name="mtjq" type="radio" value="2" />2&nbsp;&nbsp;
+								<input name="mtjq" type="radio" value="3" />3&nbsp;&nbsp;
+								<input name="mtjq" type="radio" value="4" />4&nbsp;&nbsp;
+								<input name="mtjq" type="radio" value="5" />5&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>2、损伤过程描述:&nbsp;&nbsp;
+						</td>
+						<td>
+								<input name="tgjc" type="radio" value="1" />1&nbsp;&nbsp;
+								<input name="tgjc" type="radio" value="2" />2&nbsp;&nbsp;
+								<input name="tgjc" type="radio" value="3" />3&nbsp;&nbsp;
+								<input name="tgjc" type="radio" value="4" />4&nbsp;&nbsp;
+								<input name="tgjc" type="radio" value="5" />5&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>3、既往史及药物治疗情况:&nbsp;&nbsp;
+						</td>
+						<td>
+								<input name="zysy" type="radio" value="1" />1&nbsp;&nbsp;
+								<input name="zysy" type="radio" value="2" />2&nbsp;&nbsp;
+								<input name="zysy" type="radio" value="3" />3&nbsp;&nbsp;
+								<input name="zysy" type="radio" value="4" />4&nbsp;&nbsp;
+								<input name="zysy" type="radio" value="5" />5&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>4、其他可能相关病史:&nbsp;&nbsp;
+							</td>
+						<td>
+								<input name="lcpd" type="radio" value="1" />1&nbsp;&nbsp;
+								<input name="lcpd" type="radio" value="2" />2&nbsp;&nbsp;
+								<input name="lcpd" type="radio" value="3" />3&nbsp;&nbsp;
+								<input name="lcpd" type="radio" value="4" />4&nbsp;&nbsp;
+								<input name="lcpd" type="radio" value="5" />5&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2">Objective</td>
+					</tr>
+					<tr>
+						<td>1、生命征:&nbsp;&nbsp;
+							</td>
+						<td>
+								<input name="zxjy" type="radio" value="1" />1&nbsp;&nbsp;
+								<input name="zxjy" type="radio" value="2" />2&nbsp;&nbsp;
+								<input name="zxjy" type="radio" value="3" />3&nbsp;&nbsp;
+								<input name="zxjy" type="radio" value="4" />4&nbsp;&nbsp;
+								<input name="zxjy" type="radio" value="5" />5&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>2、心肺查体:&nbsp;&nbsp;
+							</td>
+						<td>
+								<input name="zznl" type="radio" value="1" />1&nbsp;&nbsp;
+								<input name="zznl" type="radio" value="2" />2&nbsp;&nbsp;
+								<input name="zznl" type="radio" value="3" />3&nbsp;&nbsp;
+								<input name="zznl" type="radio" value="4" />4&nbsp;&nbsp;
+								<input name="zznl" type="radio" value="5" />5&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>3、受累系统重点查体:&nbsp;&nbsp;
+							</td>
+						<td>
+								<input name="ztlc" type="radio" value="1" />1&nbsp;&nbsp;
+								<input name="ztlc" type="radio" value="2" />2&nbsp;&nbsp;
+								<input name="ztlc" type="radio" value="3" />3&nbsp;&nbsp;
+								<input name="ztlc" type="radio" value="4" />4&nbsp;&nbsp;
+								<input name="ztlc" type="radio" value="5" />5&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>a,阳性体征:&nbsp;&nbsp;
+							</td>
+						<td>
+								<input name="aztlc" type="radio" value="1" />1&nbsp;&nbsp;
+								<input name="aztlc" type="radio" value="2" />2&nbsp;&nbsp;
+								<input name="aztlc" type="radio" value="3" />3&nbsp;&nbsp;
+								<input name="aztlc" type="radio" value="4" />4&nbsp;&nbsp;
+								<input name="aztlc" type="radio" value="5" />5&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>b,相关阴性体征:&nbsp;&nbsp;
+							</td>
+						<td>
+								<input name="bztlc" type="radio" value="1" />1&nbsp;&nbsp;
+								<input name="bztlc" type="radio" value="2" />2&nbsp;&nbsp;
+								<input name="bztlc" type="radio" value="3" />3&nbsp;&nbsp;
+								<input name="bztlc" type="radio" value="4" />4&nbsp;&nbsp;
+								<input name="bztlc" type="radio" value="5" />5&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2">Analysis</td>
+					</tr>
+					<tr>
+						<td>1、简单总结资料:&nbsp;&nbsp;
+							</td>
+						<td>
+								<input name="zjzl" type="radio" value="1" />1&nbsp;&nbsp;
+								<input name="zjzl" type="radio" value="2" />2&nbsp;&nbsp;
+								<input name="zjzl" type="radio" value="3" />3&nbsp;&nbsp;
+								<input name="zjzl" type="radio" value="4" />4&nbsp;&nbsp;
+								<input name="zjzl" type="radio" value="5" />5&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>2、列举问题:&nbsp;&nbsp;
+							</td>
+						<td>
+								<input name="ljwt" type="radio" value="1" />1&nbsp;&nbsp;
+								<input name="ljwt" type="radio" value="2" />2&nbsp;&nbsp;
+								<input name="ljwt" type="radio" value="3" />3&nbsp;&nbsp;
+								<input name="ljwt" type="radio" value="4" />4&nbsp;&nbsp;
+								<input name="ljwt" type="radio" value="5" />5&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>3、按照问题所指定的计划:&nbsp;&nbsp;
+							</td>
+						<td>
+								<input name="wtjh" type="radio" value="1" />1&nbsp;&nbsp;
+								<input name="wtjh" type="radio" value="2" />2&nbsp;&nbsp;
+								<input name="wtjh" type="radio" value="3" />3&nbsp;&nbsp;
+								<input name="wtjh" type="radio" value="4" />4&nbsp;&nbsp;
+								<input name="wtjh" type="radio" value="5" />5&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>4、结果和随访:&nbsp;&nbsp;
+							</td>
+						<td>
+								<input name="jgsf" type="radio" value="1" />1&nbsp;&nbsp;
+								<input name="jgsf" type="radio" value="2" />2&nbsp;&nbsp;
+								<input name="jgsf" type="radio" value="3" />3&nbsp;&nbsp;
+								<input name="jgsf" type="radio" value="4" />4&nbsp;&nbsp;
+								<input name="jgsf" type="radio" value="5" />5&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2">Plan</td>
+					</tr>
+					<tr>
+						<td>1、安排检查(辅助检查、影像学):&nbsp;&nbsp;
+							</td>
+						<td>
+								<input name="apjc" type="radio" value="1" />1&nbsp;&nbsp;
+								<input name="apjc" type="radio" value="2" />2&nbsp;&nbsp;
+								<input name="apjc" type="radio" value="3" />3&nbsp;&nbsp;
+								<input name="apjc" type="radio" value="4" />4&nbsp;&nbsp;
+								<input name="apjc" type="radio" value="5" />5&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>2、指导:&nbsp;&nbsp;
+							</td>
+						<td>
+								<input name="zd" type="radio" value="1" />1&nbsp;&nbsp;
+								<input name="zd" type="radio" value="2" />2&nbsp;&nbsp;
+								<input name="zd" type="radio" value="3" />3&nbsp;&nbsp;
+								<input name="zd" type="radio" value="4" />4&nbsp;&nbsp;
+								<input name="zd" type="radio" value="5" />5&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>3、操作:&nbsp;&nbsp;
+							</td>
+						<td>
+								<input name="cz" type="radio" value="1" />1&nbsp;&nbsp;
+								<input name="cz" type="radio" value="2" />2&nbsp;&nbsp;
+								<input name="cz" type="radio" value="3" />3&nbsp;&nbsp;
+								<input name="cz" type="radio" value="4" />4&nbsp;&nbsp;
+								<input name="cz" type="radio" value="5" />5&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>4、药物治疗:&nbsp;&nbsp;
+						</td>
+						<td>
+								<input name="ywzl" type="radio" value="1" />1&nbsp;&nbsp;
+								<input name="ywzl" type="radio" value="2" />2&nbsp;&nbsp;
+								<input name="ywzl" type="radio" value="3" />3&nbsp;&nbsp;
+								<input name="ywzl" type="radio" value="4" />4&nbsp;&nbsp;
+								<input name="ywzl" type="radio" value="5" />5&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>5、健康教育:&nbsp;&nbsp;
+							</td>
+						<td>	<input name="jkjy" type="radio" value="1" />1&nbsp;&nbsp;
+								<input name="jkjy" type="radio" value="2" />2&nbsp;&nbsp;
+								<input name="jkjy" type="radio" value="3" />3&nbsp;&nbsp;
+								<input name="jkjy" type="radio" value="4" />4&nbsp;&nbsp;
+								<input name="jkjy" type="radio" value="5" />5&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>6、下一次见面或随访时间:&nbsp;&nbsp;
+						</td>
+						<td>								<input name="jmsf" type="radio" value="1" />1&nbsp;&nbsp;
+								<input name="jmsf" type="radio" value="2" />2&nbsp;&nbsp;
+								<input name="jmsf" type="radio" value="3" />3&nbsp;&nbsp;
+								<input name="jmsf" type="radio" value="4" />4&nbsp;&nbsp;
+								<input name="jmsf" type="radio" value="5" />5&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2"></td>
+					</tr>
+					<tr>
+						<td>观察时间:&nbsp;&nbsp;
+						</td>
+						<td>
+						<input style="width:50px;" type="text" name="gcTime" id="gcTime"/>分钟&nbsp;&nbsp;&nbsp;&nbsp;回馈时间:&nbsp;&nbsp;<input style="width:50px;" type="text" name="hkTime" id="hkTime"/>分钟&nbsp;</td>
+					</tr>
+					<tr>
+						<td>考官对于此次Mini-CEX的满意度:&nbsp;&nbsp;
+							</td>
+						<td>
+								<input name="kgmy" type="radio" value="1" />1&nbsp;&nbsp;
+								<input name="kgmy" type="radio" value="2" />2&nbsp;&nbsp;
+								<input name="kgmy" type="radio" value="3" />3&nbsp;&nbsp;
+								<input name="kgmy" type="radio" value="4" />4&nbsp;&nbsp;
+								<input name="kgmy" type="radio" value="5" />5&nbsp;&nbsp;
+								<input name="kgmy" type="radio" value="6" />6&nbsp;&nbsp;
+								<input name="kgmy" type="radio" value="7" />7&nbsp;&nbsp;
+								<input name="kgmy" type="radio" value="8" />8&nbsp;&nbsp;
+								<input name="kgmy" type="radio" value="9" />9&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>考官对于此次Mini-CEX的满意度:&nbsp;&nbsp;
+							</td>
+						<td>
+								<input name="k1" type="radio" value="1" />不满意&nbsp;&nbsp;
+								<input name="k1" type="radio" value="2" />满意&nbsp;&nbsp;
+								<input name="k1" type="radio" value="3" />非常出色&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>考生对于此次Mini-CEX的满意度:&nbsp;&nbsp;
+							</td>
+						<td>
+								<input name="ksmy" type="radio" value="1" />1&nbsp;&nbsp;
+								<input name="ksmy" type="radio" value="2" />2&nbsp;&nbsp;
+								<input name="ksmy" type="radio" value="3" />3&nbsp;&nbsp;
+								<input name="ksmy" type="radio" value="4" />4&nbsp;&nbsp;
+								<input name="ksmy" type="radio" value="5" />5&nbsp;&nbsp;
+								<input name="ksmy" type="radio" value="6" />6&nbsp;&nbsp;
+								<input name="ksmy" type="radio" value="7" />7&nbsp;&nbsp;
+								<input name="ksmy" type="radio" value="8" />8&nbsp;&nbsp;
+								<input name="ksmy" type="radio" value="9" />9&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>考生对于此次Mini-CEX的满意度:&nbsp;&nbsp;
+							</td>
+						<td>
+								<input name="k2" type="radio" value="1" />不满意&nbsp;&nbsp;
+								<input name="k2" type="radio" value="2" />满意&nbsp;&nbsp;
+								<input name="k2" type="radio" value="3" />非常出色&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr><td colspan="2"></td></tr>
+					<tr><td colspan="2">考官对于考生的主要反馈要点:</td>	</tr>
+					
+					<tr><td colspan="2">完成较好部分:</td></tr>
+					<tr>												
+						<td align="left" colspan="2"><textarea name="wcjh" cols="50" rows="5"></textarea></td>
+					</tr>
+					<tr><td colspan="2">可以改进部分:</td></tr>
+					<tr>											
+						<td colspan="2" align="left"><textarea name="fkyd" cols="50" rows="5"></textarea></td>
+					</tr>
+					<tr>
+	               	 	<td colspan="2">
+		               		<button type="button" class="btn btn-danger btn-xs" onclick="addSoap()" >添加</button>
+	               	 	</td>
+					</tr> 
+				</table>
+			</form>
+		</div>
+	</div>
+
+</div>
+
+<script>
+	function addSoap(){
+		var url ="<@spring.url '/soapController/addSoap.htm'/>";
+		$("#addform").attr("action",url).submit();
+	}
+   
+   function myCheck()
+   {
+      for(var i=0;i<document.form1.elements.length-1;i++)
+      {
+       if(document.form1.elements[i].value=="")
+	       {
+	        alert("当前表单不能有空项");
+	        document.form1.elements[i].focus();
+	        return false;
+	       }
+      }
+      var a = $(':input:radio:checked').length;
+      if(a != 28){
+    	  alert("存在未勾选的单选框,请检查");
+    	  return false;
+      }
+      return true;
+     
+   }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<#import "../decorators/uri.ftl" as uri /> <#import "../decorators/util.ftl" as
+util /> <#import "../decorators/spring.ftl" as spring />
+<!DOCTYPE html>
+<html >
+<head>
+<#include "../decorators/headtitle.ftl" >
+
+</head>
+<!-- 这个事相对于专业基地来说的，主要是为了专业基地修改来用的，还要做一个针对其他通用的查询 -->
+<body>
+	<#include "../decorators/left1.ftl" ><div class="main_right" id="right">
+		<div class="right_con">
+			<div class="main_search">
+				<form id="searchform">
+					<input type="hidden" name="li" value="${li!}"/>
+					<input type="hidden" name="div" value="${div!}"/>
+					<input type="hidden" name="type" value="${type!}"/>
+					<input type="hidden" name="baseName" value="${baseName!}"/>
+
+					基地：${baseName!}
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					选择年级：
+					2015<input type="radio" value="2015" name="grade" />&nbsp;&nbsp;
+					2016<input type="radio" value="2016" name="grade" />&nbsp;&nbsp;
+					2017 <input type="radio" value="2017" name="grade"/>&nbsp;&nbsp;
+					2018<input type="radio" value="2018" name="grade"/>&nbsp;&nbsp;
+					2019<input type="radio" value="2019" name="grade"/>&nbsp;&nbsp;
+					2020<input type="radio" value="2020" name="grade"/>&nbsp;&nbsp;
+					2021<input type="radio" value="2021" name="grade"/>&nbsp;&nbsp;
+						<button type="button" class="btn btn-danger btn-sm" onclick="queryUser()" >搜 索</button>
+
+				</form>
+				</div>
+				<div id="dataDiv">
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+<script>
+function queryUser(){
+	var url ="<@spring.url '/singleArrTurnCont/userlist.htm?targetID=dataDiv&formID=searchform'/>";
+	ajaxFormRequest("{url:'"+url+"',id:'dataDiv',form:'searchform'}");
+}
+</script>
+</body>
+</html>

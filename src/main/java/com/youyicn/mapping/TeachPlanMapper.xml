@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youyicn.dao.cycle.TeachPlanMapper">	
+	<insert id="addTeachPlan" parameterType="com.youyicn.entity.cycle.TeachPlan" >
+		insert into cycle_teachplan(
+			planName, planDate,createTime,address, roomName,teacherName,goal,takeTime,comment,resource,
+			teacherNum ) 
+		values
+			(#{planName},#{planDate},#{createTime},#{address},#{roomName},#{teacherName},#{goal},#{takeTime},#{comment},#{resource},
+			#{teacherNum} )
+	</insert>
+	
+	<select id="getTeachPlan" parameterType="com.youyicn.entity.cycle.TeachPlan" resultType="com.youyicn.entity.cycle.TeachPlan">
+		select * from cycle_teachplan where 1=1 
+		<if test="planName!=null">
+			and planName=#{planName} <!-- 临床科室查询 -->
+		</if>
+		<if test="roomName!=null"><!-- 来源查询 -->
+			and roomName =#{roomName}
+		</if>
+		<if test="teacherNum!=null"><!-- 来源查询 -->
+			and teacherNum =#{teacherNum}
+		</if>
+		
+		order by planId desc 
+	</select>
+	<delete id="delTeachPlan" parameterType="com.youyicn.entity.cycle.TeachPlan" >
+		delete from cycle_teachplan where planId=#{planId}
+	</delete>
+	
+	<select id="getTeachPlanById" parameterType="com.youyicn.entity.cycle.TeachPlan" resultType="com.youyicn.entity.cycle.TeachPlan">
+		select * from cycle_teachplan where planId=#{planId} 
+	</select>
+	
+	<update id="updateTeachePlan" parameterType="com.youyicn.entity.cycle.TeachPlan" >
+        update cycle_teacher set planDate=#{planDate},address=#{address},teacherName=#{teacherName} where planId=#{planId}
+    </update>
+	
+	
+</mapper>

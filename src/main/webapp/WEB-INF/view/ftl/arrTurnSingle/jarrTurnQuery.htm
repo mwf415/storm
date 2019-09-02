@@ -1,0 +1,85 @@
+rt "../decorators/uri.ftl" as uri /> <#import "../decorators/util.ftl" as
+util /> <#import "../decorators/spring.ftl" as spring />
+<!D<!DOCTYPE html>html xml<#include "../decorators/headtitle.ftl" >
+<script type="text/javascript">
+	function queryDetail() {
+		var time = $("#startQueryTime").val();
+		if (time == "") {
+			alert("请输入查询时间！");
+			return;
+		}
+		var loginName = $("#loginName").val();
+		var room = $("#room").val();
+		var isChangeRoom = $('input[name="changeRoom"]:checked').val(); //是否换科
+
+		$.ajax({
+			type : "get",
+			cache : false,
+			url : "<@spring.url '/jarrTurnCont/arrTurnDetail.htm'/>",
+			data : "time=" + time + "&loginName="
+					+ loginName + "&room="
+					+ encodeURI(encodeURI(room))
+					+ "&isChangeRoom=" + isChangeRoom,
+			success : function(msg) {
+				if (msg == null) {
+					alert("无记录！");
+				} else {
+					$("#arrturnTable").html("");
+					var timeList = msg.timeList;
+					var resultList = msg.resultList;
+					var timeRow = document.getElementById(
+							"arrturnTable").insertRow();
+					timeRow.insertCell();
+					for (var i = 0; i < timeList.length; i++) {
+						var timeCell = timeRow.insertCell();
+						timeCell.innerHTML = timeList[i];
+					}
+					for (var j = 0; j < resultList.length; j++) {
+						var arrturnRow = document
+								.getElementById("arrturnTable")
+								.insertRow();
+						var nameCell = arrturnRow.insertCell();
+						nameCell.innerHTML = resultList[j].name;
+						var detailList = resultList[j].detailList;
+						for (var k = 0; k < detailList.length; k++) {
+							var roomCell = arrturnRow
+									.insertCell();
+							roomCell.innerHTML = detailList[k].roomName;
+						}
+					}
+				}
+			}
+		});
+	}
+</script>﻿
+</head>
+<body>
+	<#include "../decorators/left1.ftl" ><div class="main_right" id="right">
+		<div class="right_con">
+			<div class="main_search">
+				<!--轮转安排详情  -->
+				<span>按时间查询：</span><input id="startQueryTime" type="text" name="startTime" /> 
+					<img onclick="WdatePicker({el:'startQueryTime',dateFmt:'yyyy-MM-dd'})"	
+						src="${uri.jssite}/My97DatePicker/skin/datePicker.gif" width="16"	height="22" align="absmiddle" /> 
+					&nbsp;&nbsp;&nbsp;&nbsp;
+					<span>按编号查询：</span><input type="text" id="loginName" /> 
+					&nbsp;&nbsp;&nbsp;&nbsp;
+					<span>按科室查询：</span> <Select id="room"> <option value="请选择">--请选择--</option> 
+					  <#list roomValues as room> <option value="${room.roomName}">${room.roomName}</option> </#list>
+					</Select> 
+					&nbsp;&nbsp;&nbsp;&nbsp;
+					<span>本月是否换科：</span> 
+					<input type="radio" name="changeRoom"	value="true" />是
+					<input type="radio" name="changeRoom"	value="false" />否 
+					&nbsp;&nbsp;&nbsp;&nbsp;
+					<input type="button" value="查询" onclick="queryDetail()"  class="look_02" />
+			</div>
+			<!--显示轮转数据  -->
+			<div id="dataDiv">
+				<table cellpadding="0px" cellspacing="1px" class="main_table" style="width: 100%;" id="arrturnTable">
+				</table>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

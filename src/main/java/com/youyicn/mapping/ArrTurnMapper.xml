@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youyicn.dao.cycle.ArrTurnMapper">
+	<select id="getArrTurnByCon" parameterType="com.youyicn.entity.cycle.ArrTurn"	resultType="com.youyicn.entity.cycle.ArrTurn">
+		select * from cycle_arrturn where 1=1 
+		<if test="loginName!=null">
+			and loginName=#{loginName}
+		</if>
+		<if test="realName!=null">
+			and realName=#{realName}
+		</if>
+		<if test="basename!=null">
+			and basename=#{basename}
+		</if>
+		<if test="grade!=null">
+			and grade=#{grade} 
+		</if>
+		<if test="roomName!=null">
+			and roomName=#{roomName} 
+		</if>
+		<if test="startTime!=null">
+			and startTime <![CDATA[<=]]> #{startTime} 
+		</if>
+		<if test="endTime!=null">
+			and endTime <![CDATA[>=]]> #{endTime} 
+		</if>
+		<if test="checkStatus!=null">
+			and checkStatus=#{checkStatus} 
+		</if>
+		<if test="trainTime!=null">
+			and trainTime=#{trainTime} 
+		</if>
+		<if test="teacherNum1!=null">
+			and teacherNum1=#{teacherNum1} or teacherNum2 = #{teacherNum1} 
+		</if >
+		<if test="searchStart!=null">
+			and startTime <![CDATA[	>= ]]> 	#{searchStart} 
+		</if>
+		<if test="searchEnd!=null">
+			and startTime <![CDATA[ <= ]]> #{searchEnd} 
+		</if>
+		order by startTime asc 
+	</select>
+	
+	<select id="getArrTurn" parameterType="com.youyicn.entity.cycle.ArrTurn"	resultType="com.youyicn.entity.cycle.ArrTurn">
+		select * from cycle_arrturn WHERE basename=#{basename} and startTime <![CDATA[ > ]]> #{startTime} and endTime <![CDATA[ < ]]> #{endTime} 
+		or startTime <![CDATA[ <= ]]> #{startTime} and endTime <![CDATA[ >= ]]> #{startTime} 
+		or startTime <![CDATA[ <= ]]> #{endTime} and endTime <![CDATA[ >= ]]> #{endTime}
+	</select>
+	<select id="getArrTurnByArrTurn" parameterType="com.youyicn.entity.cycle.ArrTurn"	resultType="com.youyicn.entity.cycle.ArrTurn">
+		select * from cycle_arrturn WHERE basename=#{basename} and checkStatus= #{checkStatus} and grade = #{grade} 
+	</select>
+	
+	<select id="getThisMonthUser" parameterType="com.youyicn.entity.cycle.ArrTurn"	resultType="com.youyicn.entity.cycle.ArrTurn">
+		select * from cycle_arrturn WHERE 1=1
+		 <if test="roomName!=null">
+		    and roomName=#{roomName} 
+		 </if>
+		 <if test="loginName!=null">
+		    and loginName=#{loginName} 
+		 </if>
+		 <if test="teacherNum1!=null">
+			and teacherNum1=#{teacherNum1} or teacherNum2 = #{teacherNum1} 
+		</if >
+		  and startTime <![CDATA[ < ]]> #{searchStart} and endTime <![CDATA[ > ]]> #{searchStart} 
+		  order by startTime asc 
+	</select>
+	
+	
+	<select id="getThisMonthTeacherUser" parameterType="com.youyicn.entity.cycle.ArrTurn"	resultType="com.youyicn.entity.cycle.ArrTurn">
+		select * from cycle_arrturn WHERE 1=1
+		 <if test="roomName!=null">
+		    and roomName=#{roomName} 
+		 </if>
+		 <if test="loginName!=null">
+		    and loginName=#{loginName} 
+		 </if>
+		 <if test="teacherNum1!=null">
+			and teacherNum1=#{teacherNum1} or teacherNum2 = #{teacherNum1} 
+		</if >
+		  and startTime <![CDATA[ < ]]> #{searchStart} and endTime <![CDATA[ > ]]> #{searchStart} 
+		  or startTime <![CDATA[ < ]]> #{searchEnd} and endTime <![CDATA[ > ]]> #{searchEnd} 		  
+		  order by startTime asc 
+	</select>
+	
+	<select id="getArrTurnByStartTime" parameterType="com.youyicn.entity.cycle.ArrTurn"	resultType="com.youyicn.entity.cycle.ArrTurn">
+		select * from cycle_arrturn where 1=1 
+		<if test="startTime!=null">
+			and startTime &gt;= #{startTime} 
+		</if>
+		<if test="endTime!=null">
+			and startTime &lt;= #{endTime} 
+		</if>
+		order by startTime asc 
+	</select>
+	
+	<!-- 根据科室查找轮转计划 -->
+	<select id="getArrTurnByRoom" parameterType="com.youyicn.entity.cycle.ArrTurn" resultType="com.youyicn.entity.cycle.ArrTurn">
+		select * from cycle_arrturn where roomName=#{roomName}  order by startTime asc 
+	</select>
+	<!-- 根据基地名称查找轮转计划 -->
+	<select id="getArrTurnByBasename" parameterType="java.lang.String" resultType="com.youyicn.entity.cycle.ArrTurn">
+		select * from cycle_arrturn where basename=#{basename}  order by startTime asc 
+	</select>
+	
+	<select id="getMaxBatch" resultType="java.lang.Integer">
+		select MAX(batch) from cycle_arrturn 
+	</select>
+	
+	<insert id="insertArrTurn" parameterType="com.youyicn.entity.cycle.ArrTurn">
+		insert into cycle_arrturn
+		(loginName, realName, startTime, roomName, teacherName1, teacherName2, grade, endTime, basename,checkStatus,batch,trainTime,hospitalId)
+		values 
+		(#{loginName}, #{realName}, #{startTime}, #{roomName}, #{teacherName1}, #{teacherName2}, #{grade}, #{endTime}, #{basename},#{checkStatus},#{batch},#{trainTime},#{hospitalId})
+	</insert>
+	
+	<select id="getArrTurnById" parameterType="com.youyicn.entity.cycle.ArrTurn" resultType="com.youyicn.entity.cycle.ArrTurn">
+		select * from cycle_arrturn where arrTurnId=#{arrTurnId} 
+	</select>
+	<!-- 安排老师用这个 -->
+	<update id="upDataArrTurn" parameterType="com.youyicn.entity.cycle.ArrTurn">
+		update cycle_arrturn  
+		<trim prefix="set" suffixOverrides=",">
+			  <if test="teacherName1!=null">teacherName1=#{teacherName1},</if>
+			  <if test="teacherName2!=null">teacherName2=#{teacherName2},</if>
+			  <if test="teacherNum1!=null">teacherNum1=#{teacherNum1},</if>
+			  <if test="teacherNum2!=null">teacherNum2=#{teacherNum2},</if>
+		 </trim>
+		where arrTurnId =#{arrTurnId} 
+	</update>
+	<!-- 审核用这个 -->
+	<update id="checkArrTurn" parameterType="com.youyicn.entity.cycle.ArrTurn">
+		update cycle_arrturn  
+		<trim prefix="set" suffixOverrides=",">
+			  <if test="checkStatus!=null">checkStatus=#{checkStatus},</if>
+		 </trim>
+		where loginName =#{loginName} 
+	</update>
+
+	<update id="upDataArrTurnRoom" parameterType="com.youyicn.entity.cycle.ArrTurn">
+		update cycle_arrturn  
+		<trim prefix="set" suffixOverrides=",">
+			  <if test="roomName!=null">roomName=#{roomName},</if>
+		 </trim>
+		where arrTurnId =#{arrTurnId} 
+	</update>
+	
+	<update id="upDataArrTurnTime" parameterType="com.youyicn.entity.cycle.ArrTurn">
+		update cycle_arrturn  
+		<trim prefix="set" suffixOverrides=",">
+			  <if test="startTime!=null">startTime=#{startTime},</if>
+			  <if test="endTime!=null">endTime=#{endTime},</if>
+		 </trim>
+		where arrTurnId =#{arrTurnId} 
+	</update>
+	
+	
+	<update id="updateCheckStatus" parameterType="java.lang.Integer">
+		update cycle_arrturn set checkStatus = 1 where batch =#{batch} 
+	</update>
+	
+	<delete id="deleteArrTurn" parameterType="java.lang.Integer">
+		delete from cycle_arrturn where batch=#{batch}
+	</delete>
+	
+	<delete id="delByUserNumString" parameterType="java.lang.String">
+		delete from cycle_arrturn where loginName=#{loginName}
+	</delete>
+	
+	<!-- 根据用户编号删除所有的内容 -->
+	<delete id="delByloginName" parameterType="com.youyicn.entity.cycle.ArrTurn">
+		delete from cycle_arrturn where loginName=#{loginName} and checkStatus =#{checkStatus}
+	</delete>
+	
+	
+	<delete id="delArrTurnByid" parameterType="com.youyicn.entity.cycle.ArrTurn">
+		delete from cycle_arrturn where arrTurnId=#{arrTurnId}
+	</delete>
+	
+	<!-- 分组查询 -->
+	<select id="getArrTurnAna" parameterType="com.youyicn.entity.cycle.ArrTurn"	resultType="com.youyicn.entity.cycle.ArrTurn">
+		select * from cycle_arrturn where 1=1 
+		<if test="teacherNum1!=null">
+			and teacherNum1=#{teacherNum1}
+		</if>
+		<if test="roomName!=null">
+			and roomName=#{roomName} 
+		</if>
+		<if test="endTime!=null">
+			and endTime>=#{endTime} 
+		</if>
+		<if test="checkStatus!=null">
+			and checkStatus="1" 
+		</if>
+		<if test="searchStart!=null">
+			and startTime <![CDATA[	>= ]]> 	#{searchStart} 
+		</if>
+		<if test="searchEnd!=null">
+			and startTime <![CDATA[ <= ]]> #{searchEnd} 
+		</if>
+		
+		order by arrTurnId desc 
+	</select>
+	
+	<!-- 分组查询 -->
+	<select id="getChange" parameterType="com.youyicn.entity.cycle.ArrTurn"	resultType="com.youyicn.entity.cycle.ArrTurn">
+		select * from cycle_arrturn where 1=1 
+		<if test="basename != null">
+		and basename = #{basename}
+		</if>
+		<if test="roomName != null">
+		and roomName = #{roomName}
+		</if>
+		<if test="eTime != null">
+		and DATE_FORMAT(endTime,'%Y-%m') = #{eTime}
+		</if>
+		<if test="sTime != null">
+		and DATE_FORMAT(startTime,'%Y-%m') = #{sTime}
+		</if>
+		order by arrTurnId desc 
+	</select>
+	<!-- 原理是查找有轮转的学生 -->
+	<select id="getChangeNo" parameterType="com.youyicn.entity.cycle.ArrTurn"	resultType="com.youyicn.entity.cycle.ArrTurn">
+		select * from cycle_arrturn where 1=1 
+		<if test="basename != null">
+		and basename = #{basename}
+		</if>
+		<if test="roomName != null">
+		and roomName = #{roomName}
+		</if>
+		<if test="eTime != null">
+	 		and DATE_FORMAT(startTime,'%Y-%m')  &lt;=  #{eTime} 
+	 		and DATE_FORMAT(endTime,'%Y-%m') &gt; #{eTime}  
+		</if>
+		order by arrTurnId desc 
+	</select>
+	
+	
+	<resultMap id="seCount" type="com.youyicn.entity.cycle.CountUtil" >
+		<result property="name" column="name" jdbcType="VARCHAR" />
+		<result property="ext01" column="ext01" jdbcType="VARCHAR" />
+		<result property="ext02" column="ext02" jdbcType="VARCHAR" />
+		<result property="ext03" column="ext03" jdbcType="VARCHAR" />
+		<result property="num1" column="num1" jdbcType="INTEGER" /><!-- 统计数量 -->
+	</resultMap>
+	<select id="getCountByCon" resultMap="seCount" parameterType="com.youyicn.entity.cycle.ArrTurn">
+		select teacherNum1 as ext03,teacherName1 as name,baseName as ext01,roomName as ext02, count(teacherNum1) as num1  from cycle_arrturn   
+			where 1=1 
+		<if test="searchStart!=null and searchEnd!=null">
+			and ((startTime BETWEEN #{searchStart} and #{searchEnd}) or (endTime BETWEEN #{searchStart} and #{searchEnd}))
+		</if>
+		group by teacherNum1
+	</select>
+	
+	<select id="getOutRoomByMap" resultType="com.youyicn.entity.cycle.ArrTurn" parameterType="java.util.Map">
+		select arrTurnId , loginName, realName, startTime,roomName,baseName, endTime from cycle_arrturn where 1=1 
+		<if test="roomName!=null and roomName!=''">
+			and roomName = #{roomName}
+		</if>
+		<if test="baseName!=null and baseName!=''">
+			and baseName = #{baseName}
+		</if>
+		<if test="startTime!=null">
+			and endTime > #{startTime}
+		</if>
+		<if test="endTime!=null">
+			and endTime &lt; #{endTime}
+		</if>
+		order by endTime
+	</select>
+	
+</mapper>

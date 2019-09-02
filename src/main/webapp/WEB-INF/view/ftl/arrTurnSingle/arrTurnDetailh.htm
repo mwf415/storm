@@ -1,0 +1,211 @@
+<#import "../decorators/uri.ftl" as uri /> <#import "../decorators/util.ftl" as
+util /> <#import "../decorators/spring.ftl" as spring />
+<!DOCTYPE html>
+<html >
+<head>
+<#include "../decorators/headtitle.ftl" >
+</head>
+<!-- 这个事相对于专业基地来说的，主要是为了专业基地修改来用的，还要做一个针对其他通用的查询 -->
+<body>
+<#include "../decorators/left1.ftl" >
+<div class="main_right" id="right">
+		<div class="right_con">
+			<form id="addform4" >
+				<input type="text" value="${loginName!}" name="loginName" style="display: none"/>
+				<table class="table table-hover table-bordered" >
+					<tr>
+						<td  >设置 <em>${userName!}</em>单个轮转</td>
+						<td >科室
+							<select name="roomName"> 
+								<#if roomValues?? && roomValues?size gt 0>
+									<option value="">请选择</option> 
+									<#list roomValues as baseRoom>
+										<option value="${baseRoom.roomName!}">${baseRoom.roomName!}</option>
+									</#list> 
+								</#if>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td ><em>*</em> 轮转开始时间
+						<input id="startTime" type="text" name="startTime" /> 
+						<img onclick="WdatePicker({el:'startTime',dateFmt:'yyyy-MM-dd'})"	
+							src="${uri.jssite}/My97DatePicker/skin/datePicker.gif" width="16"	height="22" align="absmiddle">
+							
+						<td  ><em>*</em> 轮转结束时间
+						<input id="endTime" type="text" name="endTime" /> 
+						<img onclick="WdatePicker({el:'endTime',dateFmt:'yyyy-MM-dd'})"	
+							src="${uri.jssite}/My97DatePicker/skin/datePicker.gif" width="16"	height="22" align="absmiddle">
+					</tr>
+		           	<tr >
+		              	 	<td colspan="2">
+		              			<button type="button" class="btn btn-danger btn-xs"  onclick="doSubArrTurn()">新建</button>
+		              	 	</td>
+					</tr>   
+				</table>
+			</form>
+			
+			<form id="addform9">
+				<input type="text" value="${baseName!}" name="baseName" style="display: none"/>
+				<input type="text" value="${li!}" name="li" style="display: none"/>
+				<input type="text" value="${div!}" name="div" style="display: none"/>
+				<input type="text" value="${type!}" name="type" style="display: none"/>
+				<input type="text" value="${loginName!}" name="loginName" id="loginName" style="display: none"/>
+				<input type="hidden" id="sizeLen" name="sizeLen" value="${sizeLen!}"/> 
+				<table class="table table-bordered table-hover">
+				<tr style="background-color: #0FF">
+					
+					<td width="7%">学生姓名</td>
+					<td width="7%">学生编号</td>
+					<td width="4%">年级</td>
+					<td width="7%">所在专业基地</td>
+					<td width="7%">科室</td>
+					<td width="10%">轮转开始时间</td>
+					<td width="10%">轮转结束时间</td>
+					<td width="8%">是否已审核</td>
+					<td width="8%">安排形式</td>
+					<#if type ?? && type=="h" >
+						<td width="8%">操作</td>
+						<td width="8%">推迟一个月</td>
+					</#if>
+				</tr>
+				<#if arrTurnList?? && arrTurnList?size gt 0>
+				<#list arrTurnList as arrTrun>
+				<tr class="table_td">
+					<td>${arrTrun.realName!}</td>
+					<td>${arrTrun.loginName!}</td>
+					<td>${arrTrun.grade!}</td>
+					<td>${arrTrun.basename!}</td>
+					<td>${arrTrun.roomName!}</td>
+					<td id="st${arrTrun_index}">${arrTrun.startTime[0..10]!}</td>
+					<td id="et${arrTrun_index}">${arrTrun.endTime[0..10]!}</td>
+					<td>
+						<#if arrTrun.checkStatus=='0'>
+							未审核
+						<#elseif arrTrun.checkStatus=='1'>
+							已审核
+						</#if>
+					</td>
+					<td>
+						<#if arrTrun.batch=='0'>
+							自动化安排
+						<#elseif arrTrun.batch=='1'>
+							手动添加
+						</#if>
+					</td>
+					<td>
+						<button type="button" class="btn btn-danger btn-xs"  onclick="pop_userinfo(event,'<@spring.url '/singleArrTurnCont/updateone.htm?loginName=${loginName!}&id=${arrTrun.arrTurnId!}&baseName=${baseName!}'/>')">修改</button>
+						<button type="button" class="btn btn-danger btn-xs"  onclick="toDel('${arrTrun.arrTurnId!}')">删除</button>
+					</td>
+					<td>
+						<button type="button" class="btn btn-danger btn-xs" onclick="delayTime(${arrTrun_index})">推迟</button>
+					</td>
+				</tr>
+				</#list>
+				<#else>
+		  			<tr class="table_td"><td colspan="12" align="center">没有符合条件的结果。</td></tr>
+				</#if>
+				</table>
+			</form>
+
+	
+	 <div style="display: none;">
+		<a id="delSuccessed" href="#" onclick="showMessageDialog(event,'成功','<@spring.url '/singleArrTurnCont/detail.htm?baseName=${baseName!}&li=${li!}&div=${div}&menuOrder=0&type=${type!}&loginName=${loginName!}'/>','closeWindow();');" ></a>
+	 	<a id="delFailed" href="#" onclick="showMessageDialog(event,'失败！','','');" ></a>
+	 </div>
+	
+	<script type="text/javascript">
+	function delayTime(index){
+		var len=$("#sizeLen").val();
+		var loginName=$("#loginName").val();
+		var url = '<@spring.url "/singleArrTurnCont/updateTime1.htm?li=${li!}&div=${div!}&loginName='+loginName+'&type=${type!}&menuOrder=0&index='+index+'"/>';
+		$.ajax({
+			type:'POST',
+			url:url,
+			success:function(data){
+				if(data=='true'){
+					window.location = '<@spring.url "/singleArrTurnCont/detail.htm?li=${li!}&div=${div!}&baseName=${baseName!}&type=${type!}&menuOrder=0&loginName='+loginName+'"/>';
+				}
+			}
+		});
+	}
+	function editArrTurn(){
+		var param = null;
+		var postmethod = "POST";
+		var param = $("#addform3").serialize();
+		var url = "<@spring.url '/arrTurnOneController/arrturnRuleSum.htm'/>";
+		$.ajax({
+			   type: postmethod,
+			   cache: false,
+			   url: url,
+			   data : param,
+			   success: function(data){
+			    if(!validateFieldMs(data)){
+					return;
+				}
+				if(data == 'true'){
+					tip(1,true);
+					return;
+				}else if(data == 'false'){
+					tip(1,false);
+					return;
+				}
+				showMessageDialog(null,data,'','');
+			   },
+			   error:function(xhr,err){
+				   window.location.href=url; 
+			}
+		});
+	}
+	function toDel(tId){
+		var param = null;
+		var loginName=$("#loginName").val();
+		var postmethod = "get";
+		var url ="<@spring.url '/singleArrTurnCont/del.htm?id="+tId+"&loginName="+loginName+"'/>";
+		window.location = url;
+		
+	}
+	
+	function doSubArrTurn(){
+		var param = null;
+		var postmethod = "POST";
+		var param = $("#addform4").serialize();
+		var url = "<@spring.url '/singleArrTurnCont/Insert.htm'/>";
+		$.ajax({
+			   type: postmethod,
+			   cache: false,
+			   url: url,
+			   data : param,
+			   success: function(data){
+			    if(!validateFieldMs(data)){
+					return;
+				}
+				if(data == 'true'){
+					tip(1,true);
+					return;
+				}else if(data == 'false'){
+					tip(1,false);
+					return;
+				}
+				showMessageDialog(null,data,'','');
+			   },
+			   error:function(xhr,err){
+				   window.location.href=url; 
+			}
+		});
+	}
+
+	function tip(type,bool){
+		if(type == 1){
+			if(bool){
+				document.getElementById("delSuccessed").click();
+				return;
+			}
+			document.getElementById("delFailed").click();
+		}
+	}
+	</script>
+	
+</div>
+</div>
+</body>

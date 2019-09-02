@@ -1,0 +1,114 @@
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<#import "../decorators/spring.ftl" as spring />
+			<div style="margin: 30px;">
+				<h3>
+					添加 <span></span>
+				</h3>
+				<form id="addform9">
+					<table class="table table-hover  table-bordered" >
+						<tr>
+							<td >身份</td>
+							<td >(必选)：
+								<select name="identityId" >
+									<option value="1">老师</option>
+									<option value="2">学生</option>
+								</select>
+							</td>
+							<td>医院ID：</td>
+							<td><input type="text" name="hospitalId" />如GP167482</td>
+						</tr>
+						<tr>
+							<td>登陆名：</td>
+							<td><input type="text" name="loginName" id ="loginName" onblur="checkLoginName()"/></td>
+							<td>姓名：</td>
+							<td><input type="text" name=userName value="" /></td>
+						</tr>
+						<tr>
+							<td>年级：(学生必填)</td>
+							<td><input type="text" name="grade" value="" /></td>
+							<td>密码：</td>
+							<td><input type="text" name="userPass" value="" /></td>
+						</tr>
+						<tr>
+							<td>性别：</td>
+							<td><input type="text" name="sex" value="" /></td>
+							<td>住址：</td>
+							<td><input type="text" name="address" value="" /></td>
+						</tr>
+						<tr>
+							<td>身份证号：</td>
+							<td><input type="text" name="cardId" value="" /></td>
+							<td>医院导师：</td>
+							<td><input type="text" name="teacher1" value="" /></td>
+						</tr>
+						<tr>
+							<td>所在基地：</td>
+							<td><select name="baseName"> 
+							<#if baseValues?? &&	baseValues?size gt 0>
+									<option value="">请选择</option> 
+										<#list baseValues as baseValue>
+										<option value="${baseValue.value}">${baseValue.value}</option>
+										</#list> 
+									</#if>
+							</select></td>
+							
+							<td>所在科室：(老师必填)</td>
+							<td><select name="roomName"> 
+							<#if roomValues?? &&	roomValues?size gt 0>
+									<option value="">请选择</option> 
+										<#list roomValues as roomValue>
+										<option value="${roomValue.value}">${roomValue.value}</option>
+										</#list> 
+									</#if>
+							</select></td>
+						</tr>
+						<tr>
+							<td>毕业院校：</td>
+							<td><input type="text" name="gradSchool" value="" /></td>
+							<td>专业：</td>
+							<td><input type="text" name="major" value="" /></td>
+						</tr>
+						<tr>
+							<td>学位：</td>
+							<td><input type="text" name="xuewei" value="" /></td>
+							<td>学历：</td>
+							<td><input type="text" name="degree" value="" /></td>
+						</tr>
+						<tr>
+							<td>大学导师：</td>
+							<td><input type="text" name="teacher2" value="" /></td>
+							<td>执照Id:</td>
+							<td><input type="text" name="licenId" value="" /></td>
+						</tr>
+						<tr>
+							<td>获取执照时间：</td>
+							<td><input id="staffTime" type="text" readonly
+								name="staffTime" /> <img
+								onclick="WdatePicker({el:'staffTime',dateFmt:'yyyy-MM-dd'})"
+								src="${uri.jssite}/My97DatePicker/skin/datePicker.gif"
+								width="16" height="22" align="absmiddle"></td>
+							<td>电话号码：</td>
+							<td><input type="text" name="telPhone" value="" /></td>
+						</tr>
+						<tr>
+							<td>手机号码：</td>
+							<td><input type="text" name="cellPhone" value="" /></td>
+							<td>微信：</td>
+							<td><input type="text" name="wechat" value="" /></td>
+						</tr>
+						<tr>
+							<td>QQ：</td>
+							<td><input type="text" name="qq" value="" /></td>
+							<td>email：</td>
+							<td><input type="text" name="email" value="" /></td>
+						</tr>
+						<tr class="button_tr">
+							<td>&nbsp;</td>
+							<td><button type="button" class="btn btn-primary btn-xs" onclick="sumUser()" >添加</button>
+							</td>
+						</tr>
+					</table>
+				</form>
+				
+			</div>

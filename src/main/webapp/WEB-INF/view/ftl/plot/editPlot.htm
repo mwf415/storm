@@ -1,0 +1,44 @@
+<#import "../decorators/uri.ftl" as uri /> 
+<#import "../decorators/util.ftl" as util /> 
+<#import "../decorators/spring.ftl" as spring />
+<style>
+.table_td td {
+	padding-left: 3px;
+}
+</style>
+
+<div>
+	<form id="plotAdd" name="plotAdd">
+		<table class="table table-hover  table-bordered" >
+			<tr>
+				<td ><em></em>${plot.baseName!}</td>
+			</tr>
+		</table>
+		<br></br>
+		<textarea id="plotTxt" name="plotTxt" class="ckeditor">${plot.plotTxt!}</textarea>
+		<script type="text/javascript">CKEDITOR.replace('plotTxt');</script>
+		<input type="button" value="提交" id="submitBtn" onclick="editPlot()">	&nbsp;&nbsp;&nbsp;&nbsp; 
+		<input type="text" name="plotId" value="${plot.plotId!}" style="display:none" />
+	</form>
+</div>
+
+<!--right end-->
+<script type="text/javascript">
+//教学计划的提交js	
+	function editPlot(){
+		CKupdate();
+		var result = confirm('是否修改！');
+		if (result) {
+			var url = "<@spring.url '/plotController/plotEditSum.htm?targetID=dataDiv&formID=searchform'/>";
+			ajaxFormRequest("{url:'" + url + "',id:'dataDiv',form:'plotAdd'}");
+		} else {
+			alert('不修改');
+		}
+	}
+	function CKupdate() {
+        for (instance in CKEDITOR.instances)
+            CKEDITOR.instances[instance].updateElement();
+    }
+
+</script>
+

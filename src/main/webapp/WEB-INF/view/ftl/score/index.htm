@@ -1,0 +1,87 @@
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<#import "../decorators/spring.ftl" as spring />
+<!DOCTYPE html>
+<html >
+<head>
+<#include "../decorators/headtitle.ftl" >
+</head>
+<body>
+<#include "../decorators/left4.ftl" >
+<!--right-->
+<div class="main_right" id="right">
+	<div class="right_con">
+		<div class="main_search">
+			<form id="searchform" style="height: 30px;">
+				<input  type="button" value="搜 索" class="look_02" onclick="querySerchList();"/>
+			</form>
+		</div>
+			<table class="table table-bordered table-hover">
+			<tr class="table_title">
+			</tr>
+		</table>
+	</div>
+	 <div style="display: none;">
+	 	<a id="delSuccessed" href="#" onclick="showMessageDialog(event,'删除成功！','javaScript:queryRoleList();','closeWindow();');" ></a>
+	 	<a id="delFailed" href="#" onclick="showMessageDialog(event,'删除失败！','','');" ></a>
+	 </div>
+</div>
+<!--right end-->
+
+<!--right end-->
+<script type="text/javascript">
+function delTeacher(tId){
+	var param = null;
+	var postmethod = "get";
+	var url ="<@spring.url '/inLearn/delinPlanById.htm?id="+tId+"'/>";
+	$.ajax({
+		   type: postmethod,
+		   cache: false,
+		   url: url,
+		   data : param,
+		   success: function(data){
+			if(data == 'true'){
+				tip(1,true);
+				return;
+			}
+			if(data == 'false'){
+				tip(1,false);
+				return;
+			}
+			showMessageDialog(null,data,'','');
+		   },
+		   error:function(xhr,err){ 
+		}
+	});
+}
+
+function tip(type,bool){
+	if(type == 1){
+		if(bool){
+			document.getElementById("delSuccessed").click();
+			return;
+		}
+		document.getElementById("delFailed").click();
+	}
+}
+
+function queryRoleList(){
+	window.location = '<@spring.url "/activesCont/index.htm?li=li23&div=div_2&menuOrder=0&type=1"/>';
+}
+
+function targetPage(pageIndex){
+	var userName = $("#userName").val();
+	var roomName = $("#roomName").val();
+	window.location = '<@spring.url "/activesCont/index.htm?li=li23&div=div_2&menuOrder=0&type=1&pageIndex='+pageIndex+'&userName='+userName+'&roomName='+roomName+'"/>';
+}
+
+function querySerchList(){
+	if(!$("#searchform").validationEngine("validateField","#userName")){
+		var userName = $("#userName").val();
+		var roomName = $("#roomName").val();
+		window.location = '<@spring.url "/activesCont/index.htm?li=li61&div=div_6&menuOrder=0&type=1&userName='+userName+'&roomName='+roomName+'"/>';
+		}
+}
+</script>
+</body>
+</html>

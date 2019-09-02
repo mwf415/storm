@@ -1,0 +1,40 @@
+<#import "/decorators/spring.ftl" as spring /> <#import "/decorators/uri.ftl" as
+uri />
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html >
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<!-- 接口数据监控 -->
+	<div>
+		<h3 class="jk_wz">业务统计>>固定统计</h3>
+		<br />
+		<div id="page1" style="float: right; font-weight: bolder;"></div>
+		<div>
+			<table id="dataDiv" class="main_table" cellspacing="1" cellpadding="0"
+				style="width: 100%">
+				<tr class='table_title'>
+					<td width='12%'>登陆姓名</td>
+					<td width='12%'>错误次数</td>
+					<td width='12%'>成功次数</td>
+				</tr>
+				<tr class="table_td">
+					<td colspan="9" align="center">正在计算中，请稍后！</td>
+				</tr>
+			</table>
+		</div>
+		<div id="page2" style="float: right; font-weight: bolder;"></div>
+		<script src="monitor/js/pagenumabnormal.js" type="text/javascript"></script>
+		<script src="monitor/js/jquery.cookie.js" type="text/javascript"></script>
+		<script>
+			$(function() {
+				$("#left_em").css("display", "inline-block");
+			});
+		</script>
+
+
+	</div>
+</body>
+</html>

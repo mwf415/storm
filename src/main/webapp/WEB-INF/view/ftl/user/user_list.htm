@@ -1,0 +1,57 @@
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<#import "../decorators/spring.ftl" as spring />
+<style>
+.table_td td{
+	padding-left:3px;
+}
+</style>
+<!--right-->
+<#include "../decorators/left1.ftl" ><div class="main_right" id="right">
+	<table class="table table-bordered table-hover">
+		<tr class="table_title">
+			<td width="5%">用户id</td>
+			<td width="8%">用户姓名</td>
+			<td width="8%">专业基地</td>
+			<td width="8%">电话号码</td>
+			<td width="8%">手机号码</td>
+			<td width="8%">身份证</td>
+			<td width="30%">操作</td>
+		</tr>
+		<#if userList?? && userList?size gt 0>
+		<#list userList as user>
+		<tr class="table_td">
+			<td>${user.id!}</td>
+			<td>${user.realName!}</td>
+			<td>${user.baseName!}</td>
+			<td>${user.telPhone!}</td>
+			<td>${user.cellPhone!}</td>
+			<td>${user.cardId!}</td>
+			<td>
+			<a href="#" onclick="pop_userinfo(event,'<@spring.url '/userController/showDetail.htm?userId=${user.id}'/>')">查看详情</a>
+			
+			 <a href="#"  onclick="toEditUser('${user.id}')" style="cursor: pointer;" >修改</a>&nbsp;&nbsp;&nbsp;&nbsp;
+			<a href="#"  onclick="toDelPlan('${user.id}')" style="cursor: pointer;" >删除</a>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+		</tr>
+		</#list>
+		<#else>
+  			<tr class="table_td"><td colspan="12" align="center">没有符合条件的结果。</td></tr>
+		</#if>
+	</table>
+
+</div>
+<!--right end-->
+
+<script type="text/javascript">
+function toEditUser(id){
+	
+	var url ="<@spring.url '/userController/user_edit.htm?userId=" + id + "'/>";
+	ajaxFormRequest("{url:'"+url+"',id:'dataDiv',form:'searchform'}");
+} 
+function toDelPlan(id){
+	if (window.confirm('你确定要删除吗？')) {
+		var url ="<@spring.url '/teachPlanController/teachPlanDel.htm?userId=" + id + "'/>";
+		ajaxFormRequest("{url:'"+url+"',id:'dataDiv',form:'searchform'}");
+	}
+}
+</script>

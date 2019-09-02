@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youyicn.dao.cycle.ClassRoomMapper">
+
+	<insert id="addRoom" parameterType="com.youyicn.entity.cycle.ClassRoom"	useGeneratedKeys="true" keyProperty="id">
+	    insert into classroom (id,roomName) values (#{id},#{roomName})
+	</insert>
+	
+	<select id="queryAllRoom" resultType="com.youyicn.entity.cycle.ClassRoom">
+		select * from classroom 
+	</select>
+	
+	<select id="queryByName" parameterType="com.youyicn.entity.cycle.ClassRoom" resultType="com.youyicn.entity.cycle.ClassRoom">
+		select * from classroom where  roomName=#{roomName} 
+	</select>
+	
+	<delete id="del" parameterType="com.youyicn.entity.cycle.ClassRoom" >
+		delete  from classroom where id = #{id}
+	</delete>
+	
+</mapper>

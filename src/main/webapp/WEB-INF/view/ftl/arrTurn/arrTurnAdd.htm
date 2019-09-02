@@ -1,0 +1,130 @@
+<#import "../decorators/uri.ftl" as uri /> 
+<#import "../decorators/util.ftl" as util /> 
+<#import "../decorators/spring.ftl" as spring />
+<style>
+.table_td td {
+	padding-left: 3px;
+}
+</style>
+
+<div>
+	<form id="atForm">
+		<input type="text" value="${type!}" name="type" style="display: none"/>
+		<input type="text" value="${li!}" name="li" style="display: none"/>
+		<input type="text" value="${div!}" name="div" style="display: none"/>
+		<input type="text" value="${grade!}" name="grade" style="display: none"/>
+		<input type="text" value="${baseName!}" name="baseName" style="display: none"/>
+		<#if grade?? >
+			<h2 style="margin-left: 60px;">${baseName!}${grade!}级学员安排轮转</h2>
+		<#else><h2 style="color:red ;margin-left: 60px;">请选择年级</h2></#if>
+		<table class="tab_infor" id="tab_infor">
+			<tr>
+				<td width="21%" class="td_right">指派学员：</td>
+				<td id="left" class="menu">
+					<select name="userParm" id="userParm" style="width: 130px;" > 
+					<#if userList?? && userList?size gt 0>
+						<option value="">请选择</option> 
+						<#list userList as user>
+								<option value="${user.loginName!}:${user.realName!}" >${user.realName!}</option>
+						</#list> 
+					</#if>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td width="21%" class="td_right">请指派科室：</td>
+				<td>
+				<Select id="selectedRoom" name = "roomName">
+					<option value="请选择">--请选择--</option> 
+						<#list arrTurnRuleList as arrTurnRule>
+					<option value="${arrTurnRule.roomName}">${arrTurnRule.roomName}</option>
+					</#list>
+				</Select>
+				</td>
+			</tr>
+			<tr>
+				<td width="21%" class="td_right">开始时间：</td>
+				<td>
+				<input id="startTime" type="text" name="startTime" /> 
+				<img onclick="WdatePicker({el:'startTime',dateFmt:'yyyy-MM-dd'})"	
+					src="${uri.jssite}/My97DatePicker/skin/datePicker.gif" width="16"	height="22" align="absmiddle">
+				</td>
+			</tr>
+			<tr class="button_tr">
+               	<td>&nbsp;</td>
+              	 	<td>
+              	 	
+					<input type="button"  value="提交" onclick="subBtn()" class="main_button" >
+              	 	</td>
+			</tr>   
+		</table>
+	</form>
+</div>
+<div style="display: none;">
+    <a id="addSuccessed" href="#" onclick="showMessageDialog(event,'新建成功','<@spring.url '/arrTurnController/userlist.htm?li=${li!}&div=${div!}&menuOrder=0&type=${type!}&grade=${grade!}&baseName=${baseName!}'/>','closeWindow();');" ></a>
+    <a id="addFailed" href="#" onclick="showMessageDialog(event,'新建失败','','');" ></a>
+ </div>
+
+<!--right end-->
+<script type="text/javascript">
+	
+function subBtn(){
+	var userParm = $("#userParm").val();
+	var selectedRoom = $("#selectedRoom").val();
+	var startTime = $("#startTime").val();
+	
+	if (userParm == "") {
+		alert("请至少选择一位学员！");
+		return;
+	} else if (selectedRoom == "" || selectedRoom == "请选择") {
+		alert("请指派一个科室！");
+		return;
+	} else if (startTime == "") {
+		alert("请规定开始时间！");
+		return;
+	}
+	var param = null;
+	var postmethod = "POST";
+	var url ="<@spring.url '/arrTurnController/subArrTurn.htm'/>";
+	var param = $("#atForm").serialize();
+	$.ajax({
+		   type: postmethod,
+		   cache: false,
+		   url: url,
+		   data : param,
+		   success: function(data){
+		    if(!validateFieldMs(data)){
+				return;
+			}
+			if(data == 'true'){
+				tip(1,true);
+				return;
+			}else if(data == 'false'){
+				tip(1,false);
+				return;
+			}
+			showMessageDialog(null,data,'','');
+		   },
+		   error:function(xhr,err){
+			   window.location.href=url; 
+		}
+	});
+}
+//文本框 ckeditor上传需要转换成能够controller接受的
+
+
+function tip(type,bool){
+	if(type == 1){
+		if(bool){
+			document.getElementById("addSuccessed").click();
+			return;
+		}
+		document.getElementById("addFailed").click();
+	}
+}
+function showArrTurn(id){
+	window.location = '<@spring.url "/singleArrTurnCont/detail.htm?li=li211&div=div_2&menuOrder=0&loginName='+id+'"/>';
+}
+
+</script>
+

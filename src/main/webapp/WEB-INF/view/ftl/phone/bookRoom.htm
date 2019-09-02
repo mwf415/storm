@@ -1,0 +1,105 @@
+<#import "/decorators/uri.ftl" as uri />
+<#import "/decorators/util.ftl" as util />
+<#import "/decorators/spring.ftl" as spring />
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"> 
+	<title>Bootstrap 实例 - 悬停表格</title>
+	<link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">  
+	<script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body style="margin:20px;">
+<ul class="nav nav-tabs">
+	<li class="dropdown active">
+		<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+			 菜单 <span class="caret"></span>
+		</a>		
+		<ul class="dropdown-menu">
+			<li>
+				<a href="javascript:void(0);">教学</a>
+			</li>
+			<li>
+				<a href="javascript:void(0);" onclick="kaoping()">考评</a>
+			</li>
+			<li class="divider"></li>
+			<li>
+				<a href="javascript:void(0);">考试</a>
+			</li>
+			<li>
+				<a href="<@spring.url '/getBookRoom/index.htm'/>" >教室</a>
+			</li>
+		</ul>
+		
+	</li>
+	<li><a>教学</a></li>
+	
+	<li style ="float:right;"><a href="<@spring.url '/wap/loginout.htm'/>">退出</a></li>
+	<li style ="float:right;"><a >${loginName!}</a></li>
+</ul>
+<table class="table table-hover table-bordered">
+	<thead id="headCon">
+		 <tr>
+			<th rowspan="2">所在教室</th>
+			<th colspan="2">周一</th>
+			<th colspan="2">周二</th>
+			<th colspan="2">周三</th>
+			<th colspan="2">周四</th>
+			<th colspan="2">周五</th>
+			<th colspan="2">周六</th>
+			<th colspan="2">周日</th>
+		</tr> 
+	</thead>
+		<tbody id="bodyCon"></tbody>
+	</tbody>
+	<input type="hidden" id="listLen" name="listLen" value="${classList?size}"/>
+</table>
+<script>
+$(document).ready(function(){
+	var len=$("#listLen").val();
+	var htm="";
+	var arr=[];
+	for(var i=0;i<len;i++){
+		htm+="<tr><td id='t"+i+"'>"+(i+1)+"教室</td>";
+		for(var j=0;j<7;j++){
+			htm+="<td colspan='2' id='s"+i+j+"'><button>添加</button></td>";
+			arr[i]=(i+1)+'教室';
+		}
+		htm+="</tr>";
+	}
+	$("#bodyCon").html(htm);
+	var url="<@spring.url '/getBookRoom/index_xq.htm'/>";
+	$.ajax({
+		type:'POST',
+		url:url,
+		dataType:'json',
+		success:function(data){
+			if(data!=null && data!=""){
+				for(var i=0;i<arr.length;i++){
+					for(var j=0;j<data.length;j++){
+						if(arr[i]==data[j].roomName){
+							var w=checkTime(data[j].startTime);
+							var a="<button type='button' class='btn btn-danger btn-xs'  onclick='pop_userinfo(event,'')'>"+data[j].activityName+"</button>"
+								  +"<a href=''><img src='${uri.imgsite}/xiugai.png' title='修改'/>&nbsp;</a>"
+								  +"<a href='javascript:void(0)' onclick='showConfirmDialog(event,'你确定要删除该教师信息吗？','javaScript:closeWindow()','delUser();');'><img src='${uri.imgsite}/shanchu.png' title='删除' />&nbsp;</a>";  
+							$("#s"+i+w).html(a);
+						}
+					}
+				}
+			}
+				
+			}
+		});
+});
+function checkTime(time){
+	var week=new Date(time).getDay()-1;
+	return week;
+}
+function kaoping(){
+	url ="<@spring.url '/judgeController/index.htm?type=h'/>";
+	window.location =url;
+}
+</script>
+</body>
+</html>

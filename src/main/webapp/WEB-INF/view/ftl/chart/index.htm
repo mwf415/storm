@@ -1,0 +1,182 @@
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<#import "../decorators/spring.ftl" as spring />
+<!DOCTYPE html>
+<html >
+<head>
+<#include "../decorators/headtitle.ftl" >
+</head>
+<body>
+<!--right-->
+<#include "../decorators/left7.ftl" >
+<div class="main_right" id="right">
+	<div class="right_con">
+			<div class="main_right" id="right">
+				<div class="main_search">
+					<form id="searchform">
+					<span id="shortKeySpan">
+						时间快捷选择:&nbsp;
+						<a href="#" name="today">今天</a>
+						<a href="#" name="yesterday">昨天</a>
+						<a href="#" name="thisWeek">本周</a>
+						<a href="#" name="lastWeek">上周</a>
+						<a href="#" name="thisMonth">本月</a>
+						<a href="#" name="lastMonth">上月</a>
+					</span>
+						时间：<input type="text" name="startTime" id="startTime" onclick="WdatePicker({startDate:'%y-%M-%d 00:00:00',dateFmt:'yyyy-MM-dd HH:mm:ss'})" />-
+						<input type="text" name="endTime" id="endTime" onclick="WdatePicker({startDate:'%y-%M-%d 23:59:59',dateFmt:'yyyy-MM-dd HH:mm:ss'})" /></td>
+						<button type="button" class="btn btn-primary btn-sm"  onclick="search()">搜索</button>
+						<button type="button" class="btn btn-primary btn-sm"  onclick="add('add')">添加</button>
+						</span>
+					</form>
+
+				</div>
+			</div>
+		<!-- 显示数据的div -->
+		<div id="dataDiv">
+			<div class="main_right" id="right">
+				<div id="mainChart" style="width: 100%;height:800px;"></div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--right end-->
+	<script type="text/javascript" language="javascript">
+        $(function(){
+
+            $("#shortKeySpan").find("a").each(function() {
+                $(this).click(function() {
+                    onShortKey($(this).attr("name"), "startTime", "endTime");
+                });
+            });
+        });
+        function onShortKey(shortKey, startField, endField) {
+            var now = new Date();
+            var key = shortKey;
+            if (typeof (key) == undefined) {
+                alert("δ��ÿ�ݼ�.");
+            }
+            if (shortKey == 'yesterday') {
+                dateEnd = dateTrunc(now, 'day');
+                dateStart = dateAdd(dateEnd, 'day', -1);
+                setFullTime(dateStart, dateEnd, startField, endField);
+            }
+            if (shortKey == 'lastWeek') {
+                dateEnd = dateTrunc(now, 'week');
+                dateStart = dateAdd(dateEnd, 'week', -1);
+                setFullTime(dateStart, dateEnd, startField, endField);
+            }
+            if (shortKey == 'lastMonth') {
+                dateEnd = dateTrunc(now, 'month');
+                dateStart = dateAdd(dateEnd, 'month', -1);
+                setFullTime(dateStart, dateEnd, startField, endField);
+            }
+            if (shortKey == 'lastYear') {
+                dateEnd = dateTrunc(now, 'year');
+                dateStart = dateAdd(dateEnd, 'year', -1);
+                setFullTime(dateStart, dateEnd, startField, endField);
+            }
+            if (shortKey == 'today') {
+                dateStart = dateTrunc(now, 'day');
+                dateEnd = dateAdd(dateStart, 'day', 1);
+                setFullTime(dateStart, dateEnd, startField, endField);
+            }
+            if (shortKey == 'thisWeek') {
+                dateStart = dateTrunc(now, 'week');
+                dateEnd = dateAdd(dateStart, 'week', 1);
+                setFullTime(dateStart, dateEnd, startField, endField);
+            }
+            if (shortKey == 'thisMonth') {
+                dateStart = dateTrunc(now, 'month');
+                dateEnd = dateAdd(dateStart, 'month', 1);
+                setFullTime(dateStart, dateEnd, startField, endField);
+            }
+            if (shortKey == 'thisYear') {
+                dateStart = dateTrunc(now, 'year');
+                dateEnd = dateAdd(dateStart, 'year', 1);
+                setFullTime(dateStart, dateEnd, startField, endField);
+            }
+        }
+	</script>
+
+	<script type="text/javascript">
+        $().ready(function() {
+            var myChart = echarts.init(document.getElementById('mainChart'));
+            //图表显示提示信息
+            myChart.showLoading();
+            //定义图表options
+            var options = {
+                color : [ '#3398DB' ],
+                title : {
+                    text : "专业基地统计汇总",
+                },
+                tooltip : {
+                    trigger : 'axis'
+                },
+                legend : {
+                    data : []
+                },
+                toolbox : {
+                    show : true,
+                    feature : {
+                        mark : false
+                    }
+                },
+                calculable : true,
+                xAxis : [ {
+                    type : 'category',
+                    data : []
+                } ],
+                yAxis : [ {
+                    type : 'value',
+                    splitArea : {
+                        show : true
+                    }
+                } ],
+                series : [ {
+                    barWidth : '60%'
+                } ]
+            };
+
+            //通过Ajax获取数据
+			$.ajax({
+                type : "post",
+                async : false, //同步执行
+                url :"<@spring.url '/chartController/getData.htm'/>",
+                dataType : "json", //返回数据形式为json
+                success : function(result) {
+                    if (result) {
+                        //将返回的category和series对象赋值给options对象内的category和series
+                        //因为xAxis是一个数组 这里需要是xAxis[i]的形式
+                        options.xAxis[0].data = result.category;
+                        options.series = result.series;
+                        options.legend.data = result.legend;
+
+                        myChart.hideLoading();
+                        myChart.setOption(options);
+                    }
+                },
+                error : function(errorMsg) {
+                    alert("图表请求数据失败啦!");
+                }
+            });
+
+        });
+	</script>
+
+	<script type="text/javascript">
+	// 这个是进入页面就会查询；
+	function queryList(){
+		var searchStart = $("#searchStart").val();
+		if(searchStart == '') {
+			  alert("请注意 :时间不能为空");
+			  return false;
+		}
+		var url ="<@spring.url '/countController/index.htm'/>";
+		$("#searchform").attr("action",url).submit();
+	}
+
+</script>
+
+</body>
+</html>

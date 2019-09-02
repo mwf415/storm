@@ -1,0 +1,49 @@
+<#import "../decorators/spring.ftl" as spring />
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html >
+<head>
+<#include "../decorators/headtitle.ftl" >
+</head>
+<body>
+<!--right-->
+<#include "../decorators/left1.ftl" ><div class="main_right" id="right">
+	<div class="rig_tab">
+		<div class="rig_tab2">
+			<form id="addform4">
+				<input name ="lectureId" value="${lectureId!}" type="hidden"/>
+				<table class="table table-hover  table-bordered" >
+	                <tr>
+	                	<td class="td_right"><em>*</em>评论信息</td>
+	                    <td><textarea name="lecDes" id="lecDes"  cols="60" rows="7" class="validate[required,maxSize[250]] text-input"></textarea><a></a></td>
+	                </tr>
+	            	<tr class="button_tr">
+	                	<td>&nbsp;</td>
+	               	 	<td>
+		               	 	<input  onclick="adddesc()" value="添加评论"  class="main_button"/>
+	               	 	</td>
+					</tr>   
+				</table>
+			</form>
+		</div>
+	</div>
+
+</div>
+
+<div style="display: none;">
+        	<a id="addSuccessed" href="#" onclick="showMessageDialog(event,'新建成功','<@spring.url '/lectureCont/index.htm?type=${type!}&li=li48&div=div_4&menuOrder=0'/>','closeWindow();');" ></a>
+        	<a id="addFailed" href="#" onclick="showMessageDialog(event,'新建失败','','');" ></a>
+ </div>
+
+<script>
+
+function adddesc(){
+	var url = "<@spring.url '/lectureCont/sumdes.htm'/>";
+	$("#addform4").attr("action",url).submit();
+}
+	
+</script>
+</body>
+</html>

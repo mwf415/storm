@@ -1,0 +1,31 @@
+<#import "../decorators/uri.ftl" as uri /> <#import "../decorators/util.ftl" as
+util /> <#import "../decorators/spring.ftl" as spring />
+<div>
+	<form id="planAdd" name="planAdd">
+		<table class="main_table" style="width:100%;" cellpadding="0px" cellspacing="1px">
+			<tr class="table_title">
+				<td width="25%">时间</td>
+				<td width="25%">科室</td>
+				<td width="25%">人员</td>
+				<td width="25%">操作</td>
+			</tr>
+			
+			<#if detailList?? && detailList?size gt 0> 
+				<#list detailList as detail>
+				<tr class="table_td">
+					<td>${detail.time}</td>
+					<td>${detail.roomName}</td>
+					<td>${detail.users}</td> 
+					<#if detail.checkStatus == "1">
+					<td><input type="button" value="已通过" style="width:100px;"/> <input
+						type="button" value="删除" style="width:100px;" onclick="doDel(this)" id="${detail.batch}"/></td> <#else>
+					<td><input type="button" value="审核" style="width:100px;" onclick="doCheck(this)" id="${detail.batch}"/> <input
+						type="button" value="删除" style="width:100px;" onclick="doDel(this)" id="${detail.batch}"/></td> </#if>
+				</tr>
+				</#list> 
+				<#else>
+  					<tr class="table_td"><td colspan="12" align="center">没有符合条件的结果。</td></tr>
+			</#if>
+		</table>
+	</form>
+</div>

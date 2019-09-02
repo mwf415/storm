@@ -1,0 +1,147 @@
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<#import "../decorators/spring.ftl" as spring />
+<!DOCTYPE html>
+<html >
+<head><#include "../decorators/headtitle.ftl" >
+</head>
+<body>
+<!--right-->
+<#include "../decorators/left7.ftl" >
+<div class="main_right" id="right">
+	<div class="right_con">
+		<div class="main_search">
+			<form id="searchform">
+				<div style="border: 0px solid silver;height: 30px;padding-top: 3px;">
+						选择时间
+						<input type="text" id="time" name="time" value="${time!}" style="width: 100px;" />
+						<img onclick="WdatePicker({el:'time',dateFmt:'yyyy-MM'})" src="${uri.jssite}/My97DatePicker/skin/datePicker.gif" width="16" height="22" align="absmiddle"/>	
+						<select name="type" style="width: 100px;">
+							<option value="m" <#if type='m'>selected</#if>>月度</option>
+							<option value="y" <#if type='y'>selected</#if>>年度</option>
+						</select>
+						<input type="hidden" name="li" value="${li!}"/>
+						<input type="hidden" name="div" value="${div!}"/>
+						<input type="hidden" name="pageIndex" value="${pageIndex!'1'}"/>
+						<button type="button" class="btn btn-danger btn-sm" onclick="queryList()" >搜 索</button>
+						<span style="float: right;">
+						</span>
+				</div>
+			</form>
+		</div>
+		<!-- 显示数据的div -->
+		<div id="dataDiv">
+			<div class="main_right" id="right">
+					<table class="table table-bordered table-hover">
+						<caption>科室${year!}年<#if type=='m'>${month!}月</#if><#if type=='m'>月度<#else>年度</#if>统计表</caption>
+						<tr class="table_title">
+							<td width="7%">科室名称</td>
+							<td width="8%">编制教师数</td>
+							<td width="8%">助理教师数</td>
+							<td width="8%">度在培学员数</td>
+							<td width="8%">度入科学员数</td>
+							<td width="8%">度出科学员数</td>
+							<td width="8%">度入科教育数</td>
+							<td width="8%">度入科教育参加人数</td>
+							<!-- 6 -->
+							<td width="7%">度教学查房次数</td>
+							<td width="7%">度教学查房参加人数</td>
+							<td width="7%">度教学查房资料上传数</td>
+							
+							<td width="7%">度病例讨论次数</td>
+							<td width="7%">度病例讨论参加人数</td>
+							<td width="7%">度病例讨论上传资料数</td>
+							
+							<td width="7%">度教学讲座次数</td>
+							<td width="7%">度教学讲座参加人数</td>
+							<td width="7%">度教学讲座资料上传数</td>
+
+							<td width="7%">度操作训练此时</td>
+							<td width="7%">度操作训练参加人数</td>
+							<td width="7%">度操作训练上传资料数</td>
+							
+							<td width="7%">学员值班次数</td>
+							<td width="7%">学员书写病例数</td>
+							<td width="7%">学员管理病人数</td>
+							
+							<td width="7%">教师参加教学人次</td>
+							<td width="7%">助教参加教学人次</td>
+							<td width="7%">教学总时长</td>
+							<td width="7%">平均教学时长</td>
+							<td width="7%">教学任务安排数</td>
+							<td width="7%">教学任务完成数</td>
+							<td width="7%">出科理论考试人数</td>
+							<td width="7%">出科操作技能考核人数</td>
+							<td width="7%">出科临床能力考核人数</td>
+							<td width="7%">出科考核资料上传数</td>
+						</tr>
+						<#if roomStats?? && roomStats?size gt 0>
+						<#list roomStats as rs>
+						<tr class="table_td">
+								<td>${rs.roomName}</td>
+								<td>${rs.teacherNum!}</td>
+								<td>${rs.teacherNum!}</td>
+								<td>${rs.inTrain!}</td>
+								<td>${rs.inRoom!}</td>
+								<td>${rs.outRoom!}</td>
+								<td>${rs.inRoomTimes!}</td>
+								<td>${rs.inRoomNum!}</td>
+								
+								<td>${rs.checkRoomTimes!}</td>
+								<td>${rs.checkRoomNum!}</td>
+								<td>${rs.checkRoomFnum!}</td>
+								
+								<td>${rs.caseDiscTimes!}</td>
+								<td>${rs.caseDiscNum!}</td>
+								<td>${rs.caseDiscFnum!}</td>
+								
+								<td>${rs.techLectureTimes!}</td>
+								<td>${rs.techLectureNum!}</td>
+								<td>${rs.techLectureFnum!}</td>
+								
+								<td>${rs.practiceTimes!}</td>
+								<td>${rs.practiceNum!}</td>
+								<td>${rs.practiceFnum!}</td>
+								
+								<td>${rs.onDetyMount!}</td>
+								<td>${rs.uploadFileCount!}</td>
+								<td>${rs.mngMount!}</td>
+								
+								<td>${rs.offiNum!}</td>
+								<td>${rs.unOffiNum!}</td>
+								<td>${rs.takeTime!}</td>
+								<td>${rs.avgTime!}</td>
+								<td>${rs.activeNum!}</td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td>${rs.outRoomFnum!}</td>
+							</tr>
+							</#list>
+							<#else>
+			  				<tr class="table_td"><td colspan="30" align="center">没有符合条件的结果。</td></tr>
+							</#if>
+					</table>
+			</div>
+		</div>
+	</div>
+</div>
+<!--right end-->
+
+<script type="text/javascript">
+// 这个是进入页面就会查询；
+function queryList(){
+	var searchStart = $("#searchStart").val();
+	if(searchStart == '') {
+		  alert("请注意 :时间不能为空");
+		  return false;
+	}
+	var url ="<@spring.url '/countController/tindex.htm'/>";
+	$("#searchform").attr("action",url).submit();
+
+} 
+</script>
+
+</body>
+</html>

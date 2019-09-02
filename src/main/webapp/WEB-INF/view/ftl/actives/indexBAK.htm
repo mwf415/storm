@@ -1,0 +1,279 @@
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<#import "../decorators/spring.ftl" as spring />
+<!DOCTYPE html>
+<html>
+<head>
+<#include "../decorators/headtitle.ftl" >
+
+<script type="text/javascript">
+		function ansSums(){
+			CKupdate();
+			var result = confirm('一旦提交，没法修改');
+			if (result) {
+				var url = "<@spring.url '/questController/ansSum.htm'/>";
+				$("#ansSum").attr("action",url).submit();
+				closeWindow("mesWindowUsr");
+			} else {
+				alert('不添加');
+			}
+		}
+	
+		//文本框 ckeditor上传需要转换成能够controller接受的
+		function CKupdate() {
+		    for (instance in CKEDITOR.instances)
+		        CKEDITOR.instances[instance].updateElement();
+		}
+	</script>
+</head>
+<body>
+<#include "../decorators/left1.ftl" >
+<!--right-->
+<div class="main_right" id="right">
+	<div class="right_con">
+	<div id="dataDiv">
+		<div class="main_search">
+			<form id="searchform2">
+				<#if status ?? && status == 4 >
+					<#if type?? && type =="r">
+						<#if zl??>
+						<span><a href="#" onclick="pop_userinfo(event,'<@spring.url '/inLearn/ziliao_detail.htm?type=${type}&roomName=${roomName!}'/>')"><img src="${uri.imgsite}/xiugai.png" title="查看资料"/>查看资料</a></span>   
+						<span><a href="<@spring.url '/inLearn/ziliao_add.htm?li=li34&div=div_3&menuOrder=0&type=2'/>"><img src="${uri.imgsite}/xiugai.png" title="更新资料"/>更新资料</a></span>
+						<#else>
+						 	<span><a href="<@spring.url '/inLearn/ziliao_add.htm?li=li34&div=div_3&menuOrder=0&type=2'/>"><img src="${uri.imgsite}/xiugai.png" title="添加资料"/>添加资料</a></span>
+						</#if>	
+					</#if>
+				</#if>
+			
+				<div style="border: 0px solid silver;height: 30px;padding-top: 3px;">
+				<#if type ?? && (type =="h" || type=="b")>
+					科室：<select name="roomName"  id="roomName"> 
+					<#if roomValues?? && roomValues?size gt 0>
+						<option value="">请选择</option> 
+						<#list roomValues as roomValue>
+								<option value="${roomValue.value}" <#if roomValue.value==roomName!>selected="selected"</#if> >${roomValue.value}</option>
+						</#list> 
+					</#if>
+					</select>
+					|
+				</#if>
+				<#if type ?? && type =="h">
+					基地：<select name="baseName"  id="baseName" style="width: 105px;" > 
+					<#if baseValues?? && baseValues?size gt 0>
+						<option value="">请选择</option> 
+						<#list baseValues as baseValue>
+								<option value="${baseValue.value}" <#if baseValue.value==baseName!>selected="selected"</#if> >${baseValue.value}</option>
+						</#list> 
+					</#if>
+					</select>
+				</#if>
+					开始时间：
+						<input id="searchStart" type="text" name="searchStart" style="width: 100px;"/>
+							<img onclick="WdatePicker({el:'searchStart',dateFmt:'yyyy-MM-dd'})" 
+									src="${uri.jssite}/My97DatePicker/skin/datePicker.gif" width="16" height="22" align="absmiddle">	
+									
+					|	
+					结束时间：
+						<input id="searchEnd" type="text" name="searchEnd" style="width: 100px;"/>
+							<img onclick="WdatePicker({el:'searchEnd',dateFmt:'yyyy-MM-dd'})" 
+									src="${uri.jssite}/My97DatePicker/skin/datePicker.gif" width="16" height="22" align="absmiddle">	
+					
+						<input type="hidden" name="li" id="li" value="${li!}"/>
+						<input type="hidden" name="div" id="div" value="${div!}"/>
+						<input type="hidden" name="type" id="type" value="${type!}"/>
+						<input type="hidden" name="pageIndex" value="${pageIndex!'1'}"/>
+						<#if type?? && type=="s">
+						<#else>
+							<button type="button" class="btn btn-danger btn-sm" onclick="queryList()" >搜 索</button>
+						</#if>
+						<span style="float: right;">
+							<#if status ?? && status ==4 && type ="r" >
+								<button type="button" onclick="AddCheRoom()"  class="btn btn-primary btn-sm">添加入科教育</button>
+							<#elseif status?? && status ==3 && (type ="h" ||type ="b"||type ="r") >
+								<button type="button" onclick="AddCheRoom()"  class="btn btn-primary btn-sm">添加其他活动</button>
+							<#elseif status?? && status ==5 && type ="r"  >
+								<button type="button" onclick="AddCheRoom()"  class="btn btn-primary btn-sm">添加出科考试</button>
+							<#elseif status?? && status ==6 && (type ="h" ||type ="b"||type ="r") >
+								<button type="button" onclick="AddCheRoom()"  class="btn btn-primary btn-sm">添加教学查房</button>
+							<#elseif status?? && status ==7 && (type ="h" ||type ="b"||type ="r") >
+								<button type="button" onclick="AddCheRoom()"  class="btn btn-primary btn-sm">添加病例讨论</button>
+							<#elseif status?? && status ==8 && (type ="h" ||type ="b"||type ="r") >
+								<button type="button" onclick="AddCheRoom()"  class="btn btn-primary btn-sm">添加教学讲座</button>
+							<#elseif status?? && status ==9 && (type ="h" ||type ="b"||type ="r") >
+								<button type="button" onclick="AddCheRoom()"  class="btn btn-primary btn-sm">添加操作训练</button>
+							</#if>	
+						</span>
+				</div>
+			</form>
+		</div>
+		<input type="hidden" id="isIn" name="isIn"/>
+		<!-- 显示数据的div -->
+			<div style="border: 1px solid #ccc ;margin-top: 10px;" >
+				<div class="main_right" id="right">
+					<table class="table table-bordered table-hover">
+						<tr class="table_title">
+							<td width="7%">科室</td>
+							<td width="7%">责任老师</td>							
+							<td width="10%">开始时间</td>
+							<#if status ?? && status==5>
+								<td>
+									出科考试学员
+								</td>
+							<#else>									
+							</#if>
+							<#if status ?? && (status ==6 || status ==7)> 
+								<td width="15%">疾病名称</td>
+								<td width="7%">病人姓名</td>
+								<td width="5%">病案号</td>
+							<#elseif status?? && (status ==4 || status ==3 || status ==5|| status ==8 || status ==9)>
+								<td width="15%">标题</td>
+							</#if>
+							<td width="7%">地点</td>
+							<td width="5%">时长</td>
+							<#if type?? && type =="r" && status==4>
+							<#else>
+								<td width="10%">操作</td>
+							</#if>
+														
+							<#if status ?? && status ==5>
+							<#else>
+								<td width="6%">来源</td>
+							</#if>
+							
+						</tr>
+						
+						<#if page.list ?? && page.list ?size gt 0>
+						<#list page.list  as cheRoom>
+						<tr class="table_td">
+							<td>${cheRoom.roomName!}</td>
+							<td>
+							<#if cheRoom.activesUsers??>
+								<#if status ?? && status==5>
+								<#else>		
+								<a href="javaScript:activesDetail('${cheRoom.id!}');" > 
+							          	<span class="glyphicon glyphicon-align-justify"></span>
+							        </a>&nbsp;&nbsp;
+							     </#if>
+								<#list cheRoom.activesUsers as au>
+										<#if au.identityId==1>${au.name}&nbsp;</#if>
+								</#list>
+								
+							</#if>
+							</td>
+							<#if status ?? && status==5>
+								<td>
+									<#if cheRoom.activesUsers??>
+										<#list cheRoom.activesUsers as au>
+												<#if au.identityId==2>${au.name}&nbsp;</#if>
+										</#list>
+									</#if>
+								</td>
+							<#else>									
+							</#if>
+							<td>
+								<#if cheRoom.startTime ?? >
+									${cheRoom.startTime[0..15]}
+								<#else>
+									没有指定开始时间
+								</#if>
+							</td>
+							<#if status?? && (status ==6 || status ==7)> 
+								<td>${cheRoom.title!}</td>
+								<td>${cheRoom.sickPerson!}</td>
+								<td>${cheRoom.sickNum!}</td>
+							<#elseif status?? && (status ==4 || status ==3 ||status ==5|| status ==8 || status ==9)>
+								<td>${cheRoom.title!}</td>
+							</#if>
+							<td>${cheRoom.address!}</td>
+							<td>${cheRoom.takeTime!}</td>
+							
+							<#if type?? && type =="r" && status ==4>
+							<#else>
+								<td>
+									<#if status?? && status==4 >
+										<button type="button" class="btn btn-primary btn-xs"  onclick="pop_userinfo(event,'<@spring.url '/inLearn/ziliao_detail.htm?roomName=${cheRoom.roomName!}'/>')">入科资料</button>   
+									<#else>
+											<#if type ?? && type=="s">
+												<button type="button" class="btn btn-danger btn-xs"  onclick="pop_userinfo(event,'<@spring.url '/questCont/qusetans.htm?activesId=${cheRoom.id!}'/>')">回答问题</button>
+											<#else>
+												<button type="button" class="btn btn-primary btn-xs"  onclick="pop_userinfo(event,'<@spring.url '/questController/add.htm?activesId=${cheRoom.id!}'/>')">查看问题</button>
+											</#if>&nbsp;&nbsp;
+											<a href="javaScript:cheFile('${cheRoom.id!}');" > 查看资料</span>
+									        </a>&nbsp;&nbsp;
+											
+									</#if>
+								
+									<#if type?? && type=="h">
+										<button type="button" class="btn btn-primary btn-xs" onclick="del('${cheRoom.id}')" >删除</button>
+									</#if>									
+									
+								</td>						
+							</#if>
+							
+							<#if status ?? && status ==5>
+							<#else>
+								<td>
+									${cheRoom.org!}
+								</td>
+							</#if>
+						</tr>
+						</tr>
+						<tr class="contentTr">
+			      	    	<td colspan="12" >
+			      	    		<div id="${cheRoom.id!}" class="showViewStyle"></div>
+			      	    	</td>
+			   	 		</tr>
+						</#list>
+						<#else>
+				  			<tr class="table_td"><td colspan="12" align="center">没有符合条件的结果。</td></tr>
+						</#if>
+					</table>
+				<#include "../decorators/page.htm" />
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+
+function activesDetail(id){
+	var url ="<@spring.url '/activesCont/show.htm?activesId="+id+"&menuOrder=${menuOrder!}&status=${status!}&type=${type!}&div=${div!}&li=${li!}'/>";
+	showView(id,url);
+}
+
+function del(tId){
+	if (window.confirm('你确定要删除吗？')) {
+		window.location = "<@spring.url '/activesController/del.htm?id="+tId+"&status=${status!}&type=${type!}&div=${div!}&li=${li!}'/>";
+	}
+}
+
+function cheFile(id){
+	var url ="<@spring.url '/file/filelist.htm?activesId="+id+"&menuOrder=${menuOrder!}&status=${status!}&type=${type!}&div=${div!}&li=${li!}'/>";
+	showView(id,url);
+}
+
+
+function targetPage(pageIndex){
+	window.location = '<@spring.url "/activesCont/index.htm?li=${li!}&type=${type!}&div=${div!}&menuOrder=${menuOrder!}&searchEnd=${searchEnd!}&searchStart=${searchStart!}&teachernum=${teachernum!}&pageIndex='+pageIndex+'"/>';
+}
+
+function AddCheRoom(){
+	var type=$("#type").val();
+	var url ="<@spring.url '/activesController/add.htm?type="+type+"'/>";
+	window.location = url;
+}
+function queryList(){
+	var searchStart=$("#searchStart").val();
+	var searchEnd=$("#searchEnd").val();
+	var type=$("#type").val();
+	var roomName=$("#roomName").val();
+	var baseName=$("#baseName").val();
+	var li=$("#li").val();
+	var div=$("#div").val();
+	window.location="<@spring.url '/activesCont/index.htm?li="+li+"&div="+div+"&menuOrder=1&type="+type+"&roomName="+roomName+"&roomName="+roomName+"&searchStart="+searchStart+"&searchEnd="+searchEnd+"'/>";
+}
+	
+</script>
+
+</body>
+</html>

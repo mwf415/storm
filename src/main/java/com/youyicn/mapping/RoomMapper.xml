@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youyicn.dao.cycle.RoomMapper">
+
+	<insert id="addRoom" parameterType="com.youyicn.entity.cycle.Room"	useGeneratedKeys="true" keyProperty="id">
+	    insert into cycle_room (roomNum,value) values (#{roomNum},#{value})
+	</insert>
+	
+	<select id="queryAllRoom" resultType="com.youyicn.entity.cycle.Room">
+		select * from cycle_room 
+	</select>
+	
+	<select id="queryByName" parameterType="com.youyicn.entity.cycle.Room" resultType="com.youyicn.entity.cycle.Room">
+		select * from cycle_room where  value=#{value} 
+	</select>
+	<select id="getById" parameterType="com.youyicn.entity.cycle.Room" resultType="com.youyicn.entity.cycle.Room">
+		select * from cycle_room where  id=#{id} 
+	</select>
+	
+	<delete id="del" parameterType="com.youyicn.entity.cycle.Room" >
+		delete  from cycle_room where id = #{id}
+	</delete>
+	
+</mapper>

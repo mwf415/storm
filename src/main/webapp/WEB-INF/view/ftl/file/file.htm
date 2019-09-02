@@ -1,0 +1,33 @@
+<#import "../decorators/uri.ftl" as uri /> 
+<#import "../decorators/util.ftl" as util /> 
+<#import "../decorators/spring.ftl" as spring />
+<!DOCTYPE html>
+<html >
+<head>
+<style>
+.table_td td {
+	padding-left: 3px;
+}
+</style>
+</head>
+<body>
+	<div style="margin-top: 30px">
+	<form  action="<@spring.url '/file/sumfile.htm'/>"  method="post" enctype="multipart/form-data" >
+			<table class="table table-hover" >
+	               <tr>
+					<td width="21%" class="td_right"><em>*</em>上传文件：</td>
+					<td width="79%">
+						<input type="file" name="file"  ></input>
+					</td>
+				</tr>
+	           	<tr class="button_tr">
+	               	<td>&nbsp;</td>
+	              	 	<td>
+						<button type="submit" class="btn btn-danger">提交</button>
+	              	 </td>
+				</tr>   
+			</table>
+	</form>
+	</div>
+</body>
+</html>

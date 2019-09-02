@@ -1,0 +1,89 @@
+<#import "../decorators/spring.ftl" as spring />
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html >
+<head><#include "../decorators/headtitle.ftl" >
+</head>
+<body>
+<!--right-->
+<#include "../decorators/left1.ftl" ><div class="main_right" id="right">
+	<div class="rig_tab">
+		<div class="rig_tab2">
+			<h1>新增角色 <span>(注：带*为必填项)</span></h1>
+			<form id="addform">
+				<table class="table table-hover  table-bordered" >
+					<tr>
+						<td width="21%" class="td_right"><em>*</em> 角色名称</td>
+						<td width="79%"><input name="roleName" id="roleName" type="text" class="validate[required,maxSize[50]] text-input"/><a></a></td>
+					</tr>
+					<!-- <tr>
+						<td width="21%" class="td_right"><em>*</em> 角色ID</td>
+						<td width="79%"><input name="roleNum" id="roleNum" type="text" class="validate[required,maxSize[50]] text-input"/><a></a></td>
+					</tr> -->
+	                <tr>
+	                	<td class="td_right"><em>*</em>描述信息</td>
+	                    <td><textarea name="roleDes" id="roleDes"  cols="60" rows="7" class="validate[required,maxSize[250]] text-input"></textarea><a></a></td>
+	                </tr>
+	            	<tr class="button_tr">
+	       				<td>&nbsp;</td>
+	               	 	<td>
+		               	 <button  type="button" onclick="addRole()" class="btn btn-info"> 新建</button>&nbsp;&nbsp;
+	               	 	</td>
+					</tr>   
+				</table>
+			</form>
+		</div>
+	</div>
+
+</div>
+
+<div style="display: none;">
+        	<a id="addSuccessed" href="#" onclick="showMessageDialog(event,'角色新建成功','<@spring.url '/userRoleController/tolistrole.htm?li=li12&div=div_1&menuOrder=0'/>','closeWindow();');" ></a>
+        	<a id="addFailed" href="#" onclick="showMessageDialog(event,'角色新建失败','','');" ></a>
+ </div>
+
+<script>
+	function addRole(){
+		var param = null;
+		var postmethod = "POST";
+		var url ="<@spring.url '/userRoleController/addrole.htm'/>";
+		var param = $("#addform").serialize();
+		$.ajax({
+			   type: postmethod,
+			   cache: false,
+			   url: url,
+			   data : param,
+			   success: function(data){
+			    if(!validateFieldMs(data)){
+					return;
+				}
+				if(data == 'true'){
+					tip(1,true);
+					return;
+				}else if(data == 'false'){
+					tip(1,false);
+					return;
+				}
+				showMessageDialog(null,data,'','');
+			   },
+			   error:function(xhr,err){
+				   window.location.href=url; 
+			}
+		});
+	}
+
+	function tip(type,bool){
+		if(type == 1){
+			if(bool){
+				document.getElementById("addSuccessed").click();
+				return;
+			}
+			document.getElementById("addFailed").click();
+		}
+	}
+
+</script>
+</body>
+</html>

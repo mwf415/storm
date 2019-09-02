@@ -1,0 +1,442 @@
+<#import "/decorators/uri.ftl" as uri />
+<#import "/decorators/util.ftl" as util />
+<#import "/decorators/spring.ftl" as spring />
+<html >
+<head>
+<#include "../decorators/headtitle.ftl" >
+</head>
+<body >
+<div class="container" >
+	<div class="row clearfix">
+		<div class="col-md-10 column">
+			<img alt="140x140" img src="${uri.imgsite}/cycle.png"  />
+		</div>
+		<div class="col-md-2 column">
+			<div class="btn-group">
+					<a id="modal-208140" href="#modal-container-208140" role="button" class="btn" data-toggle="modal">${realName!}</a>
+					<a id="modal-208141" href="<@spring.url '/loginout.htm'/>" role="button" class="btn" data-toggle="modal">退出</a>
+				</div>
+			</div>
+		</div>
+		<hr/>
+	
+	<div class="container">
+		<div class="row clearfix">
+			<div class="col-md-12 column">
+				<nav class="navbar navbar-default" role="navigation">
+					<div class="navbar-header">
+						 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="#">首页</a>
+					</div>
+					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+						<ul class="nav navbar-nav">
+							<li>
+								 <a href="#"></a>
+							</li>
+						</ul>
+						<form class="navbar-form navbar-right" role="search">
+							<div class="form-group">
+								<input type="text" class="form-control" />
+							</div> <button type="submit" class="btn btn-default">搜索</button>
+						</form>
+					</div>
+				</nav>
+			</div>
+		</div>
+	</div>
+
+	<div class="row clearfix">
+		<div class="col-md-2 column">
+			 <a  target="_blank" href='<@spring.url "/user/index.htm?li=li01&div=div_0&type=1"/>' >
+				<img alt="100x100" src="${uri.imgsite}/xtsz.png" class="img-circle" />
+			</a>
+		</div>
+		<div class="col-md-2 column">
+		 	<a  target="_blank" href='<@spring.url "/teacheringController/index.htm"/>'>
+				<img alt="100x100" src="${uri.imgsite}/gp.png" class="img-circle" />
+			</a>
+		</div>
+		<div class="col-md-2 column">
+			<a  target="_blank" href='<@spring.url "/countController/index.htm?li=li120&div=div_12&type=t"/>'>		
+				<img alt="100x100" src="${uri.imgsite}/tj.png" class="img-circle" />
+			</a>
+		</div>
+		<div class="col-md-2 column">
+			
+		</div>
+		<div class="col-md-2 column">
+			
+		</div>
+		<div class="col-md-2 column">
+			
+		</div>
+	</div>
+	
+	
+	<div class="row clearfix">
+		<div class="col-md-6 column">		
+			<ul class="list-group">
+				<li class="list-group-item">热烈祝贺我院**成为优秀医生</li>
+				<li class="list-group-item">北京大学教授**来我院演讲</li>
+				<li class="list-group-item">市政府表彰**</li>
+				<li class="list-group-item">2017年我们医院取得了**的成绩</li>
+				
+				<li class="list-group-item">
+					<span class="badge">2</span>
+					医院新闻5
+				</li>
+				<li class="list-group-item">医院新闻4</li>
+				<li class="list-group-item">
+					<span class="badge">2</span>
+					医院新闻5
+				</li>
+			</ul>
+		</div>
+		<div class="col-md-6 column">
+			<div class="carousel slide" id="carousel-681925">
+				<ol class="carousel-indicators">
+					<li class="active" data-slide-to="0" data-target="#carousel-681925">
+					</li>
+					<li data-slide-to="1" data-target="#carousel-681925">
+					</li>
+					<li data-slide-to="2" data-target="#carousel-681925">
+					</li>
+				</ol>
+				<div class="carousel-inner">
+					<div class="item active">
+						<img alt="" src="${uri.imgsite}/a1.png" />
+						<div class="carousel-caption">
+							<h4>
+								
+							</h4>
+							<p>
+								
+							</p>
+						</div>
+					</div>
+					<div class="item">
+						<img alt="" src="${uri.imgsite}/a2.png" />
+						<div class="carousel-caption">
+							<h4>
+								
+							</h4>
+							<p>
+							</p>
+						</div>
+					</div>
+					<div class="item">
+						<img alt="" src="${uri.imgsite}/a3.png" />
+						<div class="carousel-caption">
+							<h4>
+								
+							</h4>
+							<p>
+								
+							</p>
+						</div>
+					</div>
+				</div> <a class="left carousel-control" href="#carousel-681925" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a> <a class="right carousel-control" href="#carousel-681925" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
+			</div>
+		</div>
+	</div>
+	<li class="divider">
+
+	<div class="panel panel-default " style="height: 500px;overflow: auto;">
+		<div class="panel-heading ">
+			<h4 class="panel-title">未来7天事项</h4>
+		</div>
+				<div class="panel-body ">
+			<div class="tabbable" id="tabs-637763">
+				<ul class="nav nav-tabs">
+					<li class="active">
+						 <a href="#panel-445732" data-toggle="tab">入科教育：${count4!0}</a>
+					</li>
+					<li>
+						 <a href="#panel-445733" data-toggle="tab">教学查房：${count6!0}</a>
+					</li>
+					<li>
+						 <a href="#panel-445734" data-toggle="tab">病例讨论：${count7!0}</a>
+					</li>
+					<li>
+						 <a href="#panel-445735" data-toggle="tab">教学讲座：${count8!0}</a>
+					</li>
+					<li>
+						 <a href="#panel-445736" data-toggle="tab">操作训练：${count9!0}</a>
+					</li>
+					<li>
+						 <a href="#panel-445737" data-toggle="tab">出科考试：${count5!0}</a>
+					</li>					
+					<li>
+						 <a href="#panel-445738" data-toggle="tab">其他活动：${count3!0}</a>
+					</li>		
+					
+				</ul>
+				<div class="tab-content">
+						<div class="tab-pane" id="panel-445732">
+						
+						<table class="table">
+							<thead>
+								<tr>
+									<th>老师姓名</th>									
+									<th>科室名称</th>
+									<th>教学内容</th>
+									<th>开始时间</th>
+								</tr>
+							</thead>
+							<tbody>
+								<#if page4.list?? && page4.list?size gt 0>
+									<#list page4.list as le>
+									<tr class="table_td">
+										<td>
+											<#if le.activesUsers ?? && le.activesUsers?size gt 0>
+												<#list le.activesUsers as au >
+													<#if au.identityId==1>${au.name}&nbsp;</#if>
+												</#list>
+											</#if>
+										</td>
+										<td>${le.roomName!}</td>
+										<td>${le.title!}</td>
+										<td>${le.startTime!}</td>
+									</tr>
+									</#list>
+									<#else>
+					  					<tr class="table_td"><td colspan="12" align="center">没有符合条件的结果。</td></tr>
+									</#if>
+								</tr>
+							</tbody>
+						</table>					
+					</div>
+					
+					
+					<div class="tab-pane active" id="panel-445733">
+						<table class="table">
+							<thead>
+								<tr>
+									<th>老师姓名</th>									
+									<th>科室名称</th>
+									<th>教学内容</th>
+									<th>开始时间</th>
+								</tr>
+							</thead>
+							<tbody>
+								<#if page6.list?? && page6.list?size gt 0>
+									<#list page6.list as le>
+									<tr class="table_td">
+										<td>
+											<#if le.activesUsers ?? && le.activesUsers?size gt 0>
+												<#list le.activesUsers as au >
+													<#if au.identityId==1>${au.name}&nbsp;</#if>
+												</#list>
+											</#if>
+										</td>
+										<#-- -->
+										<td>${le.roomName!}</td>
+										<td>${le.title!}</td>
+										<td>${le.startTime!}</td>
+									</tr>
+									</#list>
+									<#else>
+					  					<tr class="table_td"><td colspan="12" align="center">没有符合条件的结果。</td></tr>
+									</#if>
+							</tbody>
+						</table>
+					</div>
+					<div class="tab-pane" id="panel-445734">
+						<table class="table">
+							<thead>
+								<tr>
+									<th>老师姓名</th>									
+									<th>科室名称</th>
+									<th>教学内容</th>
+									<th>开始时间</th>
+								</tr>
+							</thead>
+							<tbody>
+								<#if page7.list?? && page7.list?size gt 0>
+									<#list page7.list as le>
+									<tr class="table_td">
+										<td>
+											<#if le.activesUsers ?? && le.activesUsers?size gt 0>
+												<#list le.activesUsers as au >
+													<#if au.identityId==1>${au.name}&nbsp;</#if>
+												</#list>
+											</#if>
+										</td>
+										
+										<td>${le.roomName!}</td>
+										<td>${le.title!}</td>
+										<td>${le.startTime!}</td>
+									</tr>
+									</#list>
+									<#else>
+					  					<tr class="table_td"><td colspan="12" align="center">没有符合条件的结果。</td></tr>
+									</#if>
+							</tbody>
+						</table>
+						
+						
+						
+					</div>
+					
+					
+					<div class="tab-pane" id="panel-445735">
+						
+						<table class="table">
+							<thead>
+								<tr>
+									<th>老师姓名</th>									
+									<th>科室名称</th>
+									<th>教学内容</th>
+									<th>开始时间</th>
+								</tr>
+							</thead>
+							<tbody>
+								<#if page8.list?? && page8.list?size gt 0>
+									<#list page8.list as le>
+									<tr class="table_td">
+										<td>
+											<#if le.activesUsers ?? && le.activesUsers?size gt 0>
+												<#list le.activesUsers as au >
+													<#if au.identityId==1>${au.name}&nbsp;</#if>
+												</#list>
+											</#if>
+										</td>
+										
+										<td>${le.roomName!}</td>
+										<td>${le.title!}</td>
+										<td>${le.startTime!}</td>
+									</tr>
+									</#list>
+									<#else>
+					  					<tr class="table_td"><td colspan="12" align="center">没有符合条件的结果。</td></tr>
+									</#if>
+							</tbody>
+						</table>
+						
+						
+						
+					</div>
+					
+					
+					<div class="tab-pane" id="panel-445736">						
+						<table class="table">
+							<thead>
+								<tr>
+									<th>老师姓名</th>									
+									<th>科室名称</th>
+									<th>教学内容</th>
+									<th>开始时间</th>
+								</tr>
+							</thead>
+							<tbody>
+								<#if page9.list?? && page9.list?size gt 0>
+									<#list page9.list as le>
+									<tr class="table_td">
+										<td>
+											<#if le.activesUsers ?? && le.activesUsers?size gt 0>
+												<#list le.activesUsers as au >
+													<#if au.identityId==1>${au.name}&nbsp;</#if>
+												</#list>
+											</#if>
+										</td>
+										
+										<td>${le.roomName!}</td>
+										<td>${le.title!}</td>
+										<td>${le.startTime!}</td>
+									</tr>
+									</#list>
+									<#else>
+					  					<tr class="table_td"><td colspan="12" align="center">没有符合条件的结果。</td></tr>
+									</#if>
+							</tbody>
+						</table>
+					</div>					
+					
+				
+					
+						<div class="tab-pane" id="panel-445737">
+						
+						<table class="table">
+							<thead>
+								<tr>
+									<th>老师姓名</th>									
+									<th>科室名称</th>
+									<th>教学内容</th>
+									<th>开始时间</th>
+								</tr>
+							</thead>
+							<tbody>
+								<#if page5.list?? && page5.list?size gt 0>
+									<#list page5.list as le>
+									<tr class="table_td">
+										<td><#if le.activesUsers ?? && le.activesUsers?size gt 0>
+												<#list le.activesUsers as au >
+													<#if au.identityId==1>${au.name}&nbsp;</#if>
+												</#list>
+											</#if>
+										</td>
+										<td>${le.roomName!}</td>
+										<td>${le.title!}</td>
+										<td>${le.startTime!}</td>
+									</tr>
+									</#list>
+									<#else>
+					  					<tr class="table_td"><td colspan="12" align="center">没有符合条件的结果。</td></tr>
+									</#if>
+								</tr>
+							</tbody>
+						</table>					
+					</div>
+					
+					
+						<div class="tab-pane" id="panel-445738">
+						
+						<table class="table">
+							<thead>
+								<tr>
+									<th>老师姓名</th>									
+									<th>科室名称</th>
+									<th>教学内容</th>
+									<th>开始时间</th>
+								</tr>
+							</thead>
+							<tbody>
+									<#if page3.list?? && page3.list?size gt 0>
+									<#list page3.list as le>
+									<tr class="table_td">
+										<td>
+											<#if le.activesUsers ?? && le.activesUsers?size gt 0>
+												<#list le.activesUsers as au >
+													<#if au.identityId==1>${au.name}&nbsp;</#if>
+												</#list>
+											</#if>
+										</td>
+										<td>${le.roomName!}</td>
+										<td>${le.title!}</td>
+										<td>${le.startTime!}</td>
+									</tr>
+									</#list>
+									<#else>
+					  					<tr class="table_td"><td colspan="12" align="center">没有符合条件的结果。</td></tr>
+									</#if>
+								</tr>
+							</tbody>
+						</table>					
+					</div>
+				</div>
+			</div>
+			
+		</div>
+	
+	</div>
+	
+	
+	<div>
+		<ul>
+			<li><a href="" target="_blank">超链接</a></li>
+		</ul>
+	</div>
+				
+</div>
+	
+</body>
+</html>

@@ -1,0 +1,111 @@
+<#import "../decorators/uri.ftl" as uri /> <#import
+"../decorators/util.ftl" as util /> <#import "../decorators/spring.ftl"
+as spring />
+<!DOCTYPE html>
+<html>
+<head>
+<#include "../decorators/headtitle.ftl" >
+</head>
+<body>
+<#include "../decorators/left1.ftl" >
+<div class="main_right" id="right">
+	<div class="right_con">
+			<form id="planAdd" name="planAdd" method="post">
+				<input type="hidden" name="type" value="${type!}" /> <input
+					type="hidden" name="li" value="${li!}" /> <input type="hidden"
+					name="div" value="${div!}" />
+				<table class="table table-hover  table-bordered">
+					<tr>
+						<td width="20%" class="td_right">待选科室</td>
+						<td width="60%">
+						<#if arrTurnList?? && arrTurnList?size gt 0> <#list arrTurnList as
+					arrTurn> <a 
+						title="开始时间 :${arrTurn.startTime[0..10]}
+结束时间${arrTurn.endTime[0..10]}">
+						<button type="button" class="btn btn-info btn-sm"
+							onclick="roomchange('${arrTurn.arrTurnId!}','${arrTurn.roomName!}')">${arrTurn_index+1}:${arrTurn.roomName!}</button>
+						&nbsp;&nbsp;
+					</a> </#list> </#if>
+					</td>
+					</tr>
+					<tr>
+						<td class="td_right">选择科室(禁止手动输入)</td>
+						<td>
+							<input type="text" id="selectRoom" name="selectRoom" >
+						</td>
+					</tr>
+					<tr>
+						<td  class="td_right"><em>*</em>病案号</td>
+						<td ><input type="text" name="sicknum" value="" />
+						</td>
+					</tr>
+					<tr>
+						<td  class="td_right"><em>*</em>入院日期:</td>
+						<td >
+							<input id="indate" type="text" name="indate"  />
+								<img onclick="WdatePicker({el:'indate',dateFmt:'yyyy-MM-dd HH:mm:ss'})" 
+										src="${uri.jssite}/My97DatePicker/skin/datePicker.gif" width="30px;" height="35px;" align="absmiddle">	
+					        </img>
+							
+						</td>
+					</tr>
+					<tr>
+						<td  class="td_right"><em>*</em>诊断：</td>
+						<td ><input name="sickdes" value="" /><a></a></td>
+					</tr>
+					<tr>
+						<td  class="td_right"><em>*</em>临床技能操作名称：</td>
+						<td ><input name="skillname" ></td>
+					</tr>
+					<tr>
+						<td  class="td_right"><em>*</em>教学时间：</td>
+						<td >
+							<input id="starttime" type="text" name="starttime"  />
+								<img onclick="WdatePicker({el:'starttime',dateFmt:'yyyy-MM-dd HH:mm:ss'})" 
+										src="${uri.jssite}/My97DatePicker/skin/datePicker.gif" width="30px;" height="35px;" align="absmiddle">	
+					        </img>
+					     </td>
+					</tr>
+					
+					<tr>
+						<td  class="td_right"><em>*</em>病情：</td>
+						<td ><input name="sickdetail" ></td>
+					</tr>
+					<tr>
+						<td  class="td_right"><em>*</em>担任角色：</td>
+						<td ><input name="actrole" ></td>
+					</tr>
+					<tr >
+						<td  colspan="2">
+							<button type="button" onclick="addNote()" style="margin-left:40%;" class="btn btn-danger">提交</button>
+						</td>
+					</tr>
+			</form>
+		</div>
+		</div>
+	<script type="text/javascript">
+	
+	function roomchange(id,name){
+		$("#selectRoom").val(id +":"+ name);  
+	}
+		
+		
+	function addNote(){
+		var indate=$("#indate").val();
+		if(indate==null || indate==""||indate==undefined){
+			alert("日期不能为空!");
+			return;
+		}
+		var starttime=$("#starttime").val();
+		if(starttime==null || starttime==""||starttime==undefined){
+			alert("日期不能为空!");
+			return;
+		}
+		var url = "<@spring.url '/cyleNoteController/sum.htm'/>";
+		$("#planAdd").attr("action",url).submit();
+	}
+
+	
+</script>
+</body>
+</html>

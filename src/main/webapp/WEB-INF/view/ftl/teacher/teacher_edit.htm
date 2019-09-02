@@ -1,0 +1,154 @@
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<#import "../decorators/spring.ftl" as spring />
+<!DOCTYPE html>
+<html >
+<head>
+<style>
+.table_td td {
+	padding-left: 3px;
+}
+</style>
+</head>
+<body>
+	<div>
+		<form id="teacherEdit" name="teacherEdit">
+			<table class="main_table">
+				<tr id="box1">
+					<td colspan="8">
+						<div class="right_em_con">
+							<div class="title">
+								<ul>
+									<li id="con_0">基本信息</li>
+								</ul>
+							</div>
+						</div>
+					</td>
+				</tr>
+
+				<table class="tab_open01" id="tours_0">
+
+					<tr>
+						<td width="15%" class="td_r">用户Id：</td>
+						<td width="30%"><input type="text" name="userId"
+							value="${user.id!}" readOnly="true"></input></td>
+						<td width="15%" class="td_r">医院编号：</td>
+						<td width="30%"><input type="text" name="loginName"
+							value="${user.loginName!}"></input></td>
+					</tr>
+					<tr>
+						<td class="td_r">用户名字 ：</td>
+						<td><input type="text" name="userName"
+							value="${user.realName!}"></input></td>
+						<td class="td_r">密码：</td>
+						<td><input type="text" name="userPass"
+							value="${user.userPass!}"></input></td>
+					</tr>
+					<tr>
+						<td class="td_r">所在基地 ：</td>
+						<td><select name="baseName"> 
+						<#if user.baseName?? >
+								<option value="${user.baseName!}">${user.baseName!}</option>
+								<#list baseValues as baseValue>
+								<option value="${baseValue.value}">${baseValue.value}</option></#list>
+								<#else>
+								<option value="">请选择</option> <#list baseValues as baseValue>
+
+								<option value="${baseValue.value}">${baseValue.value}</option>
+								</#list> </#if>
+						</select></td>
+					</tr>
+					<tr>
+						<td class="td_r">所在科室 ：</td>
+						<td><select name="roomName"> <#if user.roomName??>
+								<option value="${user.roomName!}">${user.roomName!}</option>
+								<#list roomValues as roomValue>
+								<option value="${roomValue.value}">${roomValue.value}</option></#list>
+								<#else>
+								<option value="">请选择</option> <#list roomValues as roomValue>
+
+								<option value="${roomValue.value}">${roomValue.value}</option>
+								</#list> </#if>
+						</select></td>
+						<td class="td_r">职位：</td>
+						<td><input type="text" name="staff" value="${user.staff!}"></input></td>
+					</tr>
+					<tr class="add_td_border">
+						<td colspan="4" class="td_r"></td>
+					</tr>
+					<tr>
+						<td class="td_r">用户性别 ：</td>
+						<td><input type="text" name="sex" value="${user.sex!}"></input></td>
+						
+					</tr>
+					<tr>
+						<td class="td_r">毕业院校：</td>
+						<td><input type="text" name="gradSchool"
+							value="${user.gradSchool!}"></input></td>
+						<td class="td_r">毕业专业：</td>
+						<td><input type="text" name="major" value="${user.major!}"></input></td>
+					</tr>
+					<tr>
+						<td class="td_r">学历：</td>
+						<td><input type="text" name="degree" value="${user.degree!}"></input></td>
+	
+					</tr>
+					<tr>
+						<td class="td_r">学位：</td>
+						<td><input type="text" name="xuewei" value="${user.xuewei!}"></input></td>
+						<td class="td_r">邮箱：</td>
+						<td><input type="text" name="email" value="${user.email!}"></input></td>
+					</tr>
+					<tr class="add_td_border">
+						<td colspan="4" class="td_r"></td>
+					</tr>
+					<tr class="button_tr">
+						<td width="15%" class="td_r">电话 ：</td>
+						<td width="30%"><input type="text" name="telPhone"
+							value="${user.telPhone!}"></input></td>
+						<td width="16%" class="td_r">手机：</td>
+						<td width="39%"><input type="text" name="cellPhone"
+							value="${user.cellPhone!}"></input></td>
+					</tr>
+
+					<tr>
+						<td class="td_r">QQ号：</td>
+						<td><input type="text" name="qq" value="${user.qq!}"></input></td>
+						<td class="td_r">微信号 ：</td>
+						<td><input type="text" name="wechat" value="${user.wechat!}"></input></td>
+					</tr>
+
+					<tr>
+						<td width="15%" class="td_r">家庭住址 ：</td>
+						<td width="30%"><input type="text" name="address"
+							value="${user.address!}"></input></td>
+						<td width="15%" class="td_r">身份证号 ：</td>
+						<td width="30%"><input type="text" name="cardId"
+							value="${user.cardId!}"></input></td>
+					</tr>
+					<tr>
+						<input type="button" value="提交" onclick="editTeacher()">&nbsp;&nbsp;&nbsp;&nbsp;
+							<input type="button" value="返回" onclick="toblack()">
+					</tr>
+
+				</table>
+
+
+
+			</table>
+		</form>
+	</div>
+</body>
+
+<script type="text/javascript">
+	function editTeacher() {
+		var result = confirm('是否修改！');
+		if (result) {
+			var url = "<@spring.url '/teacherController/teacher_update.htm?targetID=dataDiv&formID=searchform'/>";
+			ajaxFormRequest("{url:'" + url	+ "',id:'dataDiv',form:'teacherEdit'}");
+		} else {
+			alert('不修改');
+		}
+	}
+</script>
+</html>

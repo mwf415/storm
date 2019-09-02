@@ -1,0 +1,56 @@
+rt "../decorators/uri.ftl" as uri /> <#import "../decorators/util.ftl" as
+util /> <#import "../decorators/spring.ftl" as spring />
+<!D<!DOCTYPE html>html xml<head><#include "../decorators/headtitle.ftl" >
+<script type="text/javascript">
+	function doQuery(){
+		var loginName = $("#loginName").val();
+		if(loginName == null || loginName == ""){
+			alert("请输入用户编号！");
+		}
+		var identity = $("#identity").val();
+		window.location.href="<@spring.url '/arrTurnController/querySingleArrturn_index.htm?li=li102&div=div_10&menuOrder=0&loginName=" + loginName + "&identity=" + identity +"'/>";
+	}
+</script>
+﻿
+</head>
+<body>
+	<#include "../decorators/left1.ftl" ><div class="main_right" id="right">
+		<div class="right_con">
+			<div class="main_search">
+				<form id="singleForm" >
+					请输入编号：<input type="text" id="loginName"/>
+					请选择身份：<select id="identity">
+						<option value="1">学生</option>
+						<option value="2">老师</option>
+					</select>
+					<input type="button" value="查询" onclick="doQuery()"/>
+				</form>
+			</div>
+			<div id="dataDiv">
+				<#if flag??>
+				<table class="table table-bordered table-hover">
+				<tr class="table_title">
+					<td width="25%">姓名</td>
+					<td width="25%">科室</td>
+					<td width="25%">开始时间</td>
+					<td width="25%">结束时间</td>
+				</tr>
+				<#if arrturnList?? && arrturnList?size gt 0>
+				<#list arrturnList as arrturn>
+					<tr class="table_td">
+						<td>${arrturn.userName}</td>
+						<td>${arrturn.roomName}</td>
+						<td>${arrturn.startTime}</td>
+						<td>${arrturn.endTime}</td>
+					</tr>
+				</#list>
+				<#else>
+					<tr class="table_td"><td colspan="4" align="center">没有符合条件的结果。</td></tr>
+				</table>
+				</#if>
+				</#if>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

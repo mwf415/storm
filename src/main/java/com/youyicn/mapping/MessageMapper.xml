@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youyicn.dao.cycle.MessageMapper">
+
+	<select id="getUserMessage" parameterType="com.youyicn.entity.User" resultType="com.youyicn.entity.cycle.Message">
+	   select messageId,messageTitle,messageTxt,createTime,senderName
+	   from cycle_message where sender=#{loginName} 
+	</select>
+	
+	<update id="updateMessage" parameterType="com.youyicn.entity.cycle.Message" >
+        update cycle_message set messageTitle=#{messageTitle},messageTxt=#{messageTxt} where id=#{messageId}
+    </update>
+    
+	 <insert id="addMessage" parameterType="com.youyicn.entity.cycle.Message" useGeneratedKeys="true" keyProperty="messageId"> 
+        insert into cycle_message(messageTitle,messageTxt,createTime,receiver,sender,senderName)  
+             values(#{messageTitle},#{messageTxt},#{createTime},#{receiver},#{sender},#{senderName})  
+    </insert>
+	
+	   
+    <delete id="deleMessage" parameterType="int">
+        delete from user where messageId=#{messageId}
+    </delete>
+    
+   <select id="getUserMessageByRoomName" parameterType="java.lang.String" resultType="com.youyicn.entity.cycle.Message">
+	   select messageId,messageTitle,messageTxt,createTime,senderName
+	   from cycle_message where receiver like concat(concat('%',#{roomName}),'%')  or receiver = #{loginName}
+	</select>
+	<select id="getUserMessageByUserNum" parameterType="java.lang.String" resultType="com.youyicn.entity.cycle.Message">
+	   select messageId,messageTitle,messageTxt,createTime,senderName
+	   from cycle_message where receiver = #{loginName}
+	</select>
+</mapper>

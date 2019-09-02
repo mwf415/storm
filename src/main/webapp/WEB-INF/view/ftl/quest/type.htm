@@ -1,0 +1,113 @@
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<#import "../decorators/spring.ftl" as spring />
+<!DOCTYPE html>
+<html >
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script src="${uri.jssite}/jquery.js" type="text/javascript" ></script>
+<script src="${uri.jssite}/js02.js" type="text/javascript" ></script>
+
+<script src="${uri.jssite}/exam.js" type="text/javascript" ></script>
+<script src="${uri.jssite}/js05.js" type="text/javascript" ></script>
+<script src="${uri.jssite}/jquery.js" type="text/javascript" ></script>
+<script src="${uri.jssite}/common.js" type="text/javascript" ></script>
+</head>
+<body>
+<div class="right_con">
+	<input type="hidden" value="${type!}" id="type"/>
+	<input type="hidden" value="${li!}" id="li"/>
+	<input type="hidden" value="${div!}" id="div"/>
+	 <input type="hidden" value="${subjectId!}" id="subjectId"/>
+
+	<table class="table table-hover ">
+		<caption>题目表</caption>
+			<thead>
+				<tr>
+					<th>题目类型</th>
+					<th>题目数量</th>
+					<#if menuOrder?? &&  menuOrder ==1 >
+						<td>导入</td>
+						<td>查看题目</td>
+					<#elseif menuOrder ?? && menuOrder ==5>
+						<td>已做题目</td>
+						<td>继续练习</td>
+
+					</#if>
+				</tr>
+			</thead>
+			<tbody>
+				<#if sList?? && sList?size gt 0>
+					<#list sList as sl>
+						<tr>
+							<td><@util.type sl.typeClass?number/></td>
+							<td>${sl.sum!}</td>
+							<#if menuOrder?? &&  menuOrder ==1 >
+								<td><button type="button" class="btn btn-xs btn-danger" onclick="导入题目" >导入题目</button></td>
+								<td><button type="button" class="btn btn-xs btn-danger" onclick="导入题目" >查看题目</button></td>
+							<#elseif menuOrder ?? && menuOrder ==5>
+								<td>${(sl.userQuestPageNum!0) *10}</td>
+								<td><button type="button" class="btn btn-xs btn-danger" onclick="pop_userinfo('event','<@spring.url '/oneByone/one.htm?type=${sl.typeClass!}&pageIndex=${sl.userQuestPageNum!0}&subjectId=${subjectId!}'/>')" >继续练习</button></td>
+							</#if>
+						</tr>
+					</#list>
+					<#else>
+		  				<tr class="table_td"><td colspan="12" align="center">暂无考试试题。</td></tr>
+				</#if>
+			</tbody>
+		</table>
+	</div>
+<script type="text/javascript">
+function targetPage(pageIndex,type){
+	var subjectId = $("#subjectId").val();
+	var url = '<@spring.url "/oneByone/one.htm?menuOrder=0&type='+type+'&pageIndex='+pageIndex+'&subjectId='+subjectId+'"/>';
+	closeWindow("mesWindowUsr");
+	pop_userinfo('event',url);
+}
+
+function saverecord( pageNum ,type,subjectId){
+
+	var url = '<@spring.url "/oneByone/saverecord.htm?menuOrder=0&type='+type+'&pageNum='+pageNum+'&subjectId='+subjectId+'"/>';
+	$.ajax({
+		   type:"post",
+		   cache: false,
+		   url: url,
+		   success: function(data){
+			   if(data=true){
+				   alert("保存记录成功");
+			   }else{
+				   alert("保存记录失败")
+			   }
+				closeWindow("mesWindowUsr");
+
+			}
+		})
+}
+
+function showAns(id){
+	document.getElementById(id).style.display="";
+}
+//收藏功能
+function collection(parm) {
+	var param = null;
+	var postmethod = "get";
+	var url = "/storm/collectionExam/add.htm?parm=" + parm;
+	$.ajax({
+		type : postmethod,
+		cache : false,
+		url : url,
+		data : param,
+		success : function(data) {
+			if (data == '1') {
+				alert("收藏成功");
+			}
+			if (data == '0') {
+				alert("收藏失败");
+			}
+		},
+	});
+
+}
+</script>
+</body>
+</html>

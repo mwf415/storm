@@ -1,0 +1,80 @@
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<#import "../decorators/spring.ftl" as spring />
+<!DOCTYPE html>
+<html >
+<head><#include "../decorators/headtitle.ftl" >
+</head>
+<body>
+<!--凤英做的弹框，后期优化的时候可以使用-->
+<!-- 首页仅仅提供查询的功能 -->
+<#include "../decorators/left1.ftl" ><div class="main_right" id="right">
+	<div class="right_con">
+		<div class="main_search">
+			<form id="searchform">
+				<input style="height: 30px;" type="button" value="汇总评价"  onclick="sumSocre();" />
+				<input style="height: 30px;" type="button" value="理论成绩"  onclick="inLec();" />
+				<input style="height: 30px;" type="button" value="书写病历"  onclick="writeCase();" />
+				
+			</form>
+		</div>
+		<!-- 显示数据的div -->
+		<div id="dataDiv">
+			<div class="main_right" id="right">
+	<div style="overflow: auto;">
+	<table class="table table-bordered table-hover" >
+	<table cellpadding="0px" cellspacing="1px" class="main_table">
+		<tr class="table_title">
+			<td >id</td>
+			<td >学生姓名</td>
+			<td>指导老师</td>
+			<td>科室</td>
+			<td >创建时间</td>
+			<td >病人评价</td>
+			<td >创建人</td>
+			<td>操作</td>
+		</tr>
+		<#if page.list?? && page.list?size gt 0>
+		<#list page.list as sumScore>
+		<tr class="table_td">
+			<td>${sumScore.id!}</td>
+			<td>${sumScore.userName!}</td>
+			<td>${sumScore.teacherName!}</td>
+			<td>${sumScore.roomName!}</td>
+			<td>${sumScore.createTime!}</td>
+			<td>${sumScore.sickDes!}</td>
+			<td>${sumScore.createName!}</td>
+			<td><a href="javascript:void(0);" onclick="pop_userinfo(event,'<@spring.url '/outRoomCont/outroomXq.htm?id=${sumScore.id!}'/>')">详情</a></td> 
+		</tr>
+		</#list>
+		<#else>
+  			<tr class="table_td"><td colspan="12" align="center">没有符合条件的结果。</td></tr>
+		</#if>
+	</table>
+	</div>
+	<#include "../decorators/page.htm" />
+</div>
+		</div>
+	</div>
+</div>
+<!--right end-->
+
+<script type="text/javascript">
+function sumSocre(){
+	var url ="<@spring.url '/outRoomCont/outroomindex.htm'/>";
+	ajaxFormRequest("{url:'"+url+"',id:'dataDiv',form:'searchform'}");
+}
+function addSumSocre(){
+	var url ="<@spring.url '/tsumScoreCont/sumScoreadd.htm'/>";
+	ajaxFormRequest("{url:'"+url+"',id:'dataDiv',form:'searchform'}");
+}
+
+function writeCase(){
+	var url ="<@spring.url '/twriteCaseCont/writeCase.htm'/>";
+	ajaxFormRequest("{url:'"+url+"',id:'dataDiv',form:'searchform'}");
+}
+
+</script>
+
+</body>
+</html>

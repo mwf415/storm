@@ -1,0 +1,215 @@
+
+<#import "../decorators/spring.ftl" as spring />
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html >
+<head><#include "../decorators/headtitle.ftl" >
+</head>
+<body>
+<!--right-->
+<#include "../decorators/left1.ftl" ><div class="main_right" id="right">
+	<#if cex??>
+	<div >
+    	${cex.ksName} 的DOPS评价表
+    </div>
+	<div style="margin: 30px;">
+		<table class="table table-bordered table-hover">
+					<tr>
+						<td colspan="2">考官姓名:${cex.kgName!}工号:${cex.kgNum!}</td>
+					</tr>
+					<tr>
+						<td >日期:
+						<#if cex.gradeDate ??>
+							${cex.gradeDate?date}
+						</#if>
+						</td><td>
+						时间段:<#if cex.gradeTime ?? && cex.gradeTime == "1">
+								上午  
+							<#elseif cex.gradeTime ?? && cex.gradeTime == "2">
+								下午
+							<#elseif cex.gradeTime ?? && cex.gradeTime == "3">
+								晚上
+							</#if>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2">考官身份:
+							<#if cex.kgIdentity ?? && cex.kgIdentity == "1"> 
+								护士
+							<#elseif cex.kgIdentity ?? && cex.kgIdentity == "2"> 
+							住院医
+							<#elseif cex.kgIdentity ?? && cex.kgIdentity == "3"> 
+							住院总
+							<#elseif cex.kgIdentity ?? && cex.kgIdentity == "4"> 
+							主治医
+							<#elseif cex.kgIdentity ?? && cex.kgIdentity == "5"> 
+								副主任医师及以上
+							</#if>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2">考生姓名:${cex.ksName!}学号/工号:${cex.ksNum}</td>
+					</tr>
+					<tr>
+						<td>考生身份:
+								</td><td>
+							<#if cex.ksIdentity?? && cex.ksIdentity == "1">见习
+							
+							<#elseif cex.ksIdentity?? && cex.ksIdentity == "2">实习
+							<#elseif cex.ksIdentity?? && cex.ksIdentity == "3">第一年住院师
+							<#elseif cex.ksIdentity?? && cex.ksIdentity == "4">第二年住院医师
+							<#elseif cex.ksIdentity?? && cex.ksIdentity == "5">住院总
+							</#if>
+						</td>
+					</tr>
+					<tr>
+						<td>考核地点:
+							</td><td>
+							<#if  cex.khaddress?? && cex.khaddress == "1">门诊
+							<#elseif  cex.khaddress?? && cex.khaddress == "2">急诊
+							<#elseif  cex.khaddress?? && cex.khaddress == "3">住院 
+							<#elseif  cex.khaddress?? && cex.khaddress == "4">其他 
+							</#if>
+						</td>
+					</tr>
+					<tr>
+						<td>操作名称:	</td><td>${cex.khmudi!}</td>
+					</tr>
+					<tr>
+						<td colspan="2"></td>
+					</tr>
+					<tr>
+						<td>病历号:${cex.blh!};
+							年龄:${cex.bage!}
+							性别:${cex.bsex!}
+							病房:${cex.bfh!}
+							床号:${cex.bch!}
+						</td>
+					</tr>
+					<tr>
+						<td>病人属于:
+						</td>
+						<td><#if cex.isFirst?? && cex.isFirst == "1">第一次接触
+							 <#else> 非第一次接触
+							 </#if>
+						</td>
+					</tr>
+					<tr>
+						<td>病例复杂程度:
+						</td><td>
+						<#if cex.complexDegree?? && cex.complexDegree == "1">低
+							<#elseif cex.complexDegree?? && cex.complexDegree == "2">中
+							<#elseif cex.complexDegree?? && cex.complexDegree == "3">高
+							</#if>
+						</td>
+					</tr>
+					<tr>
+						<td>病人配合程度:
+								</td><td>
+							<#if cex.coordinatio ?? && cex.coordination == "1">差
+							<#elseif cex.coordinatio ?? && cex.coordination == "2">中
+							<#elseif cex.coordinatio ?? && cex.coordination == "3">好
+							</#if>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2"></td>
+					</tr>
+					<tr><td colspan="2">评分标准：远低于能力预期(1分)低于能力预期(2分) 达到能力预期下限(3分) 符合平均能力预期(4分) 高于平均能力预期(5分) 达到高一级别能力预期(6分) 未观察到或难以评价(a/c)</td></tr>
+					
+					<tr>
+						<td>1、掌握操作适应症、相关解剖关系和操作技术:
+							</td><td>
+						</td>
+					</tr>
+					<tr>
+						<td>2、同病人交流并获得知情同意:
+								</td><td>${cex.tgjc!}
+						</td>
+					</tr>
+					<tr>
+						<td>3、术前准备:
+								</td><td>${cex.zysy!}
+						</td>
+					</tr>
+					<tr>
+						<td>4、麻醉止痛操作:	</td><td>
+						${cex.lcpd!}
+						</td>
+					</tr>
+					<tr>
+						<td>5、安全镇静技术:	</td><td>
+							${cex.zxjy!}
+						</td>
+					</tr>
+					<tr>
+						<td>6、无菌操作:	</td><td>
+							${cex.zznl!}
+						</td>
+					</tr>
+					<tr>
+						<td>7、需要时及时寻求帮助:	</td><td>
+							${cex.ztlc!}
+						</td>
+					</tr>
+					<tr>
+						<td>8,术后操作:	</td><td>
+						${cex.aztlc!}
+						</td>
+					</tr>
+					<tr>
+						<td>9,交流沟通技巧:	</td><td>
+						 ${cex.bztlc!}
+						</td>
+					</tr>
+					<tr>
+						<td>10、专业素养和病人照顾:	</td><td>
+							${cex.zjzl!}
+						</td>
+					</tr>
+					<tr>
+						<td >11、总体表现评价:	</td><td>
+							${cex.ljwt!}
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2"></td>
+					</tr>
+					<tr>
+						<td colspan="2">观察时间:${cex.gcTime!}分钟回馈时间:${cex.hkTime!}分钟</td>
+					</tr>
+					<tr>
+						<td>考官满意度:	</td><td>
+							${cex.kgmy!}
+						</td>
+					</tr>
+					<tr>
+						<td>考官满意度:	</td><td>
+							${cex.k1!}
+						</td>
+					</tr>
+					<tr>
+						<td>考生满意度:	</td><td>
+							${cex.ksmy!}
+						</td>
+					</tr>
+					<tr>
+						<td>考生满意度:	</td><td>
+							${cex.k2!}	
+						</td>
+					</tr>
+					
+				</table>
+			</form>
+		</div>
+	</div>
+	<#else>
+			<table class="tab_infor" >
+					<tr><td align="center">没有符合条件的结果</td></tr>
+				</table>
+    </#if>
+</div>
+</body>
+</html>

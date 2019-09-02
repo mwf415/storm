@@ -1,0 +1,148 @@
+<#import "/decorators/uri.ftl" as uri />
+<#import "/decorators/util.ftl" as util />
+<#import "/decorators/spring.ftl" as spring />
+<html >
+<head><#include "../decorators/headtitle.ftl" >
+
+ <script>
+ 	 function showImg(){
+ 		$("#xqShow").show();
+ 	} 
+ 	function hidImg(id){
+ 		$("#xqShow").hide();
+ 	}
+ 	
+ 	 $(function () {  
+         $("#tabs1 a").mousemove(function (e) {  
+             $(this).tab('show');  
+         });  
+         $("#tabs2 a").mousemove(function (e) {  
+             $(this).tab('show');  
+         });  
+         $("#tabs3 a").mousemove(function (e) {  
+             $(this).tab('show');  
+         });  
+         $("#tabs4 a").mousemove(function (e) {  
+             $(this).tab('show');  
+         }); 
+         $("#tabs5 a").mousemove(function (e) {  
+             $(this).tab('show');  
+         }); 
+         $("#tabs6 a").mousemove(function (e) {  
+             $(this).tab('show');  
+         }); 
+         $("#tabs7 a").mousemove(function (e) {  
+             $(this).tab('show');  
+         }); 
+     });  
+ </script>
+
+</head>
+<body>
+<#include "../decorators/left0.ftl" />
+<!--left-->
+
+	<!-- 模态框（Modal） -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+						&times;
+					</button>
+					<h4 class="modal-title" id="myModalLabel">
+						修改内容
+					</h4>
+				</div>
+				<form id="changeform" >
+				<div class="modal-body">
+					<input class="form-control" type="hidden" name ="loginName" value="${loginName!}" >
+					<h4>新密码：<input type="password" name ="userPwd" >
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭
+					</button>
+					<button type="button" class="btn btn-primary" onclick="changePwd()" >
+						提交更改
+					</button>
+				</div>
+				</form>
+				
+			</div>
+		</div>
+	</div>
+
+<div class="main_right" id="right">
+	<table style="width:100%;">
+		<tr>
+		<td align="center" valign="top">
+		   		<div class="panel panel-default ">
+					<div class="panel-heading ">
+						<h4 class="panel-title">医院整体概况情况</h4>
+					</div>
+					<div class="panel-body">
+	    				<table class="table table-hover  ">
+							<tbody>
+								<tr class="table_td">
+									<td width="30%" class="td_right3 bb_er" >在职老师总数：</td>
+									<td width="23%" class="td_left">${techNum!0}人</td>
+									<td width="28%" class="td_right3 bb_er">正常状态老师：</td>
+									<td width="19%" class="td_left">${techNum!0}人</td>
+								</tr>
+								<tr class="table_td">
+									<td width="30%" class="td_right3 bb_er" onmouseover ="showImg()" onmouseout="hidImg()">接纳学员总数：</td>
+									<td width="23%" class="td_left">${stuNum!0}人</td>
+									<td width="28%" class="td_right3 bb_er" onmouseover ="showImg()" onmouseout="hidImg()">社会输出人才：</td>
+									<td width="19%" class="td_left">${stuNum!0}人</td>
+								</tr>
+								<tr class="table_td">
+									<td width="30%" class="td_right3 bb_er" onmouseover ="showImg()" onmouseout="hidImg()">轮转学员总数：</td>
+									<td width="23%" class="td_left" >${stuNum!0}人</td>
+									<td width="28%" class="td_right3 bb_er" onmouseover ="showImg()" onmouseout="hidImg()">正常学员总数：</td>
+									<td width="19%" class="td_left">${stuNum!0}人</td>
+								</tr>
+							</tbody>
+						</table>						
+					</div>
+				</div>		   		
+		</td>
+		
+	</tr>
+       
+</div>
+<script>
+function changePwd(){
+	var url ='<@spring.url "/userinfo/changepwdsum.htm"/>';
+	$("#changeform").attr("action",url).submit();
+	closeWindow("mesWindowUsr");
+}
+
+
+function targetPage1(pageIndex){
+	var userName = $("#userName").val();
+	var baseName = $("#baseName").val();
+	var roomName = $("#roomName").val();
+	var type=$("#type").val();
+//	window.location = '<@spring.url "/userinfo/index.htm?menuOrder=0&pageIndex='+pageIndex+'&type='+type+'&userName='+userName+'&baseName='+baseName+'"/>';
+	var url = '<@spring.url "/userinfo/index.htm?menuOrder=0&pageIndex='+pageIndex+'&type='+type+'&userName='+userName+'&baseName='+baseName+'"/>';
+	closeWindow("mesWindowUsr");
+	pop_userinfo(event,url);
+	
+  } 
+
+function querySerchList(){
+		var grade  = $('input[name="grade"]:checked').val(); 
+		var userName = $("#userName").val();
+		var baseName = $("#baseName").val();
+		var roomName = $("#roomName").val();
+		var type=$("#type").val();
+		var url = '<@spring.url "/userinfo/index.htm?menuOrder=0&userName='+userName+'&grade='+grade+'&type='+type+'&roomName='+roomName+'&baseName='+baseName+'"/>';
+		closeWindow("mesWindowUsr");
+		pop_userinfo("event",url);
+}   
+
+</script>
+
+</div>
+</body>
+</html>

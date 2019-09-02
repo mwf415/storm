@@ -1,0 +1,85 @@
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<#import "../decorators/spring.ftl" as spring />
+<!DOCTYPE html>
+<html >
+<head>
+<#include "../decorators/headtitle.ftl" >
+</head>
+<body>
+<#include "../decorators/left1.ftl" >
+<!--right-->
+<div class="main_right" id="right">
+	<div class="right_con">
+		<div class="main_search" style="height: auto;">
+			<form id="searchform2">
+				 	<#if arrTurnList?? && arrTurnList?size gt 0>
+						<#list arrTurnList as arrTurn>
+						<a title="开始时间 :${arrTurn.startTime[0..10]}
+结束时间${arrTurn.endTime[0..10]}" >
+							<button type="button" class="btn btn-info btn-sm" onclick="queryList('${arrTurn.arrTurnId!}','${arrTurn.roomName!}')" >${arrTurn_index+1}:${arrTurn.roomName!}</button> &nbsp;&nbsp;
+						</a>
+						</#list> 
+					</#if>
+				<input type="hidden" name="li" value="${li!}"/>
+				<input type="hidden" name="li" value="${li!}"/>
+				<input type="hidden" name="div" value="${div!}"/>
+				<input type="hidden" name="type" value="${type!}"/>
+				<input type="hidden" name="pageIndex" value="${pageIndex!'1'}"/>
+				<button type="button" style="float: right;" class="btn btn-danger btn-sm" onclick="addCyleNote()" >添加</button>
+			</form>
+		</div>
+		<!-- 显示数据的div -->
+			<#if roomName?? >
+				<a>${roomName!}：学习记录</a>
+			</#if>
+			<div style="border: 1px solid #ccc ;margin-top: 10px;" >
+				<div class="main_right" id="right">
+					<table class="table table-bordered table-hover">
+						<tr class="table_title">
+							<td width="3%">序号</td>
+							<td width="4%">病案号</td>
+							<td width="7%">入出院日期</td>
+							<td width="7%">诊断</td>
+							<td width="8%">临床技能操作名称</td>
+							<td width="8%">操作日期</td>
+							<td width="8%">病情</td>
+							<td width="5%">担任角色</td>
+						</tr>
+						<tr>
+							<#if cyleNoteList ?? && cyleNoteList ?size gt 0>
+							<#list cyleNoteList  as cyleNote>
+							<tr class="table_td">
+								<td>${cyleNote.id!}</td>
+								<td>${cyleNote.sicknum!}</td>
+								<td>${cyleNote.indate?string('yyyy-MM-dd HH:mm:ss')}</td>
+								<td>${cyleNote.sickdes!}</td>
+								<td>${cyleNote.skillname!}</td>
+								<td>${cyleNote.starttime?string('yyyy-MM-dd HH:mm:ss')}</td>
+								<td>${cyleNote.sickdetail!}</td>
+								<td>${cyleNote.actrole!}</td>
+							</tr>
+							</#list>
+						<#else>
+				  			<tr class="table_td"><td colspan="12" align="center">没有符合条件的结果。</td></tr>
+						</#if>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+function queryList(id,roomName){
+	window.location="<@spring.url '/cyleNoteController/index.htm?li=${li!}&div=${div!}&menuOrder=1&type=${type!}&arrTurnId="+id+"&roomName="+roomName+"' />";
+}
+function addCyleNote(){
+	window.location="<@spring.url '/cyleNoteController/add.htm?li=${li!}&div=${div!}&menuOrder=1&type=${type!}' />";
+}
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,176 @@
+<#import "../decorators/spring.ftl" as spring /> <#import
+"../decorators/uri.ftl" as uri /> <#import "../decorators/util.ftl" as util />
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html >
+<head><#include "../decorators/headtitle.ftl" >
+</head>
+<body>
+	<!--right-->
+	<#include "../decorators/left1.ftl" >
+	<div class="main_right" id="right">
+		<div class="rig_tab">
+			<div class="rig_tab2">
+				<h1>
+					出科总评价 <span>(注：带*为必填项)</span>
+				</h1>
+				<form id="addform">
+					<table class="table table-hover"  >
+						<input type="hidden" name ="div" value="${div!}" />
+						<input type="hidden" name ="li" value="${li!}" />
+						<input type="hidden" name ="type" value="${type!}" />
+						<tr>
+							<td width="15%" class="td_right"><em>*</em> </td>
+							<td width="35%">${sumScore.roomName!}
+							<input type="hidden" name ="roomName" value="${sumScore.roomName!}"/>
+							<input type="hidden" name ="id" value="${sumScore.id!}"/>
+							</td>
+						</tr>
+						<tr>
+							<td width="15%" class="td_right"><em>*</em> </td>
+							<td width="35%">${sumScore.userName!}
+							<input type="hidden" name ="userName" value="${sumScore.userName!}"/>
+							<input type="hidden" name ="loginName" value="${sumScore.loginName!}"/>
+							</td>
+						</tr>
+						<tr>
+							<td width="15%" class="td_right"><em>*</em>指导老师</td>
+							<td width="35%">${sumScore.teacherName!}
+							<input type="hidden" name ="teacherName" value="${sumScore.teacherName!}"/>
+							<input type="hidden" name ="teacherNum" value="${sumScore.teacherNum!}"/>
+							</td>
+						</tr>
+						<tr>
+							<td width="15%" class="td_right"><em>*</em>理论分数</td>
+							<td width="35%"><input name="theoryscore" id="theoryscore"
+								type="text" class="validate[required,maxSize[50]] text-input" /><a></a></td>
+						</tr>
+						<tr>
+							<td width="15%" class="td_right"><em>*</em> 缺席天数</td>
+							<td width="35%"><input name="absenceMount" id="absenceMount"
+								type="text" class="validate[required,maxSize[50]] text-input" /><a></a></td>
+						</tr>
+						<tr>
+							<td width="15%" class="td_right"><em>*</em> 值班次数</td>
+							<td width="35%"><input name="onDetyMount" id="onDetyMount"
+								type="text" class="validate[required,maxSize[50]] text-input" /><a></a></td>
+						</tr>
+						<tr>
+							<td width="15%" class="td_right"><em>*</em> 学习病种和例数</td>
+							<td width="35%"><input name="sickMount" id="sickMount"
+								type="text" class="validate[required,maxSize[50]] text-input" /><a></a></td>
+						</tr>
+						<tr>
+							<td width="15%" class="td_right"><em>*</em> 管理病人数量</td>
+							<td width="35%"><input name="mngMount" id="mngMount"
+								type="text" class="validate[required,maxSize[50]] text-input" /><a></a></td>
+						</tr>
+						<tr>
+							<td width="15%" class="td_right"><em>*</em> 病例书写质量</td>
+							<td width="35%"><input name="writeQuality" id="writeQuality"
+								type="text" class="validate[required,maxSize[50]] text-input" /><a></a></td>
+						</tr>
+						<tr>
+							<td width="15%" class="td_right"><em>*</em> 操作技能种数</td>
+							<td width="35%"><input name="operateMount" id="operateMount"
+								type="text" class="validate[required,maxSize[50]] text-input" /><a></a></td>
+						</tr>
+						<tr>
+							<td width="15%" class="td_right"><em>*</em> 临床思维</td>
+							<td width="35%"><input name="thinking" id="thinking"
+								type="text" class="validate[required,maxSize[50]] text-input" /><a></a></td>
+						</tr>
+						<tr>
+							<td width="15%" class="td_right"><em>*</em>品德</td>
+							<td width="35%"><input name="virtues" id="virtues"
+								type="text" class="validate[required,maxSize[50]] text-input" /><a></a></td>
+						</tr>
+						<tr>
+							<td width="15%" class="td_right"><em>*</em> 教学能力</td>
+							<td width="35%"><input name="teachAbility" id="teachAbility"
+								type="text" class="validate[required,maxSize[50]] text-input" /><a></a></td>
+						</tr>
+						<tr>
+							<td width="15%" class="td_right"><em>*</em> 参加学习次数</td>
+							<td width="35%"><input name="learnAmount" id="learnAmount"
+								type="text" class="validate[required,maxSize[50]] text-input" /><a></a></td>
+						</tr>
+						<tr>
+							<td width="15%" class="td_right"><em>*</em> 科研情况</td>
+							<td width="35%"><input name="science" id="science"
+								type="text" class="validate[required,maxSize[50]] text-input" /><a></a></td>
+						</tr>
+						<tr>
+							<td width="15%" class="td_right"><em>*</em>医疗差错</td>
+							<td width="35%"><input name="mistake" id="mistake"
+								type="text" class="validate[required,maxSize[50]] text-input" /><a></a></td>
+						</tr>
+						<tr>
+							<td width="15%" class="td_right"><em>*</em>护士打分</td>
+							<td width="35%"><input name="nurseDes" id="nurseDes"
+								type="text" class="validate[required,maxSize[50]] text-input" /><a></a></td>
+						</tr>
+						<tr>
+							<td width="15%" class="td_right"><em>*</em> 病人打分</td>
+							<td width="35%"><input name="sickDes" id="sickDes"
+								type="text" class="validate[required,maxSize[50]] text-input" /><a></a></td>
+						</tr>
+
+						<tr class="button_tr">
+							<td>&nbsp;</td>
+							<td><Button type="button"  onclick="sumScoreSum()"
+								class="btn btn-info" >新 建</Button>&nbsp;&nbsp;</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+		</div>
+
+	</div>
+	<!-- 借鉴 -->
+	<script>
+//校验学生名字
+function cheUser(){
+	//获取表单信息
+	var loginName = $("#loginName").val().trim();
+	//发送ajax请求
+	$.ajax({
+	  url:"<@spring.url '/cheUserCont/cheUser.htm'/>",
+	  type:"get",
+	  data:"loginName="+loginName,
+	  success:function(data){
+	  	    $("#warning_1 span").html(data);
+	  	},
+	  error:function(e){
+	  	alert(e);
+	  }
+	  
+	});
+};
+function cheTeacher(){
+	//获取表单信息
+	var loginName = $("#teacherNum").val().trim();
+	//发送ajax请求
+	$.ajax({
+	  url:"<@spring.url '/cheUserCont/cheteacher.htm'/>",
+	  type:"get",
+	  data:"loginName="+loginName,
+	  success:function(data){
+	  	    $("#warning_2 span").html(data);
+	  	},
+	  error:function(e){
+	  	alert(e);
+	  }
+	  
+	});
+};
+	<!-- 借鉴 -->
+	
+	function sumScoreSum(){
+		var url = "<@spring.url '/rsumScoreCont/updatesum.htm'/>";
+		$("#addform").attr("action",url).submit();
+	}
+	
+</script>
+</body>
+</html>

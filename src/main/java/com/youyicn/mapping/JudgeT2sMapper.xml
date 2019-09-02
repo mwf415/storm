@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youyicn.dao.cycle.JudgeT2sMapper">
+
+	<!-- 添加教学查房安排 -->
+	<insert id="insertJudgeT2s" parameterType="com.youyicn.entity.cycle.JudgeT2s" >
+		insert into cycle_judget2s 
+		(activesId,roomName,baseName,   teacherNum,    teacherName,     userName,   loginName ,createTime ,   ylws   ,zlnl ,zdce,
+		brpj   ,hspj ,fxyj,bzs,cfrz,ylcz,cjtl,gtxz,zbjb,llkh,dlglbrsl,cyglbrsl,zbcs,cqjl,isOver) 
+			values	
+		(#{activesId},#{roomName},#{baseName},#{teacherNum},#{teacherName},#{userName},#{loginName},#{createTime},#{ylws},#{zlnl},#{zdce},
+		#{brpj},#{hspj},#{fxyj},#{bzs},#{cfrz},#{ylcz} ,#{cjtl},#{gtxz},#{zbjb},#{llkh},#{dlglbrsl},#{cyglbrsl},#{zbcs},#{cqjl},#{isOver})
+	</insert>
+	
+	<update id="update"  parameterType="com.youyicn.entity.cycle.JudgeT2s" >
+		update cycle_judget2s set  teacherNum =#{teacherNum},    teacherName =#{teacherName},   
+		 createTime =#{createTime} ,   ylws  =#{ylws}  ,zlnl  =#{zlnl},zdce  =#{zdce},isOver=#{isOver},
+		brpj  =#{brpj}  ,hspj  =#{hspj},fxyj =#{fxyj},bzs =#{bzs},cfrz =#{cfrz},ylcz =#{ylcz},cjtl =#{cjtl},
+		gtxz =#{gtxz},zbjb =#{zbjb},llkh =#{llkh},dlglbrsl =#{dlglbrsl},cyglbrsl  =#{cyglbrsl},zbcs=#{zbcs},cqjl =#{cqjl} 
+		where id =#{id}
+	</update>
+	
+	<update id="updateSelfStatus"  parameterType="Integer" >
+		update cycle_judget2s set  
+		selfStatus =#{selfStatus}
+		where id =#{id}
+	</update>
+	
+	
+	<select id="getbyCon" parameterType="com.youyicn.entity.cycle.JudgeT2s" resultType="com.youyicn.entity.cycle.JudgeT2s">
+		select * from cycle_judget2s where 1=1
+		<if test="roomName!=null">
+			and roomName=#{roomName}
+		</if> 
+		<if test="teacherName !=null and teacherName !=''"><!-- 专业基地查询 -->
+			and teacherName like #{teacherName}
+		</if>
+		<if test="userName !=null and userName !=''"><!-- 专业基地查询 -->
+			and userName like #{userName}
+		</if>
+		
+		<if test="loginName!=null">
+			and loginName=#{loginName}
+		</if> 
+		<if test="baseName!=null">
+			and baseName=#{baseName}
+		</if> 
+		<if test="teacherNum!=null">
+			and teacherNum=#{teacherNum}
+		</if>
+		<if test="isOver!=null">
+			and isOver=#{isOver}
+		</if>
+		
+		<if test="searchStart!=null">
+			and createTime  <![CDATA[ > ]]>	#{searchStart} 
+		</if>
+		<if test="searchEnd!=null">
+			and createTime <![CDATA[ <= ]]> #{searchEnd} 
+		</if>
+		order by id desc 
+		
+	</select>
+	
+	<select id="getbyRoom" parameterType="com.youyicn.entity.cycle.JudgeT2s" resultType="com.youyicn.entity.cycle.JudgeT2s">
+		select * from cycle_judget2s where roomName =#{roomName} order by id desc 
+		
+	</select>
+	
+	<select id="getById" parameterType="com.youyicn.entity.cycle.JudgeT2s" resultType="com.youyicn.entity.cycle.JudgeT2s">
+		select * from cycle_judget2s where id =#{id} 
+	</select>
+	
+	<select id="getbyBase" parameterType="com.youyicn.entity.cycle.JudgeT2s" resultType="com.youyicn.entity.cycle.JudgeT2s">
+		select * from cycle_judget2s where baseName =#{baseName} order by id desc 
+	</select>
+	<select id="getbyTeacherNum" parameterType="com.youyicn.entity.cycle.JudgeT2s" resultType="com.youyicn.entity.cycle.JudgeT2s">
+		select * from cycle_judget2s where teacherNum =#{teacherNum} order by id desc 
+		
+	</select>
+	<select id="getByUserNum" parameterType="com.youyicn.entity.cycle.JudgeT2s" resultType="com.youyicn.entity.cycle.JudgeT2s">
+		select * from cycle_judget2s where loginName =#{loginName} order by id desc 
+	</select>
+	
+	<!-- 删除 -->
+	<delete id="delJudgeT2s" parameterType="com.youyicn.entity.cycle.JudgeT2s">
+		delete from cycle_judget2s where id=#{id}
+	</delete>
+	
+	<delete id="delByActivesId" parameterType="Integer">
+		delete from cycle_judget2s where activesId=#{activesId}
+	</delete>
+	
+	<select id="getByAcitvesIdAndUser"  resultType="com.youyicn.entity.cycle.JudgeT2s">
+		select * from cycle_judget2s where activesId =#{activesId} and loginName =${loginName}
+	</select>
+	
+</mapper>

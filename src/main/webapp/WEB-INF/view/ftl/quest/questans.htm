@@ -1,0 +1,33 @@
+<#import "../decorators/uri.ftl" as uri /> 
+<#import "../decorators/util.ftl" as util /> 
+<#import "../decorators/spring.ftl" as spring />
+
+<div style="margin: 30px;">
+		<form id="ansSum" name="ansSum" role="form">
+		<input type="text" name="activesId" value="${activesId!}" style="display:none" />
+		<#if (quest.questTxt)?? >
+				<div class="form-group">
+				    <label for="name">老师问题如下</label>
+						<textarea id="questTxt" name="questTxt" class="form-control ckeditor" rows="5" >${quest.questTxt!}</textarea>
+						<script type="text/javascript">CKEDITOR.replace('questTxt');</script>
+				</div>
+					<div class="form-group">
+					    <div class="col-sm-offset-2 col-sm-10">
+					    	 <button type="button" class="btn btn-default"  onclick="ansSums()">提交</button>
+						</div>
+					</div>
+		<#else>
+			<div class="form-group">
+			    <label for="name">老师未提交问题：可写小结，代表你参加过本次活动</label>
+						<textarea id="questTxt" name="questTxt" class="form-control ckeditor" rows="5"></textarea>
+						<script type="text/javascript">CKEDITOR.replace('questTxt');</script>
+				</div>
+				<div class="form-group">
+				    <div class="col-sm-offset-2 col-sm-10">
+					      <button type="button" class="btn btn-default"  onclick="ansSums()">提交</button>
+				    </div>
+				  </div>
+		</#if>
+	</form>
+</div>
+

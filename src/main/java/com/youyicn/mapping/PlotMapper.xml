@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youyicn.dao.cycle.PlotMapper">	
+	<insert id="addPlot" parameterType="com.youyicn.entity.cycle.Plot" useGeneratedKeys="true" keyProperty="plotId">
+		insert into cycle_plot (baseName,plotTxt,createTime) 	values	(#{baseName},#{plotTxt},#{createTime}) 
+	</insert>
+	
+	<select id="getPlotByCon" parameterType="com.youyicn.entity.cycle.Plot" resultType="com.youyicn.entity.cycle.Plot">
+		select plotId, baseName,createTime, modifyTime from cycle_plot where 1=1 
+		<if test="baseName!=null"><!-- 专业基地查询 -->
+			and baseName=#{baseName}
+		</if>		
+		order by plotId desc
+	</select>
+	
+	<select id="getPlotById" parameterType="com.youyicn.entity.cycle.Plot" resultType="com.youyicn.entity.cycle.Plot">
+		select * from cycle_plot where plotId=#{plotId}
+		
+	</select>
+	
+	<delete id="delPlot" parameterType="com.youyicn.entity.cycle.Plot" >
+		delete from cycle_plot where plotId=#{plotId}
+	</delete>
+	
+	<update id="updatePlot" parameterType="com.youyicn.entity.cycle.Plot">
+		 update cycle_plot set plotTxt=#{plotTxt},modifyTime=#{modifyTime} where plotId=#{plotId}
+	</update>
+	
+</mapper>

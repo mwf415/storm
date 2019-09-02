@@ -1,0 +1,323 @@
+<#import "../decorators/uri.ftl" as uri /> 
+<#import "../decorators/util.ftl" as util /> 
+<#import "../decorators/spring.ftl" as spring />
+<!DOCTYPE html>
+<html >
+<head>
+	<#include "../decorators/headtitle.ftl" >
+	<script type="text/javascript">
+		$(function (){  
+			
+		    $("#roomName").change(function(){  
+		    	var roomName = $("#roomName").val();  
+		        $("#teacherNum option").remove();  
+		        $.ajax({  
+		            url: "<@spring.url '/link/roomlteacher.htm'/>",
+		            type:"post",  
+		            data:{roomName:roomName},
+		            dataType:'json',
+		            success: function(d){  
+ 		            	if(d != null && d.length > 0){  
+ 		                    var html="";  
+ 		                    for(var i=0; i<d.length; i++){  
+ 		                        html+="<option value='"+d[i].loginName+":"+d[i].realName+"'>"+d[i].realName+"</option>";  
+ 	                   		 }  
+	               	 		
+ 	                	}  
+ 		            	$("#teacherNum").html(html);  
+	            	},
+	            	error: function(XMLHttpRequest, textStatus, errorThrown) {  alert(XMLHttpRequest.status);  alert(XMLHttpRequest.readyState);  alert(textStatus);
+	            	}
+	        	});
+	        
+	    });  
+	});
+
+</script>
+</head>
+<body>
+	<#include "../decorators/left1.ftl" >
+<div class="main_right" id="right">
+	<div class="right_con">
+	
+	<div style="margin-top: 10px">
+		<h5>
+			<#if status ?? && status ==4 && type =="r" >
+				添加入科教育
+			<#elseif status?? && status ==3 >
+				添加出其他活动
+			<#elseif status?? && status ==5 >
+				添加出科考试
+			<#elseif status?? && status ==6 >
+				添加教学查房
+			<#elseif status?? && status ==7 >
+				添加病例讨论
+			<#elseif status?? && status ==8 >
+				添加教学讲座
+			<#elseif status?? && status ==9 >
+				添加操作训练
+			</#if>	
+			<span>(注：带*为必填项)</span>
+		</h5>
+		<div class="container" style="width: 70%" >
+			<form id="planAdd" name="planAdd" >
+				<input type="hidden" name="type" value="${type!}"/>
+				<input type="hidden" name="li" value="${li!}"/>
+				<input type="hidden" name="div" value="${div!}"/>
+				<input type="hidden" name="status" value="${status!}"/>
+				<#if status ?? && status ==4 && type =="r" >
+					<p>正在本科室轮转且未参加入科教育的学员：</p>
+					<table class="table table-hover  table-bordered"  >
+						<tr>
+							<#if arrTurnList?? && arrTurnList ?size gt 0>
+								<#list arrTurnList as	arrTurn>
+								<td>
+									<input type="checkbox" name="userP"  value="${arrTurn.loginName}:${arrTurn.realName}"> 
+								</td>
+								<td>
+									${arrTurn.realName} 
+								</td>
+								</#list>
+							<#else>
+							<td>
+								本月正在本科室轮转的学员已全部参加入科考试，请不要重复添加 
+							</td>
+							</#if>
+						</tr>
+					</table>
+				</#if>	
+				<table class="table table-hover  table-bordered"  >
+					<tr>
+						<td width="20%" class="td_right"><em>*</em>
+							<#if status ?? && status ==4 && type =="r" >
+								入科教育标题	
+							<#elseif status ?? && status ==3 >
+								其他活动标题							
+							<#elseif status?? && status ==5 >
+								出科考试内容
+							<#elseif status?? && status ==6 >
+								疾病名称
+							<#elseif status?? && status ==7 >
+								疾病名称
+							<#elseif status?? && status ==8 >
+								教学讲座标题
+							<#elseif status?? && status ==9 >
+								操作训练标题
+							</#if>	
+						</td>
+						<td width="60%"><input name="title"   type="text"/></td>
+					</tr>
+					
+					<#if type ?? && ( type =="h" || type=="b" )>
+						<tr>
+							<td class="td_right">
+								科室：
+							</td>
+							<#if type ?? && type =="h" >
+								<td>
+									<select name="roomName" class="form-control" id="roomName"	data-toggle="selectpicker"> 
+										<#if roomValues ?? && roomValues?size gt 0> 
+											<#list roomValues as roomValue>
+												<option value="${roomValue.value!}">${roomValue.value!}</option> 
+											</#list> 
+										</#if>
+									</select>
+								</td>
+							<#elseif type ?? && type=="b" >
+								<td>
+									<select name="roomName" class="form-control" id="roomName"	data-toggle="selectpicker"> 
+									<#if baseRoomList ?? && baseRoomList?size gt 0> 
+										<#list baseRoomList as roomValue>
+										<option value="${roomValue.roomName!}">${roomValue.roomName!}</option> 
+										</#list> 
+									</#if>
+									</select>
+								</td>
+							</#if>
+						</tr>
+						
+						<tr>
+							<td class="td_right">
+								责任教师:
+							</td>
+							<td>
+								 <select name="teacherNum" class="form-control"	id="teacherNum" data-toggle="selectpicker">
+								 <#if	teacherList?? && teacherList ? size gt 0> <#list teacherList as	teacher >
+									<option value="${teacher.loginName!}:${teacher.realName!}"<#if teacher.loginName==teacherNum!>selected="selected"</#if> >
+										${teacher.realName!}</option> 
+										</#list> 
+									</#if>
+								</select>
+							</td>
+						</tr>
+					</#if>
+	
+					<#if type ?? && type == "r" >
+						<tr>
+							<td class="td_right"><em></em>承办科室:</td>
+	                    	<td>${roomName}<input type="hidden" name="roomName" value="${roomName}" />&nbsp;&nbsp;&nbsp;&nbsp;</td>
+						</tr>
+						<#if status ?? && status == 5>
+							<tr>
+								<td>
+									选择主考官：<br/>
+									<#if teacherList?? && teacherList ? size gt 0>
+										
+										<#list teacherList as teacher>
+											<input type="radio" name='teacherNum'  value="${teacher.loginName!}:${teacher.realName!}" >${teacher.realName!}</input> &nbsp;&nbsp;&nbsp;&nbsp;
+										</#list> 
+									</#if>
+								</td>
+						
+								<td>考官：<br/>
+									<#if teacherList?? && teacherList ? size gt 0>
+										<#list teacherList as teacher>
+											<input type="checkbox" name='teacherP' value="${teacher.loginName!}:${teacher.realName!}" >${teacher.realName!}</input> &nbsp;&nbsp;&nbsp;&nbsp;
+										</#list> 
+									</#if>
+								</td>
+							</tr>
+						<#else>
+							<tr>
+								<td width="50%" class="td_right"><em>*</em>教学老师：</td>
+								<td width="50%">
+									<select name="teacherNum" id="teacherNum"> 
+										<#if teacherList ?? && teacherList?size gt 0>
+											<#list teacherList as	t>
+												<option value="${t.loginName!}:${t.realName!}">${t.realName!}</option>
+											</#list> 
+										</#if>
+									</select>
+								</td>
+							</tr>
+						</#if>
+					</#if>
+					<#if status?? && (status ==6  || status ==7 )>
+					<tr>
+						<td width="50%" class="td_right"><em>*</em>病人姓名：</td>
+						<td width="50%">
+							 <input type="text" name="sickPerson" value="" />
+						</td>
+					</tr>
+					<tr>
+						<td width="50%" class="td_right"><em>*</em>病案号:</td>
+						<td width="50%">
+							 <input type="text" name="sickNum" value="" />
+						</td>
+					</tr>
+					</#if>
+					<tr>
+						<td width="50%" class="td_right"><em>*</em>地点：</td>
+						<td width="50%"><input name="address" value=""/><a></a></td>
+					</tr>
+					<tr>
+						<td width="50%" class="td_right"><em>*</em>时长：</td>
+						<td width="50%"><input name="takeTime" onkeyup="this.value=this.value.replace(/\D/g,'');" value=""/>小时<a></a></td>
+					</tr>
+					<tr>
+						<td width="50%" class="td_right"><em>*</em>教学时间：</td>
+						<td width="50%">
+							<input id="startTime" type="text" name="startTime"  />
+								<img onclick="WdatePicker({el:'startTime',dateFmt:'yyyy-MM-dd HH:mm:ss'})" 
+										src="${uri.jssite}/My97DatePicker/skin/datePicker.gif" width="30px;" height="35px;" align="absmiddle">	
+					        </img>
+					     </td>
+					</tr>
+					<#if type ?? && type == "r" && status ==5 >
+						<tr>
+		                	<td class="td_right"><em>*</em>选择学生出科时间:</td>
+		                    <td>
+								<input id="searchT" type="text" name="searchT" />
+								<img onclick="WdatePicker({el:'searchT',dateFmt:'yyyy-MM-dd HH:mm'})" src="${uri.jssite}/My97DatePicker/skin/datePicker.gif" width="30" height="35" align="absmiddle">	
+								<button type="button" class="btn btn-info btn-xs" onclick="searchS()">查找</button>
+							</td>
+		                </tr>
+					</#if>
+				</table>
+				<hr />
+				<#if type ?? && type == "r" && status ==5 >
+				<table id="tb" class="table table-hover table-bordered" style="width: 600px;margin: auto;"> 
+					<tr> 
+						<th>序列</th> 
+						<th>姓名</th> 
+						<th>编号</th> 
+						<th>本科室开始时间</th> 
+						<th>本科室结束时间</th> 
+					</tr> 
+					<tr> 
+						<td colspan="5"> 
+						</td> 
+					</tr> 
+				</table>
+				</#if>
+				<hr />
+					<span style="margin-left:500px;">
+					<button type ="button" onclick="addRole()" class="btn btn-danger">提交</button></span>
+				</form>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+<script type="text/javascript">
+
+function searchS(){
+		$("#tb  tr:not(:first)").empty("");
+		var searchT=$("#searchT").val();
+		if(searchT==null || searchT==""||searchT==undefined){
+			alert("日期不能为空!");
+			return;
+		}
+		var url ="<@spring.url '/outexam/searchS.htm'/>";
+		$.ajax({
+			   url: url,
+			   type: 'post',
+			   data : {time:searchT},
+			   dataType:'json',
+			   success: function(d){
+				   	tab = document.getElementById("tb"); 
+				    if(null == d){
+				    	var tr = tab.insertRow(tab.rows.length - 1);//插入到末二行，最后一行要给全选那一行保留着 
+						var td1 = tr.insertCell(-1); 
+							td1.innerHTML = "<p >本科室本月没有换科学员</p>"; 
+				    }else{
+						//把data循环遍历方式以tr的方式加入表格中 
+						for (var i = 0; i < d.length; i++) { 
+							var tr = tab.insertRow(tab.rows.length - 1);//插入到末二行，最后一行要给全选那一行保留着 
+							var td1 = tr.insertCell(-1); 
+							td1.innerHTML = "<input type='checkbox' name='userP' value="+d[i].loginName+":"+d[i].realName+">"; 
+							var td2 = tr.insertCell(-1); 
+							td2.innerHTML = d[i].realName; 
+							var td3 = tr.insertCell(-1); 
+							td3.innerHTML = d[i].loginName; 
+							var td4 = tr.insertCell(-1); 
+							console.log(d[i].startTime);
+							var strStart =parseLong2DateString(d[i].startTime);
+							td4.innerHTML = strStart; 
+							
+							var strEnd =parseLong2DateString(d[i].endTime);
+							var td5 = tr.insertCell(-1); 
+							td5.innerHTML = strEnd; 
+						} 
+				    }
+				}
+			});
+		}
+		
+
+	
+	function addRole(){
+		var startTime=$("#startTime").val();
+		if(startTime==null || startTime==""||startTime==undefined){
+			alert("日期不能为空!");
+			return;
+		}
+		var url = "<@spring.url '/activesController/sum.htm'/>";
+		$("#planAdd").attr("action",url).submit();
+	}
+  
+	
+</script>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<#import "../decorators/spring.ftl" as spring />
+<!DOCTYPE html>
+<html >
+<head>
+<#include "../decorators/headtitle.ftl" >
+</head>
+<body>
+
+<#include "../decorators/left1.ftl" >
+<div class="main_right" id="right">
+	<div class="right_con">
+		<div class="main_search">
+			<form id="searchform">
+				<button type="button" onclick="toAddplot()" class="btn btn-primary btn-sm">添加</button>
+			</form>
+		</div>
+		<!-- 显示数据的div -->
+		<div id="dataDiv">
+			<table class="table table-bordered table-hover">
+				<tr class="table_title">
+					<td width="8%">基地名称</td>
+					<td width="8%">创建时间</td>
+					<td width="8%">最后修改时间</td>
+					<td width="14%">操作</td>
+				</tr>
+				<#if page.list?? && page.list?size gt 0>
+				<#list page.list as plot>
+				<tr class="table_td">
+					<td>${plot.baseName!}</td>
+					<td>${plot.createTime[0..10]}</td>
+					<td>${plot.modifyTime!}</td>
+					<td>
+						<a href="#" onclick="pop_userinfo(event,'<@spring.url '/plotController/plotDetail.htm?plotId=${plot.plotId}'/>')">查看详情</a>
+						<a href="#"  onclick="toEditPlot('${plot.plotId}')" style="cursor: pointer;" >修改</a>&nbsp;&nbsp;&nbsp;&nbsp;
+						<a href="#"  onclick="toDelPlot('${plot.plotId}')" style="cursor: pointer;" >删除</a>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+					</td>
+				</tr>
+				</#list>
+				<#else>
+		  			<tr class="table_td"><td colspan="12" align="center">没有符合条件的结果。</td></tr>
+				</#if>
+			</table>
+		</div>
+	</div>
+</div>
+<!--right end-->
+<div style="display: none;">
+ 	<a id="delSuccessed" href="#" onclick="showMessageDialog(event,'删除成功！','<@spring.url '/plotController/plot_index.htm?li=li62&div=div_6&menuOrder=0'/>','closeWindow();');" ></a>
+        	
+ 	
+ 	<a id="delFailed" href="#" onclick="showMessageDialog(event,'删除失败！','','');" ></a>
+</div>
+<script type="text/javascript">
+function toAddplot(){
+	var url ="<@spring.url '/plotController/plotAdd.htm'/>";
+	ajaxFormRequest("{url:'"+url+"',id:'dataDiv',form:'searchform'}");
+}
+function toEditPlot(id){
+	var url ="<@spring.url '/plotController/editPlot.htm?plotId=" + id + "'/>";
+	ajaxFormRequest("{url:'"+url+"',id:'dataDiv',form:'searchform'}");
+}
+
+function toDelPlot(tId){
+	var param = null;
+	var postmethod = "get";
+	var url ="<@spring.url '/plotController/delPlot.htm?plotId="+tId+"'/>";
+	$.ajax({
+		   type: postmethod,
+		   cache: false,
+		   url: url,
+		   data : param,
+		   success: function(data){
+			if(data == 'true'){
+				tip(1,true);
+				return;
+			}
+			if(data == 'false'){
+				tip(1,false);
+				return;
+			}
+			showMessageDialog(null,data,'','');
+		   },
+		   error:function(xhr,err){ 
+		}
+	});
+}
+
+function tip(type,bool){
+	if(type == 1){
+		if(bool){
+			document.getElementById("delSuccessed").click();
+			return;
+		}
+		document.getElementById("delFailed").click();
+	}
+}
+
+
+
+</script>
+
+</body>
+</html>

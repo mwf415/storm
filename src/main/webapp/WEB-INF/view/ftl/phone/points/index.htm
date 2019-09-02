@@ -1,0 +1,68 @@
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<#import "../decorators/spring.ftl" as spring />
+<!DOCTYPE html>
+<html >
+<head>
+<#include "../../decorators/headtitle.ftl" >
+</head>
+<body>
+
+<#include "../../decorators/left0.ftl" >
+<div class="main_right" id="right">
+	<div class="right_con">
+		<div class="main_search">
+			<form id="searchform">
+				<button type="button" onclick="toAddplot()" class="btn btn-primary btn-sm">添加</button>
+			</form>
+		</div>
+		<!-- 显示数据的div -->
+		<div id="dataDiv">
+			<table class="table table-bordered table-hover">
+				<tr class="table_title">
+					<td width="8%">id</td>
+					<td width="8%">项目</td>
+					<td width="8%">没参加一次的分数积分</td>
+					<td width="14%">操作</td>
+				</tr>
+				<#if rulelist?? && rulelist?size gt 0>
+				<#list rulelist as rule>
+				<tr class="table_td">
+					<td>${rule.id!}</td>
+					<td>${rule.active_name!}</td>
+					<td>${rule.each_score!}</td>
+					<td>
+						<input type="text" placeholder="${rule.each_score!}" id="${rule.id}1" />
+						<a href="#"  onclick="toEditPoint('${rule.id}')" style="cursor: pointer;" >修改</a>&nbsp;&nbsp;&nbsp;&nbsp;
+					</td>
+				</tr>
+				</#list>
+				<#else>
+		  			<tr class="table_td"><td colspan="12" align="center">没有符合条件的结果。</td></tr>
+				</#if>
+			</table>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+function toAddplot(){
+	var url ="<@spring.url '/plotController/plotAdd.htm'/>";
+	ajaxFormRequest("{url:'"+url+"',id:'dataDiv',form:'searchform'}");
+}
+function toEditPoint(id){
+	var eacesId = id+1;
+	var each_score= document.getElementById(eacesId);
+	var es = each_score.value;
+	var url ="<@spring.url '/pointrule/edit.htm?each_score="+es+"&id=" + id + "'/>";
+	window.location =url;
+	
+}
+
+
+
+
+</script>
+
+</body>
+</html>

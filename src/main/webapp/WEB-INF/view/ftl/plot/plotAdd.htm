@@ -1,0 +1,98 @@
+<#import "../decorators/uri.ftl" as uri /> 
+<#import "../decorators/util.ftl" as util /> 
+<#import "../decorators/spring.ftl" as spring />
+<style>
+.table_td td {
+	padding-left: 3px;
+}
+</style>
+
+<div>
+	<form id="addform" name="addform" >
+	<table class="table table-hover  table-bordered" >
+		<tr>
+			<td width="15%" class="td_right"><em>*</em>请选择基地</td>
+			<td width="35%">
+				<select id="baseName" name="baseName"> 
+					<option>请选择</option>
+					<#if baseList??  && baseList?size gt 0> 
+					<#list baseList as baseValue>
+					<option value="${baseValue.value}" name="baseValue">
+					<a	style="color: green; font-size: 15px;">${baseValue.value}</a><br>
+					</option> 
+				</#list> 
+				</#if>
+				</select> <br> 
+			</td>
+		</tr>
+		</table>
+		
+		<textarea id="plotTxt" name="plotTxt"></textarea>
+		<script type="text/javascript">CKEDITOR.replace('plotTxt');</script>
+
+		<input type="button" value="提交" id="submitBtn" onclick="addPlot()">&nbsp;&nbsp;&nbsp;&nbsp; 
+	</form>
+</div>
+<div style="display: none;">
+        	<a id="addSuccessed" href="#" onclick="showMessageDialog(event,'新建成功','<@spring.url '/plotController/plot_index.htm?li=li62&div=div_6&menuOrder=0'/>','closeWindow();');" ></a>
+        	<a id="addFailed" href="#" onclick="showMessageDialog(event,'新建失败','','');" ></a>
+ </div>
+
+<!--right end-->
+<script type="text/javascript">
+//教学计划的提交js
+
+function toPlotblack(){
+	var url = "<@spring.url '/plotController/plot_index.htm?targetID=dataDiv&formID=searchform'/>";
+	ajaxFormRequest("{url:'"+url+"',id:'dataDiv',form:'searchform'}");
+}
+
+	
+function addPlot(){
+	CKupdate();
+	var param = null;
+	var postmethod = "POST";
+	var url ="<@spring.url '/plotController/plotSum.htm'/>";
+	var param = $("#addform").serialize();
+	$.ajax({
+		   type: postmethod,
+		   cache: false,
+		   url: url,
+		   data : param,
+		   success: function(data){
+		    if(!validateFieldMs(data)){
+				return;
+			}
+			if(data == 'true'){
+				tip(1,true);
+				return;
+			}else if(data == 'false'){
+				tip(1,false);
+				return;
+			}
+			showMessageDialog(null,data,'','');
+		   },
+		   error:function(xhr,err){
+			   window.location.href=url; 
+		}
+	});
+}
+//文本框 ckeditor上传需要转换成能够controller接受的
+function CKupdate() {
+       for (instance in CKEDITOR.instances)
+           CKEDITOR.instances[instance].updateElement();
+   }
+
+function tip(type,bool){
+	if(type == 1){
+		if(bool){
+			document.getElementById("addSuccessed").click();
+			return;
+		}
+		document.getElementById("addFailed").click();
+	}
+}
+
+
+</script>
+

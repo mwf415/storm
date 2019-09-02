@@ -1,0 +1,150 @@
+<#import "../decorators/uri.ftl" as uri /> <#import "../decorators/util.ftl" as
+util /> <#import "../decorators/spring.ftl" as spring />
+<!DOCTYPE html>
+<html >
+<head>
+<#include "../decorators/headtitle.ftl" >
+</head>
+<!-- 这个事相对于专业基地来说的，主要是为了专业基地修改来用的，还要做一个针对其他通用的查询 -->
+<body>
+	<#include "../decorators/left1.ftl" >
+<div class="main_right" id="right">
+		<div class="right_con">
+			<div class="main_search">
+					<form id="searchform5">
+						<input type="hidden" name="li" value="${li!}"/>
+						<input type="hidden" name="div" value="${div!}"/>
+						<input type="hidden" name="type" value="${type!}"/>
+						基地：<select name="baseName" id="baseName" style="width: 105px;" >
+						<#if baseValues?? && baseValues?size gt 0>
+							<option value="">请选择</option>
+							<#list baseValues as baseValue>
+									<option value="${baseValue.value}" <#if baseValue.value==baseNamed!>selected="selected"</#if> >${baseValue.value}</option>
+							</#list>
+						</#if>
+						</select>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						学生姓名<input type ="text" name ="realName" value="${userNamed!}" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						选择年级：
+						2016<input type="radio" value="2016" name="grade" />&nbsp;&nbsp;&nbsp;&nbsp;
+						2017 <input type="radio" value="2017" name="grade"/>&nbsp;&nbsp;&nbsp;&nbsp;
+						2018<input type="radio" value="2018" name="grade"/>&nbsp;&nbsp;&nbsp;&nbsp;
+						2019<input type="radio" value="2019" name="grade"/>&nbsp;&nbsp;&nbsp;&nbsp;
+						2020<input type="radio" value="2020" name="grade"/>&nbsp;&nbsp;&nbsp;&nbsp;
+						2021<input type="radio" value="2021" name="grade"/>&nbsp;&nbsp;&nbsp;&nbsp;
+						<button type="button" class="btn btn-danger btn-sm" onclick="queryUser()" >搜 索</button>
+					</form>
+				</div>
+				<div id="dataDiv">
+					<table class="table table-bordered table-hover">
+						<tr class="table_title">
+							<td width="8%">学生姓名</td>
+							<td width="8%">学生编号</td>
+							<td width="8%">年级</td>
+							<td width="8%">所在专业基地</td>
+							<td width="8%">学历</td>
+							<td width="8%">操作</td>
+						</tr>
+						<#if page.list ?? && page.list ?size gt 0>
+						<#list page.list as user>
+						<tr class="table_td">
+							<td>${user.realName!}</td>
+							<td>${user.loginName!}</td>
+							<td>${user.grade!}</td>
+							<td>${user.baseName!}</td>
+							<td>${user.xuewei!}</td>
+							<td>
+								<#if user.isAt?? && user.isAt==1>
+									<a href="javaScript:showArrTurn('${user.loginName!}');" >
+							          	<span class="glyphicon glyphicon-align-justify"></span>
+							        </a>&nbsp;&nbsp;
+									<button type="button" class="btn .btn-default btn-sm"  onclick="showArrTurn('${user.loginName!}')" >查看安排</button>
+								<#else>
+									<button type="button" class="btn btn-danger btn-sm"  >未安排</button>
+								</#if>
+							</td>
+						</tr>
+						<tr class="contentTr">
+			      	    	<td colspan="12" >
+			      	    		<div id="${user.loginName!}" class="showViewStyle"></div>
+			      	    	</td>
+			   	 		</tr>
+						</#list>
+						<#else>
+				  			<tr class="table_td"><td colspan="12" align="center">没有符合条件的结果。</td></tr>
+						</#if>
+					</table>
+				<#include "../decorators/page.htm" />
+				<#if export?? && type =="h">
+					<div style="margin-top: 30px;">
+						<h3> 导出${grade!}级所有学员到excel</h3>
+						<form id="form1" name="form1"  method="post">
+						    <input type="submit" name="exit" id="exit" value="导出">
+						</form>
+					</div>
+				</#if>
+				</div>
+		</div>
+	</div>
+
+<script>
+// url="<@spring.url '/arrTurn/outexcel.htm?grade=${grade!}&baseName=${baseName!}'/>";
+$("#exit").click(function(){
+	var grades=document.getElementsByName("grade");
+	var grade;
+	for(i in grades){
+		if(grades[i].checked){
+			grade=grades[i].value;
+		}
+	}
+	if(grade==null||grade=="" ||grade==undefined){
+		alert("请选择年级！");
+	}
+	var baseName=document.getElementById("baseName").value;
+	if(baseName=="" || baseName==null){
+		alert("请选择基地！");
+	}
+	var urlPath="<@spring.url '/arrTurn/outexcel.htm?grade="+grade+"&baseName="+baseName+"'/>";
+	$('#form1').attr('action',urlPath).submit();
+
+});
+function queryUser(){
+	var url ="<@spring.url '/singleArrTurnCont/index.htm'/>";
+	$("#searchform5").attr("action",url).submit();
+}
+
+function showArrTurn(id){
+	var url ='<@spring.url "/singleArrTurnCont/detail.htm?li=${li!}&div=${div!}&baseName=${baseNamed!}&realName=${userNamed!}&grade=${grade!}&type=${type!}&menuOrder=${menuOrder!}&loginName='+id+'"/>';
+	showView(id,url);
+}
+
+function targetPage(pageIndex){
+	window.location = '<@spring.url "/singleArrTurnCont/index.htm?li=${li!}&type=${type!}&baseName=${baseName!}&grade=${grade!}&div=${div!}&menuOrder=${menuOrder!}&searchEnd=${searchEnd!}&searchStart=${searchStart!}&teachernum=${teachernum!}&pageIndex='+pageIndex+'"/>';
+}
+
+function editArrTurn(){
+    var param = null;
+    var postmethod = "POST";
+    var param = $("#addform3").serialize();
+    var url = "<@spring.url '/arrTurnOneController/arrturnRuleSum.htm'/>";
+    $.ajax({
+        type: postmethod,
+        cache: false,
+        url: url,
+        data : param,
+        success: function(data){
+            if(data == 'true'){
+                alert("修改完成");
+            }else if(data == 'false'){
+               alert("修改失败");
+                return;
+            }
+        },
+        error:function(xhr,err){
+            window.location.href=url;
+        }
+    });
+}
+</script>
+</body>
+</html>

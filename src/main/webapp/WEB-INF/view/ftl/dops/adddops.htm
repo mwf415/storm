@@ -1,0 +1,308 @@
+<#import "../decorators/spring.ftl" as spring />
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html >
+<head><#include "../decorators/headtitle.ftl" >
+</head>
+<body>
+<!--right-->
+<#include "../decorators/left1.ftl" ><div class="main_right" id="right">
+	<div class="rig_tab">
+		<div class="rig_tab2">
+			<form id="addform" name="form1">
+			<input type="hidden" name="id" value="${dops.id!}"/>
+					<table class="table table-bordered table-hover">
+					<tr>
+						<td>考官姓名:
+						${dops.kgName!}</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>考生姓名:
+						${dops.ksName!}
+						</td><td> 学号/工号:${dops.kgNum!}</td>
+					</tr>
+					<tr>
+						<td>日期:
+						<input type="text" name="gradeDate" id="gradeDate" readonly/><img onclick="WdatePicker({el:'gradeDate',dateFmt:'yyyy-MM-dd'})" 
+						src="${uri.jssite}/My97DatePicker/skin/datePicker.gif" width="16" height="22" align="absmiddle">
+						</td><td>
+							时间段:<input name="gradeTime" type="radio" value="1" />上午  
+					    				<input name="gradeTime" type="radio" value="2"/>下午 
+					    				<input name="gradeTime" type="radio" value="3"/>晚上 
+						</td>
+					</tr>
+					<tr>
+						<td>考官身份:
+						</td><td>
+						<input name="kgIdentity" type="radio" value="1" />护士
+							     <input name="kgIdentity" type="radio" value="2"/>住院医
+							     <input name="kgIdentity" type="radio" value="3"/>住院总 
+							     <input name="kgIdentity" type="radio" value="4"/>主治医
+							     <input name="kgIdentity" type="radio" value="5"/>副主任医师及以上
+						</td>
+					</tr>
+					<tr>
+						<td>考生身份:
+						</td><td>
+						<input name="ksIdentity" type="radio" value="1" />见习
+							     <input name="ksIdentity" type="radio" value="2"/>实习
+							     <input name="ksIdentity" type="radio" value="3"/>第一年住院医 
+							     <input name="ksIdentity" type="radio" value="4"/>第二年住院医
+							     <input name="ksIdentity" type="radio" value="5"/>住院总
+						</td>
+					</tr>
+					<tr>
+						<td>考核地点:
+						</td><td><input name="khaddress" type="radio" value="1" />门诊
+							     <input name="khaddress" type="radio" value="2"/>急诊
+							     <input name="khaddress" type="radio" value="3"/>住院 
+							     <input name="khaddress" type="radio" value="4"/>其他
+						</td>
+					</tr>
+					<tr>
+						<td>操作名称:</td><td><input name="khmudi" type="text" id="khmudi"/></td>
+					</tr>
+					<tr >
+						<td colspan="2"></td>
+					</tr>
+					<tr>
+						<td colspan="2">病人资料</td>
+					</tr>
+					<tr>
+						<td colspan="2" > 病历号:<input type="text" name="blh" id="blh"  style="width:100px;"/>
+							年龄:<input type="text" name="bage" id="bage" style="width:100px;"/>
+							性别:<input type="text" name="bsex" id="bsex" style="width:100px;"/>
+							病房:<input type="text" name="bfh" id="bfh" style="width:100px;"/>
+							床号:<input type="text" name="bch" id="bch" style="width:100px;"/>
+						</td>
+					</tr>
+					<tr>
+						<td>病人属于:</td><td><input name="isFirst" type="radio" value="1" />第一次接触
+							     <input name="isFirst" type="radio" value="2"/>非第一次接触
+						</td>
+					</tr>
+					<tr>
+						<td>病例复杂程度:</td><td><input name="complexDegree" type="radio" value="1" />低
+							     <input name="complexDegree" type="radio" value="2"/>中
+							     <input name="complexDegree" type="radio" value="3"/>高
+						</td>
+					</tr>
+					<tr>
+						<td>病人配合程度:</td><td>
+						<input name="coordination" type="radio" value="1" />差
+							     <input name="coordination" type="radio" value="2"/>中
+							     <input name="coordination" type="radio" value="3"/>好
+						</td>
+					</tr>
+					<tr><td colspan="2"></td></tr>
+					<tr><td colspan="2">评分标准：远低于能力预期(1分)低于能力预期(2分) 达到能力预期下限(3分) 符合平均能力预期(4分) 高于平均能力预期(5分) 达到高一级别能力预期(6分) 未观察到或难以评价(a/c)</td></tr>
+					
+					<tr>
+						<td>1、掌握操作适应症、相关解剖关系和操作技术:</td><td>
+								<input name="mtjq" type="radio" value="1" />1
+								<input name="mtjq" type="radio" value="2" />2
+								<input name="mtjq" type="radio" value="3" />3
+								<input name="mtjq" type="radio" value="4" />4
+								<input name="mtjq" type="radio" value="5" />5
+								<input name="mtjq" type="radio" value="6" />6
+								<input name="mtjq" type="radio" value="7" />a/c
+						</td>
+					</tr>
+					<tr>
+						<td>2、同病人交流并获得知情同意</td><td>:
+								<input name="tgjc" type="radio" value="1" />1
+								<input name="tgjc" type="radio" value="2" />2
+								<input name="tgjc" type="radio" value="3" />3
+								<input name="tgjc" type="radio" value="4" />4
+								<input name="tgjc" type="radio" value="5" />5
+								<input name="tgjc" type="radio" value="6" />6
+								<input name="tgjc" type="radio" value="7" />a/c
+						</td>
+					</tr>
+					<tr>
+						<td>3、术前准备:</td><td>
+								<input name="zysy" type="radio" value="1" />1
+								<input name="zysy" type="radio" value="2" />2
+								<input name="zysy" type="radio" value="3" />3
+								<input name="zysy" type="radio" value="4" />4
+								<input name="zysy" type="radio" value="5" />5
+								<input name="zysy" type="radio" value="6" />6
+								<input name="zysy" type="radio" value="7" />a/c
+						</td>
+					</tr>
+					<tr>
+						<td>4、麻醉止痛操作:</td><td>
+								<input name="lcpd" type="radio" value="1" />1
+								<input name="lcpd" type="radio" value="2" />2
+								<input name="lcpd" type="radio" value="3" />3
+								<input name="lcpd" type="radio" value="4" />4
+								<input name="lcpd" type="radio" value="5" />5
+								<input name="lcpd" type="radio" value="6" />6
+								<input name="lcpd" type="radio" value="7" />a/c
+						</td>
+					</tr>
+					<tr>
+						<td>5、安全镇静技术:</td><td>
+								<input name="zxjy" type="radio" value="1" />1
+								<input name="zxjy" type="radio" value="2" />2
+								<input name="zxjy" type="radio" value="3" />3
+								<input name="zxjy" type="radio" value="4" />4
+								<input name="zxjy" type="radio" value="5" />5
+								<input name="zxjy" type="radio" value="6" />6
+								<input name="zxjy" type="radio" value="7" />a/c
+						</td>
+					</tr>
+					<tr>
+						<td>6、无菌操作:</td><td>
+								<input name="zznl" type="radio" value="1" />1
+								<input name="zznl" type="radio" value="2" />2
+								<input name="zznl" type="radio" value="3" />3
+								<input name="zznl" type="radio" value="4" />4
+								<input name="zznl" type="radio" value="5" />5
+								<input name="zznl" type="radio" value="6" />6
+								<input name="zznl" type="radio" value="7" />a/c
+						</td>
+					</tr>
+					<tr>
+						<td>7、需要时及时寻求帮助:</td><td>
+								<input name="ztlc" type="radio" value="1" />1
+								<input name="ztlc" type="radio" value="2" />2
+								<input name="ztlc" type="radio" value="3" />3
+								<input name="ztlc" type="radio" value="4" />4
+								<input name="ztlc" type="radio" value="5" />5
+								<input name="ztlc" type="radio" value="6" />6
+								<input name="ztlc" type="radio" value="7" />a/c
+						</td>
+					</tr>
+					<tr>
+						<td>8,术后操作:</td><td>
+								<input name="aztlc" type="radio" value="1" />1
+								<input name="aztlc" type="radio" value="2" />2
+								<input name="aztlc" type="radio" value="3" />3
+								<input name="aztlc" type="radio" value="4" />4
+								<input name="aztlc" type="radio" value="5" />5
+								<input name="aztlc" type="radio" value="6" />6
+								<input name="aztlc" type="radio" value="7" />a/c
+						</td>
+					</tr>
+					<tr>
+						<td>9,交流沟通技巧:</td><td>
+								<input name="bztlc" type="radio" value="1" />1
+								<input name="bztlc" type="radio" value="2" />2
+								<input name="bztlc" type="radio" value="3" />3
+								<input name="bztlc" type="radio" value="4" />4
+								<input name="bztlc" type="radio" value="5" />5
+								<input name="bztlc" type="radio" value="6" />6
+								<input name="bztlc" type="radio" value="7" />a/c
+						</td>
+					</tr>
+					<tr>
+						<td>10、专业素养和病人照顾:</td><td>
+								<input name="zjzl" type="radio" value="1" />1
+								<input name="zjzl" type="radio" value="2" />2
+								<input name="zjzl" type="radio" value="3" />3
+								<input name="zjzl" type="radio" value="4" />4
+								<input name="zjzl" type="radio" value="5" />5
+								<input name="zjzl" type="radio" value="6" />6
+								<input name="zjzl" type="radio" value="7" />a/c
+						</td>
+					</tr>
+					<tr>
+						<td>11、总体表现评价:</td><td>
+								<input name="ljwt" type="radio" value="1" />1
+								<input name="ljwt" type="radio" value="2" />2
+								<input name="ljwt" type="radio" value="3" />3
+								<input name="ljwt" type="radio" value="4" />4
+								<input name="ljwt" type="radio" value="5" />5
+								<input name="ljwt" type="radio" value="6" />6
+								<input name="ljwt" type="radio" value="7" />a/c
+						</td>
+					</tr>
+					<tr>
+						<td >观察时间:
+						</td><td>
+						<input style="width:50px;" type="text" name="gcTime" id="gcTime"/>分钟回馈时间:
+						<input style="width:50px;" type="text" name="hkTime" id="hkTime"/>分钟</td>
+					</tr>
+					<tr>
+						<td>考官对于此次DOPS的满意度:</td><td>
+								<input name="kgmy" type="radio" value="1" />1
+								<input name="kgmy" type="radio" value="2" />2
+								<input name="kgmy" type="radio" value="3" />3
+								<input name="kgmy" type="radio" value="4" />4
+								<input name="kgmy" type="radio" value="5" />5
+								<input name="kgmy" type="radio" value="6" />6
+								<input name="kgmy" type="radio" value="7" />7
+								<input name="kgmy" type="radio" value="8" />8
+								<input name="kgmy" type="radio" value="9" />9
+						</td>
+					</tr>
+					<tr>
+						<td>考官对于此次DOPS的满意度:</td><td>
+								<input name="k1" type="radio" value="1" />不满意
+								<input name="k1" type="radio" value="2" />满意
+								<input name="k1" type="radio" value="3" />非常出色
+						</td>
+					</tr>
+					<tr>
+						<td>考生对于此次DOPS的满意度:</td><td>
+								<input name="ksmy" type="radio" value="1" />1
+								<input name="ksmy" type="radio" value="2" />2
+								<input name="ksmy" type="radio" value="3" />3
+								<input name="ksmy" type="radio" value="4" />4
+								<input name="ksmy" type="radio" value="5" />5
+								<input name="ksmy" type="radio" value="6" />6
+								<input name="ksmy" type="radio" value="7" />7
+								<input name="ksmy" type="radio" value="8" />8
+								<input name="ksmy" type="radio" value="9" />9
+						</td>
+					</tr>
+					<tr>
+						<td>考生对于此次DOPS的满意度:</td><td>
+								<input name="k2" type="radio" value="1" />不满意
+								<input name="k2" type="radio" value="2" />满意
+								<input name="k2" type="radio" value="3" />非常出色
+						</td>
+					</tr>
+					<tr>
+	               	 	<td>
+		               	 <input  type="button" onclick="addRole()"  value="提交" class="main_button"/>
+	               	 	</td>
+					</tr> 
+				</table>
+			</form>
+		</div>
+	</div>
+
+</div>
+
+<script>
+	function addRole(){
+		var url ="<@spring.url '/dopsController/addDops.htm'/>";
+		$("#addform").attr("action",url).submit();
+	}   
+   function myCheck() {
+      for(var i=0;i<document.form1.elements.length-1;i++)
+      {
+       if(document.form1.elements[i].value=="")
+	       {
+	        alert("当前表单不能有空项");
+	        document.form1.elements[i].focus();
+	        return false;
+	       }
+      }
+      var a = $(':input:radio:checked').length;
+      if(a != 22){
+    	  alert("存在未勾选的单选框,请检查");
+    	  return false;
+      }
+      return true;
+     
+   }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<#import "../decorators/spring.ftl" as spring />
+<!DOCTYPE html>
+<html >
+<head>
+<#include "../decorators/headtitle.ftl" >
+</head>
+<body>
+<!--right-->
+<#include "../decorators/left1.ftl" >
+<div class="main_right" id="right">
+	<div class="right_con">
+		<div class="main_search">
+			<form id="searchform">
+				<div style="border: 0px solid silver;height: 30px;padding-top: 3px;">
+					时间：
+					<input id="searchStart" type="text" name="searchStart" style="width: 100px;" />
+						<img onclick="WdatePicker({el:'searchStart',dateFmt:'yyyy-MM'})" 
+								src="${uri.jssite}/My97DatePicker/skin/datePicker.gif" width="16" height="22" align="absmiddle">	
+								
+						<input type="hidden" name="li" value="${li!}"/>
+						<input type="hidden" name="div" value="${div!}"/>
+						<input type="hidden" name="type" value="${type!}"/>
+						<button type="button" class="btn btn-info btn-sm" onclick="exportE()" >导出excel</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<!--right end-->
+
+<script type="text/javascript">
+
+function exportE(){
+	var searchStart = $("#searchStart").val();
+	if(searchStart == '') {
+		  alert("请注意 :时间不能为空");
+		  return false;
+	}
+	window.location = '<@spring.url "/arrTurnwithteach/excel.htm?searchStart='+searchStart+'"/>';
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,248 @@
+<#import "../decorators/spring.ftl" as spring />
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html >
+<head>	
+<#include "../decorators/headtitle.ftl" >
+</head>
+<body>
+<!--right-->
+<#include "../decorators/left1.ftl" ><div class="main_right" id="right">
+	<div class="rig_tab">
+		<div class="rig_tab2">
+			<form id="addform" name="form1">
+				<input type="hidden" name="teacherNum" id="teacherNum" value="${jt2s.teacherNum!}"/>
+				<input type="hidden" name="activesId" id="activesId" value="${jt2s.activesId!}"/>
+				<input type="hidden" name="teacherName" id="teacherName" value="${jt2s.teacherName!}" />
+				<input type="hidden" name="id" id="id" value="${jt2s.id!}" />
+				<input type="hidden" name="roomName" id="roomName" value="${jt2s.roomName!}" />
+				<input type="hidden" name="baseName" id="baseName" value="${jt2s.baseName!}" />
+				<table id="tb" class="table table-hover table-bordered" > 
+					<tr>
+						<td style="width: 50% ;">老师姓名:&nbsp;&nbsp;&nbsp;${jt2s.teacherName!}&nbsp;&nbsp;&nbsp;工号:&nbsp;&nbsp;${jt2s.teacherNum!}
+						</td>
+					</tr>
+					<tr>
+						<td>考生姓名:&nbsp;&nbsp;${jt2s.userName!}
+							学号/工号:&nbsp;&nbsp;${jt2s.loginName!}
+						</td>
+					</tr>
+				</table>
+				<table id="tb" class="table table-hover table-bordered" > 
+					<tr>
+						<td colspan="2" >评分标准：&nbsp;&nbsp;&nbsp;&nbsp;较差(1分)&nbsp;&nbsp;&nbsp;&nbsp;及格(2分) &nbsp;&nbsp;&nbsp;&nbsp;中等(3分)&nbsp;&nbsp;&nbsp;&nbsp; 良好(4分)&nbsp;&nbsp;&nbsp;&nbsp;优秀(5分)&nbsp;&nbsp;&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2" ></td>
+					</tr>
+					<tr>
+						<td colspan="2" >管理病人</td>
+					</tr>
+					
+					<tr>
+						<td style="width: 30%">医疗文书规范程度:&nbsp;&nbsp;
+						</td>
+						<td style="width: 70%">
+								<input name="ylws" type="radio" value="1" />1&nbsp;&nbsp;
+								<input name="ylws" type="radio" value="2" />2&nbsp;&nbsp;
+								<input name="ylws" type="radio" value="3" />3&nbsp;&nbsp;
+								<input name="ylws" type="radio" value="4" />4&nbsp;&nbsp;
+								<input name="ylws" type="radio" value="5" />5&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>诊疗能力:&nbsp;&nbsp;
+						</td>
+						<td>
+								<input name="zlnl" type="radio" value="1" />1&nbsp;&nbsp;
+								<input name="zlnl" type="radio" value="2" />2&nbsp;&nbsp;
+								<input name="zlnl" type="radio" value="3" />3&nbsp;&nbsp;
+								<input name="zlnl" type="radio" value="4" />4&nbsp;&nbsp;
+								<input name="zlnl" type="radio" value="5" />5&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>周到程度:&nbsp;&nbsp;
+						</td>
+						<td>
+								<input name="zdce" type="radio" value="1" />1&nbsp;&nbsp;
+								<input name="zdce" type="radio" value="2" />2&nbsp;&nbsp;
+								<input name="zdce" type="radio" value="3" />3&nbsp;&nbsp;
+								<input name="zdce" type="radio" value="4" />4&nbsp;&nbsp;
+								<input name="zdce" type="radio" value="5" />5&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>病人评价:&nbsp;&nbsp;
+						</td>
+						<td>
+								<input name="brpj" type="radio" value="1" />1&nbsp;&nbsp;
+								<input name="brpj" type="radio" value="2" />2&nbsp;&nbsp;
+								<input name="brpj" type="radio" value="3" />3&nbsp;&nbsp;
+								<input name="brpj" type="radio" value="4" />4&nbsp;&nbsp;
+								<input name="brpj" type="radio" value="5" />5&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>护士评价:&nbsp;&nbsp;
+						</td>
+						<td>
+								<input name="hspj" type="radio" value="1" />1&nbsp;&nbsp;
+								<input name="hspj" type="radio" value="2" />2&nbsp;&nbsp;
+								<input name="hspj" type="radio" value="3" />3&nbsp;&nbsp;
+								<input name="hspj" type="radio" value="4" />4&nbsp;&nbsp;
+								<input name="hspj" type="radio" value="5" />5&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>风险预见性:&nbsp;&nbsp;
+						</td>
+						<td>
+								<input name="fxyj" type="radio" value="1" />1&nbsp;&nbsp;
+								<input name="fxyj" type="radio" value="2" />2&nbsp;&nbsp;
+								<input name="fxyj" type="radio" value="3" />3&nbsp;&nbsp;
+								<input name="fxyj" type="radio" value="4" />4&nbsp;&nbsp;
+								<input name="fxyj" type="radio" value="5" />5&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2" ></td>
+					</tr>
+					
+					<tr>
+						<td colspan="2">工作评价</td>
+					</tr>
+					<tr>
+						<td>学习的病种数:&nbsp;&nbsp;
+						</td>
+						<td>
+								<input name="bzs" type="radio" value="1" />1&nbsp;&nbsp;
+								<input name="bzs" type="radio" value="2" />2&nbsp;&nbsp;
+								<input name="bzs" type="radio" value="3" />3&nbsp;&nbsp;
+								<input name="bzs" type="radio" value="4" />4&nbsp;&nbsp;
+								<input name="bzs" type="radio" value="5" />5&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>查房的认真程度:&nbsp;&nbsp;
+						</td>
+						<td>
+								<input name="cfrz" type="radio" value="1" />1&nbsp;&nbsp;
+								<input name="cfrz" type="radio" value="2" />2&nbsp;&nbsp;
+								<input name="cfrz" type="radio" value="3" />3&nbsp;&nbsp;
+								<input name="cfrz" type="radio" value="4" />4&nbsp;&nbsp;
+								<input name="cfrz" type="radio" value="5" />5&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>医疗操作能力:&nbsp;&nbsp;
+						</td>
+						<td>
+								<input name="ylcz" type="radio" value="1" />1&nbsp;&nbsp;
+								<input name="ylcz" type="radio" value="2" />2&nbsp;&nbsp;
+								<input name="ylcz" type="radio" value="3" />3&nbsp;&nbsp;
+								<input name="ylcz" type="radio" value="4" />4&nbsp;&nbsp;
+								<input name="ylcz" type="radio" value="5" />5&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>参加讨论发言:&nbsp;&nbsp;
+						</td>
+						<td>
+								<input name="cjtl" type="radio" value="1" />1&nbsp;&nbsp;
+								<input name="cjtl" type="radio" value="2" />2&nbsp;&nbsp;
+								<input name="cjtl" type="radio" value="3" />3&nbsp;&nbsp;
+								<input name="cjtl" type="radio" value="4" />4&nbsp;&nbsp;
+								<input name="cjtl" type="radio" value="5" />5&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td >沟通与协作能力:&nbsp;&nbsp;
+						</td>
+						<td>
+								<input name="gtxz" type="radio" value="1" />1&nbsp;&nbsp;
+								<input name="gtxz" type="radio" value="2" />2&nbsp;&nbsp;
+								<input name="gtxz" type="radio" value="3" />3&nbsp;&nbsp;
+								<input name="gtxz" type="radio" value="4" />4&nbsp;&nbsp; 
+								<input name="gtxz" type="radio" value="5" />5&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>值班和交接班:&nbsp;&nbsp;
+						</td>
+						<td>
+								<input name="zbjb" type="radio" value="1" />1&nbsp;&nbsp;
+								<input name="zbjb" type="radio" value="2" />2&nbsp;&nbsp;
+								<input name="zbjb" type="radio" value="3" />3&nbsp;&nbsp;
+								<input name="zbjb" type="radio" value="4" />4&nbsp;&nbsp;
+								<input name="zbjb" type="radio" value="5" />5&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr ><td colspan="2"></td></tr>
+					<tr>
+						<td colspan="2">出科考核:&nbsp;&nbsp;</td>
+					</tr>
+					<tr>
+						<td>理论考核成绩:&nbsp;&nbsp;
+						</td>
+						<td>
+								<input name="llkh" type="text"  />&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr><td colspan="2"></td></tr>
+					<tr>
+						<td colspan="2">工作数据:&nbsp;&nbsp;</td>
+					</tr>
+					
+					<tr>
+						<td>独立管理病人数量:&nbsp;&nbsp;</td>
+						<td>
+							<input name="dlglbrsl" type="text"  />&nbsp;&nbsp;
+							
+						</td>
+					</tr>
+					<tr>
+						<td>参与管理病人数量:&nbsp;&nbsp;</td>
+						<td>
+							<input name="cyglbrsl" type="text"  />&nbsp;&nbsp;
+							
+						</td>
+					</tr>
+					<tr>
+						<td>值班次数:&nbsp;&nbsp;</td>
+						<td>
+							<input name="zbcs" type="text"  />&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>出勤记录:&nbsp;&nbsp;</td>
+						<td>
+							<input name="cqjl" type="text"  />&nbsp;&nbsp;
+							
+						</td>
+					</tr>
+					<tr>
+	               	 	<td>
+		               	 <input  type="button" onclick="addRole()" value="提交" class="main_button"/>&nbsp;&nbsp;
+	               	 	</td>
+					</tr> 
+				</table>
+			</form>
+		</div>
+	</div>
+
+</div>
+
+
+<script>
+	function addRole(){
+		var url = "<@spring.url '/judgeController/sum.htm'/>";
+		$("#addform").attr("action",url).submit();
+	}
+
+</script>
+</body>
+</html>

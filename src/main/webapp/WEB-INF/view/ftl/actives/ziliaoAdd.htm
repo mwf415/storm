@@ -1,0 +1,79 @@
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<#import "../decorators/spring.ftl" as spring />
+<!DOCTYPE html>
+<html >
+<head>
+<#include "../decorators/headtitle.ftl" >
+
+</head>
+<body>
+<!--right-->
+<#include "../decorators/left1.ftl" ><div class="main_right" id="right">
+
+<div>
+	<form id="addform" name="addform" >	
+		<textarea id="plotTxt" name="contentTxt">${content!}</textarea>
+		<script type="text/javascript">CKEDITOR.replace('plotTxt');</script>
+
+		<input type="button" value="提交" id="submitBtn" onclick="addPlot()">&nbsp;&nbsp;&nbsp;&nbsp; 
+	</form>
+</div>
+<div style="display: none;">
+        	<a id="addSuccessed" href="#" onclick="showMessageDialog(event,'新建成功','<@spring.url '/activesCont/index.htm?li=li34&div=div_3&menuOrder=0&type=2'/>','closeWindow();');" ></a>
+        	<a id="addFailed" href="#" onclick="showMessageDialog(event,'新建失败','','');" ></a>
+ </div>
+ 
+</div>
+
+<!--right end-->
+<script type="text/javascript">
+
+function addPlot(){
+	CKupdate();
+	var param = null;
+	var postmethod = "POST";
+	var url ="<@spring.url '/inLearn/ziliaoUpdate.htm'/>";
+	var param = $("#addform").serialize();
+	$.ajax({
+		   type: postmethod,
+		   cache: false,
+		   url: url,
+		   data : param,
+		   success: function(data){
+		    if(!validateFieldMs(data)){
+				return;
+			}
+			if(data == 'true'){
+				tip(1,true);
+				return;
+			}else if(data == 'false'){
+				tip(1,false);
+				return;
+			}
+			showMessageDialog(null,data,'','');
+		   },
+		   error:function(xhr,err){
+			   window.location.href=url; 
+		}
+	});
+}
+//文本框 ckeditor上传需要转换成能够controller接受的
+function CKupdate() {
+       for (instance in CKEDITOR.instances)
+           CKEDITOR.instances[instance].updateElement();
+   }
+
+function tip(type,bool){
+	if(type == 1){
+		if(bool){
+			document.getElementById("addSuccessed").click();
+			return;
+		}
+		document.getElementById("addFailed").click();
+	}
+}
+
+
+</script>
+

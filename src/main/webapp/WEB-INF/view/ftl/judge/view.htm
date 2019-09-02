@@ -1,0 +1,151 @@
+
+<div style="margin: 30px;">
+	<#if jT2s?? >
+		<table class="table table-hover "  >
+			<tr>
+				<td style="width: 30% ;">老师姓名:&nbsp;&nbsp;&nbsp;${jT2s.teacherName!}
+					</td>
+				<td style="width: 70% ;">
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">考生姓名:&nbsp;&nbsp;${jT2s.userName!}
+					学号/工号:&nbsp;&nbsp;${jT2s.loginName!}
+				</td>
+			</tr>
+
+			<tr><td colspan="2"></td></tr>
+			<tr>
+				<td colspan="2">评分标准：&nbsp;&nbsp;&nbsp;&nbsp;较差(1分)&nbsp;&nbsp;&nbsp;&nbsp;及格(2分) &nbsp;&nbsp;&nbsp;&nbsp;中等(3分)&nbsp;&nbsp;&nbsp;&nbsp; 良好(4分)&nbsp;&nbsp;&nbsp;&nbsp;优秀(5分)&nbsp;&nbsp;&nbsp;&nbsp;
+				</td>
+			</tr>
+			
+			<tr>
+				<td colspan="2">管理病人</td>
+			</tr>
+			
+			<tr>
+				<td>医疗文书规范程度:&nbsp;&nbsp;
+				</td>
+				<td>${jT2s.ylws!}
+				</td>
+			</tr>
+			<tr>
+				<td>诊疗能力:&nbsp;&nbsp;
+				</td>
+				<td>${jT2s.zlnl!}
+				</td>
+			</tr>
+			<tr>
+				<td>周到程度:&nbsp;&nbsp;
+				</td>
+				<td>${jT2s.zdce!}
+				</td>
+			</tr>
+			<tr>
+				<td>病人评价:&nbsp;&nbsp;
+				</td>
+					<td>${jT2s.brpj!}
+				</td>
+			</tr>
+			<tr>
+				<td>护士评价:&nbsp;&nbsp;
+				</td>
+					<td>${jT2s.hspj!}
+				</td>
+			</tr>
+			<#--
+			<tr>
+				<td>风险预见性:&nbsp;&nbsp;
+				</td>
+				<td>${jT2s.fxyj!}
+				</td>
+			</tr>
+			<tr><td colspan="2"></td></tr>
+			<tr>
+				<td colspan="2">工作评价</td>
+			</tr>
+			<tr>
+				<td>学习的病种数:&nbsp;&nbsp;
+				</td>
+				<td>${jT2s.bzs!}
+				</td>
+			</tr>
+			<tr>
+				<td>查房的认真程度:&nbsp;&nbsp;
+				</td>
+				<td>${jT2s.cfrz!}
+				</td>
+			</tr>
+			<tr>
+				<td>医疗操作能力:&nbsp;&nbsp;
+				</td>
+				<td>${jT2s.ylcz!}
+				</td>
+			</tr>
+			<tr>
+				<td>参加讨论发言:&nbsp;&nbsp;
+				</td>
+				<td>${jT2s.cjtl!}
+				</td>
+			</tr>
+			<tr>
+				<td>沟通与协作能力:&nbsp;&nbsp;
+				</td>
+				<td>${jT2s.gtxz!}
+				</td>
+			</tr>
+			<tr>
+				<td>值班和交接班:&nbsp;&nbsp;
+				</td>
+				<td>${jT2s.zbjb!}
+				</td>
+			</tr>
+			-->
+			
+			<tr><td colspan="2"></td></tr>
+			<tr>
+				<td colspan="2">出科考核:&nbsp;&nbsp;</td>
+			</tr>
+			<tr>
+				<td>理论考核成绩:&nbsp;&nbsp;
+				</td>
+				<td>
+						${jT2s.llkh!} 分
+				</td>
+			</tr>
+			<tr><td colspan="2" ></td></tr>
+			<tr>
+				<td colspan="2">工作数据:&nbsp;&nbsp;</td>
+			</tr>
+			
+			<tr>
+				<td>独立管理病人数量:&nbsp;&nbsp;</td>
+				<td>
+					${jT2s.dlglbrsl!} 人
+					
+				</td>
+			</tr>
+			<tr>
+				<td>参与管理病人数量:&nbsp;&nbsp;</td>
+				<td>
+					${jT2s.cyglbrsl!} 人
+				</td>
+			</tr>
+			<tr>
+				<td>值班次数:&nbsp;&nbsp;</td>
+				<td>
+					${jT2s.zbcs!} 次
+				</td>
+			</tr>
+			<tr>
+				<td>出勤记录:&nbsp;&nbsp;</td>
+				<td>
+					${jT2s.cqjl!} 次
+				</td>
+			</tr>
+		</table>
+	<#else>
+		老师未评价
+	</#if>
+</div>

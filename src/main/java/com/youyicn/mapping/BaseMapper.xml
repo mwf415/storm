@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youyicn.dao.cycle.BaseMapper">
+
+	<insert id="addBase" parameterType="com.youyicn.entity.cycle.Base"	useGeneratedKeys="true" keyProperty="id">
+	    insert into cycle_base (baseNum,value) values (#{baseNum},#{value})
+	</insert>
+	
+	<select id="queryAllBase" resultType="com.youyicn.entity.cycle.Base">
+		select * from cycle_base 
+	</select>
+	
+	<select id="queryByName" parameterType="com.youyicn.entity.cycle.Base" resultType="com.youyicn.entity.cycle.Base">
+		select * from cycle_base where  value=#{value} 
+	</select>
+	<select id="getById" parameterType="com.youyicn.entity.cycle.Base" resultType="com.youyicn.entity.cycle.Base">
+		select * from cycle_base where  id=#{id} 
+	</select>
+	<delete id="del" parameterType="com.youyicn.entity.cycle.Base" >
+		delete  from cycle_base where id = #{id}
+	</delete>
+	
+</mapper>

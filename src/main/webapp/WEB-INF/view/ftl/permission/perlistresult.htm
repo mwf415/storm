@@ -1,0 +1,108 @@
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<#import "../decorators/spring.ftl" as spring />
+<html >
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+</head>
+<body>
+<!--right-->
+
+<#include "../decorators/left1.ftl" >
+<div class="main_right" id="right">
+	<div class="right_con">
+	<a href="<@spring.url '/permissionController/add_permission.htm?li=li11&div=div_1&menuOrder=0'/>">添加权限</a> 
+	<div>
+     	<table class="table table-bordered table-hover">
+     	  <tr class="table_title">
+     	   	<td width="12%">ID</td>
+	        <td width="26%">权限名称</td>
+	        <td width="24%">权限ID</td>
+	        <td width="24%">权限PID</td>
+	        <td width="14%" >操作</td>
+   	      </tr>
+	       	<#if page.list?? && page.list?size gt 0>
+  			<#list page.list as per>
+    		<tr class="table_td">
+	       	    <td>${per.id!}</td>
+	       	    <td><div style="width:280px;white-space:nowrap;word-break:keep-all;overflow:hidden;text-overflow:ellipsis;">${per.name!}</div></td>
+	       	    <td><div style="width:300px;white-space:nowrap;word-break:keep-all;overflow:hidden;text-overflow:ellipsis;">${per.url!}</div></td> 
+	       	    <td><div style="width:300px;white-space:nowrap;word-break:keep-all;overflow:hidden;text-overflow:ellipsis;">${per.pid!}</div></td> 
+	       	    <td>	       
+	       	    	<a href="<@spring.url '/permissionController/perview.htm?perId=${per.id}&li=li11&div=div_1&menuOrder=0'/>"><img src="${uri.imgsite}/chakan.png" title="查看" />&nbsp;</a> 
+	
+       	    			<a href="<@spring.url "/permissionController/toupdateper.htm?perId=${per.id}&li=li11&div=div_1&menuOrder=0"/>"><img src="${uri.imgsite}/xiugai.png" title="修改"/>&nbsp;</a> 
+
+  
+       	    			<a href="#" onclick="showConfirmDialog(event,'你确定要删除该权限信息吗？','javaScript:closeWindow()','delPer(|${per.id}|);');"><img src="${uri.imgsite}/shanchu.png" title="删除" />&nbsp;</a> 
+          	    			
+       	    	
+	       	    </td>
+     	    </tr>
+     	    <tr class="contentTr">
+      	    	<td colspan="4" ><div id="${per.id}" class="showViewStyle"></div></td>
+   	 		</tr>
+  			</#list>
+  		<#else>
+  			<tr class="table_td"><td colspan="4" align="center">没有符合条件的结果。</td></tr>
+     	</#if>
+     	 
+   	  </table>
+	<#include "../decorators/page.htm" />
+</div>
+ <div style="display: none;">
+ 	<a id="delSuccessed" href="#" onclick="showMessageDialog(event,'权限删除成功！','javaScript:queryRoleList();','closeWindow();');" ></a>
+ 	<a id="delFailed" href="#" onclick="showMessageDialog(event,'权限删除失败！','','');" ></a>
+ </div>
+ </div>
+</div>      
+  <script type="text/javascript">
+			function delPer(perId){
+				var param = null;
+				var postmethod = "get";
+				var url ="<@spring.url '/permissionController/delper.htm?perId="+perId+"'/>";
+				$.ajax({
+					   type: postmethod,
+					   cache: false,
+					   url: url,
+					   data : param,
+					   success: function(data){
+						if(data == 'true'){
+							tip(1,true);
+							return;
+						}
+						if(data == 'false'){
+							tip(1,false);
+							return;
+						}
+						showMessageDialog(null,data,'','');
+					   },
+					   error:function(xhr,err){ 
+					}
+				});
+			}
+
+
+			function tip(type,bool){
+				if(type == 1){
+					if(bool){
+						document.getElementById("delSuccessed").click();
+						return;
+					}
+					document.getElementById("delFailed").click();
+				}
+			}
+			
+			function queryRoleList(){
+				window.location = '<@spring.url '/permissionController/tolistper.htm?li=li11&div=div_1&menuOrder=0'/>';
+			}
+			
+			function targetPage(pageIndex){
+				window.location = '<@spring.url "/permissionController/tolistper.htm?li=li11&div=div_1&menuOrder=0&pageIndex='+pageIndex+'"/>';
+			}
+
+       </script>
+  
+  <!--right end-->
+  

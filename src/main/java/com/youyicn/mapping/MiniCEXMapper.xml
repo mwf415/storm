@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.youyicn.dao.cycle.CEXMapper" >
+  <resultMap id="BaseResultMap" type="com.youyicn.entity.cycle.MiniCEX" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="kgName" property="kgName" jdbcType="VARCHAR" />
+    <result column="kgNum" property="kgNum" jdbcType="VARCHAR" />
+    <result column="gradeDate" property="gradeDate" jdbcType="DATE" />
+    <result column="gradeTime" property="gradeTime" jdbcType="VARCHAR" />
+    <result column="ksName" property="ksName" jdbcType="VARCHAR" />
+    <result column="ksNum" property="ksNum" jdbcType="VARCHAR" />
+    <result column="ksIdentity" property="ksIdentity" jdbcType="VARCHAR" />
+    <result column="khaddress" property="khaddress" jdbcType="VARCHAR" />
+    <result column="khmudi" property="khmudi" jdbcType="VARCHAR" />
+    <result column="blh" property="blh" jdbcType="VARCHAR" />
+    <result column="bage" property="bage" jdbcType="VARCHAR" />
+    <result column="bsex" property="bsex" jdbcType="VARCHAR" />
+    <result column="bfh" property="bfh" jdbcType="VARCHAR" />
+    <result column="bch" property="bch" jdbcType="VARCHAR" />
+    <result column="isFirst" property="isFirst" jdbcType="VARCHAR" />
+    <result column="complexDegree" property="complexDegree" jdbcType="VARCHAR" />
+    <result column="coordination" property="coordination" jdbcType="VARCHAR" />
+    <result column="internship" property="internship" jdbcType="VARCHAR" />
+    <result column="mtjq" property="mtjq" jdbcType="VARCHAR" />
+    <result column="f1" property="f1" jdbcType="VARCHAR" />
+    <result column="tgjc" property="tgjc" jdbcType="VARCHAR" />
+    <result column="f2" property="f2" jdbcType="VARCHAR" />
+    <result column="zysy" property="zysy" jdbcType="VARCHAR" />
+    <result column="f3" property="f3" jdbcType="VARCHAR" />
+    <result column="lcpd" property="lcpd" jdbcType="VARCHAR" />
+    <result column="f4" property="f4" jdbcType="VARCHAR" />
+    <result column="zxjy" property="zxjy" jdbcType="VARCHAR" />
+    <result column="f5" property="f5" jdbcType="VARCHAR" />
+    <result column="zznl" property="zznl" jdbcType="VARCHAR" />
+    <result column="f6" property="f6" jdbcType="VARCHAR" />
+    <result column="ztlc" property="ztlc" jdbcType="VARCHAR" />
+    <result column="f7" property="f7" jdbcType="VARCHAR" />
+    <result column="kgmy" property="kgmy" jdbcType="VARCHAR" />
+    <result column="k1" property="k1" jdbcType="VARCHAR" />
+    <result column="ksmy" property="ksmy" jdbcType="VARCHAR" />
+    <result column="k2" property="k2" jdbcType="VARCHAR" />
+    <result column="fkyd" property="fkyd" jdbcType="VARCHAR" />
+    <result column="wcjh" property="wcjh" jdbcType="VARCHAR" />
+    <result column="kygj" property="kygj" jdbcType="VARCHAR" />
+    <result column="bzbf" property="bzbf" jdbcType="VARCHAR" />
+    <result column="ztyx" property="ztyx" jdbcType="VARCHAR" />
+    <result column="gcTime" property="gcTime" jdbcType="VARCHAR" />
+    <result column="hkTime" property="hkTime" jdbcType="VARCHAR" />
+     <result column="score" property="score" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.youyicn.entity.cycle.MiniCEX" >
+    insert into cycle_cex (
+	    kgName,kgNum,gradeDate,gradeTime,ksName,ksNum,ksIdentity,khaddress,khmudi,blh,bage,bsex,bfh,bch,
+		isFirst,complexDegree,coordination,internship,mtjq,f1,tgjc,f2,zysy,f3,lcpd,f4,zxjy,f5,zznl,
+		f6,ztlc,f7,kgmy,k1,ksmy,k2,fkyd,wcjh,kygj,bzbf,ztyx,gcTime,hkTime,score
+      )
+    values ( #{kgName},#{kgNum},
+				#{gradeDate},
+				#{gradeTime},
+				#{ksName},
+				#{ksNum},
+				#{ksIdentity},
+				#{khaddress},
+				#{khmudi},
+				#{blh},
+				#{bage},
+				#{bsex},
+				#{bfh},
+				#{bch},
+				#{isFirst},
+				#{complexDegree},
+				#{coordination},
+				#{internship},
+				#{mtjq},
+				#{f1},
+				#{tgjc},
+				#{f2},
+				#{zysy},
+				#{f3},
+				#{lcpd},
+				#{f4},
+				#{zxjy},
+				#{f5},
+				#{zznl},
+				#{f6},
+				#{ztlc},
+				#{f7},
+				#{kgmy},
+				#{k1},
+				#{ksmy},
+				#{k2},
+				#{fkyd},
+				#{wcjh},
+				#{kygj},
+				#{bzbf},
+				#{ztyx},
+				#{gcTime},
+				#{hkTime},
+				#{score}
+      )
+  </insert>
+  
+    <select id="findAll" resultMap="BaseResultMap" >
+  	 select * from cycle_cex where 1=1
+  	 	<if test="ksName!=null">
+			and ksName=#{ksName}
+		</if>
+		<if test="ksNum!=null">
+			and ksNum=#{ksNum}
+		</if>
+		<if test="gradeDate!=null">
+			and gradeDate=#{gradeDate}
+		</if>
+		order by id desc
+  	</select>
+  	
+  	<select id="findById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+  	 select *  from cycle_cex where id = #{id,jdbcType=BIGINT}
+  	</select>
+  	
+  	<delete id="deleteById" parameterType="java.lang.Integer" >
+    	delete from cycle_cex where id = #{id,jdbcType=BIGINT}
+    </delete>
+    
+     <update id="updateById" parameterType="com.youyicn.entity.cycle.MiniCEX" >
+	    update cycle_cex
+	    set kgName=#{kgName},
+			kgNum=#{kgNum},                
+			gradeDate=#{gradeDate},          
+			gradeTime=#{gradeTime},        
+			ksName=#{ksName},              
+			ksNum=#{ksNum},                
+			ksIdentity=#{ksIdentity},      
+			khaddress=#{khaddress},        
+			khmudi=#{khmudi},              
+			blh=#{blh},                    
+			bage=#{bage},                  
+			bsex=#{bsex},                  
+			bfh=#{bfh},                    
+			bch=#{bch},                    
+			isFirst=#{isFirst},            
+			complexDegree=#{complexDegree},
+			coordination=#{coordination},  
+			internship=#{internship},      
+			mtjq=#{mtjq},                  
+			f1=#{f1},                      
+			tgjc=#{tgjc},                  
+			f2=#{f2},                      
+			zysy=#{zysy},                  
+			f3=#{f3},                      
+			lcpd=#{lcpd},                  
+			f4=#{f4},                      
+			zxjy=#{zxjy},                  
+			f5=#{f5},                      
+			zznl=#{zznl},                  
+			f6=#{f6},                      
+			ztlc=#{ztlc},                  
+			f7=#{f7},                      
+			kgmy=#{kgmy},                  
+			k1=#{k1},                      
+			ksmy=#{ksmy},                  
+			k2=#{k2},                      
+			fkyd=#{fkyd},                  
+			wcjh=#{wcjh},                  
+			kygj=#{kygj},                  
+			bzbf=#{bzbf},                  
+			ztyx=#{ztyx},
+			gcTime=#{gcTime},
+			hkTime=#{hkTime},
+			score=#{score}                   
+
+	    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+
+   
+  
+</mapper>

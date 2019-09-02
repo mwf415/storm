@@ -1,0 +1,119 @@
+<#import "/decorators/uri.ftl" as uri />
+<#import "/decorators/util.ftl" as util />
+<#import "/decorators/spring.ftl" as spring />
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"> 
+	<title>Bootstrap 实例 - 折叠面板</title>
+	<link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+
+<ul class="nav nav-tabs">
+	<li class="dropdown active">
+		<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+			 菜单 <span class="caret"></span>
+		</a>
+
+		<ul class="dropdown-menu">
+			<li>
+				<a href="javascript:void(0);" onclick="changeTop('che')">教学</a>
+			</li>
+			<li>
+				<a href="javascript:void(0);" onclick="changeTop('soap')">考评</a>
+			</li>
+			<li class="divider"></li>
+			<li>
+				<a href="javascript:void(0);" onclick="changeTop('test')">考试</a>
+			</li>
+		</ul>
+	</li>
+	<li><a>考试</a></li>
+	
+	<li style ="float:right;"><a href="<@spring.url '/wap/loginout.htm'/>">退出</a></li>
+	<li style ="float:right;"><a >张三</a></li>
+</ul>
+
+
+<table class="table ">
+  <tbody>
+	<tr>
+	  <td><img src="4.png" class="img-rounded" title="单个练习"></td>
+	  <td><img src="4.png" class="img-rounded" title ="参加考试"></td>
+	  <td><img src="4.png" class="img-rounded" title ="收藏"></td>
+	</tr>								
+  </tbody>
+</table>
+
+<!---->
+
+
+<div class="panel-group" id="accordion">
+	<div class="panel panel-primary">
+		<div class="panel-heading">
+			<h4 class="panel-title">
+				<a data-toggle="collapse" data-parent="#accordion" 
+				   href="#collapseOne">
+					关于***的学习
+				</a>
+			</h4>
+		</div>
+		<div id="collapseOne" class="panel-collapse collapse in">
+			<div class="panel-body">
+				时间：</br>
+				地点：</br>
+				老师：</br>
+				问题：
+			</div>
+		</div>
+	</div>
+	<div class="panel panel-primary">
+		<div class="panel-heading">
+			<h4 class="panel-title">
+				<a data-toggle="collapse" data-parent="#accordion" 
+				   href="#collapseTwo">
+					关于***的学习
+				</a>
+			</h4>
+		</div>
+		<div id="collapseTwo" class="panel-collapse collapse">
+			<div class="panel-body">
+				时间：</br>
+				地点：</br>
+				老师：</br>
+				问题：
+			</div>
+		</div>
+	</div>
+	<div class="panel panel-primary">
+		<div class="panel-heading">
+			<h4 class="panel-title">
+				<a data-toggle="collapse" data-parent="#accordion" 
+				   href="#collapseThree">
+					关于***的学习
+				</a>
+			</h4>
+		</div>
+		<div id="collapseThree" class="panel-collapse collapse">
+			<div class="panel-body">
+				时间：</br>
+				地点：</br>
+				老师：</br>
+				问题：
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+function changeTop(top){
+	url ="<@spring.url '/index/wap_index.htm?top=" + top+ "'/>";
+	window.location =url;
+}
+
+</script>
+</body>
+</html>

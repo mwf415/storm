@@ -1,0 +1,240 @@
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<#import "../decorators/spring.ftl" as spring />
+<!DOCTYPE html>
+<html >
+<head>
+<#include "../decorators/headtitle.ftl" >
+</head>
+<body>
+<#include "../decorators/left1.ftl" >
+<!--right-->
+<div class="main_right" id="right">
+	<div class="right_con">
+	<div id="dataDiv">
+		<div class="main_search">
+			<form id="searchform2">
+				<div style="border: 0px solid silver;height: 30px;padding-top: 3px;">
+					开始时间：
+						<input id="searchStart" type="text" name="searchStart" />
+							<img onclick="WdatePicker({el:'searchStart',dateFmt:'yyyy-MM-dd'})" 
+									src="${uri.jssite}/My97DatePicker/skin/datePicker.gif" width="16" height="22" align="absmiddle">	
+									
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp; 	
+					结束时间：
+						<input id="searchEnd" type="text" name="searchEnd" />
+							<img onclick="WdatePicker({el:'searchEnd',dateFmt:'yyyy-MM-dd'})" 
+									src="${uri.jssite}/My97DatePicker/skin/datePicker.gif" width="16" height="22" align="absmiddle">	
+					&nbsp;&nbsp;&nbsp;&nbsp;
+					
+						<input type="hidden" name="li" value="${li!}"/>
+						<input type="hidden" name="div" value="${div!}"/>
+						<input type="hidden" name="type" value="${type!}"/>
+						<input type="hidden" name="pageIndex" value="${pageIndex!'1'}"/>
+						
+						<#if type?? && type=="s">
+							<div class="btn-group btn-group-sm">
+							    <button type="button" class="btn btn-primary"  onclick="sQuery('0')">未参加</button>
+							    <button type="button" class="btn btn-primary"  onclick="sQuery('1')">已参加</button>
+							</div>
+						<#else>
+							<button type="button" class="btn btn-danger btn-sm" onclick="queryList()" >搜 索</button>
+						</#if>
+				</div>
+			</form>
+		</div>
+		<!-- 显示数据的div -->
+			<div style="border: 1px solid #ccc ;margin-top: 10px;" >
+				<div class="main_right" id="right">
+					<table class="table table-bordered table-hover">
+						<tr class="table_title">
+							<td width="7%">科室</td>
+							<td width="7%">责任老师</td>
+							<#if type?? && type=="s">
+							<#else>
+								<td width="7%">学生情况</td>
+							</#if>
+							<td width="10%">开始时间</td>
+							<#if status ?? && (status ==6 || status ==7)> 
+								<td width="15%">疾病名称</td>
+								<td width="7%">病人姓名</td>
+								<td width="5%">病案号</td>
+							<#elseif status?? && (status ==4 ||status ==5|| status ==8 || status ==9)>
+								<td width="12%">标题</td>
+							</#if>
+							<td width="7%">地点</td>
+							<td width="4%">时长</td>
+							<td width="13%">操作</td>
+							<td width="6%">来源</td>
+						</tr>
+						<#if page.list ?? && page.list ?size gt 0>
+						<#list page.list  as au>
+						<tr class="table_td">
+							<td>
+								<#if au.actives ?? >
+									${au.actives.roomName!}
+								</#if>
+							</td>
+							<td>
+								<#if au.actives ?? >
+									<#if status ?? && status==5>
+									<#else>		
+										<a href="javaScript:activesDetail('${au.actives.id!}');" > 
+								          	<span class="glyphicon glyphicon-align-justify"></span>
+								        </a>&nbsp;&nbsp;
+								     </#if>
+								
+								
+									<#if au.actives.activesUsers??>
+									<#list au.actives.activesUsers as au1>
+											<#if au1.identityId==1>${au1.name}&nbsp;</#if>
+									</#list>
+									</#if>
+								</#if>
+							</td>
+							<#if type?? && type=="s">
+							<#else>
+								<td>
+									<#if au.actives ?? >
+										<#if status ?? && status==5>
+											<#if au.actives.activesUsers??>
+											<#list au.actives.activesUsers as au1>
+											<#if au1.identityId==2>${au1.name}&nbsp;</#if>								
+											</#list>
+											</#if>
+										<#else>
+											<button type="button" class="btn btn-primary btn-xs"  onclick="pop_userinfo(event,'<@spring.url '/questCont/questSee.htm?li=${li!}&div=${div!}&menuOrder=${menuOrder!}&type=${type!}&activesId=${au.actives.id}'/>')">查看详情</button> 
+										</#if>
+									</#if>
+								</td>
+							</#if>
+							<td>
+								<#if au.actives ?? >
+									${au.actives.startTime[0..15]}
+								</#if>
+							</td>
+							<#if status?? && (status ==6 || status ==7)> 
+								<#if au.actives ?? >
+									<td>${au.actives.title!}</td>
+									<td>${au.actives.sickPerson!}</td>
+									<td>${au.actives.sickNum!}</td>
+								</#if>
+							<#elseif status?? && (status ==4 ||status ==5|| status ==8 || status ==9)>
+								<#if au.actives ?? >
+									<td>${au.actives.title!}</td>
+								</#if>
+							</#if>
+							<td>
+								<#if au.actives ?? >
+									${au.actives.address!}
+								</#if>
+							</td>
+							
+							<td>
+								<#if au.actives ?? >
+									${au.actives.takeTime!}
+								</#if>
+							</td>
+							
+							
+							<td>
+							<#if status?? && status==4>
+								<#if au.actives ?? >
+									<button type="button" class="btn btn-primary btn-xs"  onclick="pop_userinfo(event,'<@spring.url '/inLearn/ziliao_detail.htm?roomName=${au.actives.roomName!}'/>')">入科资料</button>
+								</#if>
+								
+							<#else>
+								<#if type?? && type=="t">
+									<#if au.actives ?? >
+										<button type="button" class="btn btn-primary btn-xs"  onclick="pop_userinfo(event,'<@spring.url '/file/upfile.htm?id=${au.activesId!}'/>')">上传资料</button>
+										<button type="button" class="btn btn-primary btn-xs"  onclick="pop_userinfo(event,'<@spring.url '/questController/add.htm?activesId=${au.activesId!}'/>')">问题操作</button>
+										<button type="button" class="btn btn-primary btn-xs"  onclick="pop_userinfo(event,'<@spring.url '/file/filelist.htm?activesId=${au.activesId!}'/>')">查看资料</button>
+									</#if>
+
+								<#else>
+									<#if au.actives ?? >
+										<button type="button" class="btn btn-primary btn-xs"  onclick="pop_userinfo(event,'<@spring.url '/file/filelist.htm?activesId=${au.activesId!}'/>')">查看资料</button>
+										<button type="button" class="btn btn-primary btn-xs"  onclick="pop_userinfo(event,'<@spring.url '/questCont/questSee.htm?activesId=${au.activesId!}'/>')">查看问题</button>
+									</#if>
+								</#if>
+							</#if>
+							</td> 
+							<td>
+								<#if au.actives ?? >
+									${au.actives.org!}					
+								</#if>
+							</td>
+						</tr>
+						
+						<tr class="contentTr">
+			      	    	<td colspan="12" >
+			      	    		<div id="${au.activesId!}" class="showViewStyle"></div>
+			      	    	</td>
+			   	 		</tr>
+						</#list>
+						<#else>
+				  			<tr class="table_td"><td colspan="12" align="center">没有符合条件的结果。</td></tr>
+						</#if>
+					</table>
+				<#include "../decorators/page.htm" />
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+function sQuery(id){
+	var searchStart=$("#searchStart").val();
+	var searchEnd=$("#searchEnd").val();
+	var url ="<@spring.url '/activesCont/index.htm?isIn="+id+"&searchStart="+searchStart+"&searchEnd="+searchEnd+"&type=${type!}&div=${div!}&li=${li!}&menuOrder=${menuOrder}'/>";
+	window.location=url;
+}
+
+function targetPage(pageIndex){
+	window.location = '<@spring.url "/activesCont/index.htm?li=${li!}&type=${type!}&div=${div!}&menuOrder=0&searchEnd=${searchEnd!}&searchStart=${searchStart!}&teachernum=${teachernum!}&pageIndex='+pageIndex+'"/>';
+}
+
+function queryList(){
+	var url ="<@spring.url '/activesCont/index.htm?targetID=dataDiv&formID=searchform'/>";
+	ajaxFormRequest("{url:'"+url+"',id:'dataDiv',form:'searchform'}");
+}
+
+function questSum(){
+	CKupdate();
+	var result = confirm('是否添加！');
+	if (result) {
+		var url = "<@spring.url '/questController/qusetsum.htm'/>";
+		$("#planAdd8").attr("action",url).submit();
+		closeWindow("mesWindowUsr");
+	} else {
+		alert('不添加');
+	}
+}
+
+//文本框 ckeditor上传需要转换成能够controller接受的
+function CKupdate() {
+    for (instance in CKEDITOR.instances)
+        CKEDITOR.instances[instance].updateElement();
+}
+
+function delActivesQuest(activesId){
+	if (window.confirm('你确定要删除吗？会把学生回答该问题也会一起删除，你确定吗？')) {
+		var url = "<@spring.url '/questController/qusetdel.htm?activesId="+activesId+"'/>";
+		window.location=url;
+		closeWindow("mesWindowUsr");
+	}
+}
+
+function chefileDown(name){
+	var url ="<@spring.url '/file/filedown.htm?fileParm=" + name + "'/>";
+	window.location = url;
+}
+
+function activesDetail(id){
+	var url ="<@spring.url '/activesCont/show.htm?activesId="+id+"&menuOrder=${menuOrder!}&status=${status!}&type=${type!}&div=${div!}&li=${li!}'/>";
+	showView(id,url);
+}
+</script>
+
+</body>
+</html>

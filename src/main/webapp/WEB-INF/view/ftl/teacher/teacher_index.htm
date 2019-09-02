@@ -1,0 +1,158 @@
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<#import "../decorators/spring.ftl" as spring />
+<!DOCTYPE html>
+<html >
+<head><#include "../decorators/headtitle.ftl" >
+</head>
+<body>
+<!--right-->
+<#include "../decorators/left1.ftl" ><div class="main_right" id="right">
+	<div class="right_con">
+	
+		<div class="main_search">
+			<form id="searchform" style="height: 30px;">
+				用户名 <input name="userName" type="text" value=""  id="userName"class="validate[custom[chineseAndLetterAndNumber]]" maxlength="18"/> &nbsp; 
+				手机号码 <input name="phoneNum" type="text" value="" size="14"id="phoneNum"  class="validate[custom[mobilephone]]"/>&nbsp; 
+				专业基地 <select name="baseName" id="baseName"> 
+					<#if baseNamed??>
+						<option value="${baseNamed}" selected="selected">${baseNamed}</option>
+					</#if>
+						<option value="">请选择</option>											
+						<#list baseValues as baseValue>
+						<option value="${baseValue.value}">${baseValue.value}</option>
+						</#list>					
+					  </select>&nbsp; 
+					  &nbsp; 
+				所在科室 <select name="roomName" id="roomName"> 
+					<#if roomNamed??>
+						<option value="${roomNamed}" selected="selected">${roomNamed}</option>
+					</#if>
+						<option value="">请选择</option>											
+						<#list roomValues as roomValue>
+						<option value="${roomValue.value}">${roomValue.value}</option>
+						</#list>					
+					  </select>&nbsp; 
+					  &nbsp;
+					  
+					<input  type="button" value="搜 索" class="look_02" onclick="querySerchList();"/>
+			<#if (loginSession.priMap["1011"])!'false' == "true">
+			<span style="float: right;"><a href="<@spring.url '/teacherContrller/teacher_add.htm?li=li10&div=div_1&menuOrder=0'/>"><img src="${uri.imgsite}/xiugai.png" title="添加教师"/>添加教师</a></span>
+			</#if>
+			</form>
+		</div>
+		
+		<table class="table table-bordered table-hover">
+		<tr class="table_title">
+			<td width="4%">编号</td>
+			<td width="8%">老师姓名</td>
+			<td width="8%">专业基地</td>
+			<td width="8%">科室</td>
+			<td width="8%">毕业院校</td>
+			<td width="8%">电话</td>
+			<td width="8%">学位</td>
+			<td width="8%">职称</td>
+			<td width="30%">操作</td>
+		</tr>
+		<#if page.list?? && page.list?size gt 0>
+		<#list page.list as teacher>
+		<tr class="table_td">
+			<td>${teacher.loginName!}</td>
+			<td>${teacher.realName!}</td>
+			<td>${teacher.baseName!}</td>
+			<td>${teacher.roomName!}</td>
+			<td>${teacher.gradSchool!}</td>
+			<td>${teacher.telPhone!}</td>
+			<td>${teacher.xuewei!}</td>
+			<td>${teacher.staff!}</td>
+			<td>
+			<#if (loginSession.priMap["1012"])!'false' == "true">
+			<a href="<@spring.url '/teacherController/showDetail.htm?userId=${teacher.userId}&li=li10&div=div_1&menuOrder=0'/>"><img src="${uri.imgsite}/chakan.png" title="查看" />&nbsp;</a> 
+			</#if><#if (loginSession.priMap["1013"])!'false' == "true">
+			<a href="<@spring.url '/teacherController/teacher_edit.htm?userId=${teacher.userId}&li=li10&div=div_1&menuOrder=0'/>"><img src="${uri.imgsite}/xiugai.png" title="修改"/>&nbsp;</a>
+			</#if><#if (loginSession.priMap["1014"])!'false' == "true">
+			<a href="#" onclick="showConfirmDialog(event,'你确定要删除该教师信息吗？','javaScript:closeWindow()','delTeacher(|${teacher.userId}|);');"><img src="${uri.imgsite}/shanchu.png" title="删除" />&nbsp;</a>  
+			</#if><#if (loginSession.priMap["1015"])!'false' == "true">
+			<a href="<@spring.url '/teacherController/toassignprivilege.htm?userId=${teacher.userId}&li=li10&div=div_1&menuOrder=0'/>"><img src="${uri.imgsite}/chuli.png" title="权限分配"/>&nbsp;</a>  
+			</#if>
+		</tr>
+		</#list>
+		<#else>
+  			<tr class="table_td"><td colspan="12" align="center">没有符合条件的结果。</td></tr>
+		</#if>
+	</table>
+	<#include "../decorators/page.htm" />
+
+</div>
+
+	 <div style="display: none;">
+	 	<a id="delSuccessed" href="#" onclick="showMessageDialog(event,'教师删除成功！','javaScript:queryRoleList();','closeWindow();');" ></a>
+	 	<a id="delFailed" href="#" onclick="showMessageDialog(event,'教师删除失败！','','');" ></a>
+	 </div>
+	</div>
+</div>
+<!--right end-->
+<script type="text/javascript">
+function delTeacher(tId){
+	var param = null;
+	var postmethod = "get";
+	var url ="<@spring.url '/teachController/teachDel.htm?userId="+tId+"'/>";
+	$.ajax({
+		   type: postmethod,
+		   cache: false,
+		   url: url,
+		   data : param,
+		   success: function(data){
+			if(data == 'true'){
+				tip(1,true);
+				return;
+			}
+			if(data == 'false'){
+				tip(1,false);
+				return;
+			}
+			showMessageDialog(null,data,'','');
+		   },
+		   error:function(xhr,err){ 
+		}
+	});
+}
+
+function tip(type,bool){
+	if(type == 1){
+		if(bool){
+			document.getElementById("delSuccessed").click();
+			return;
+		}
+		document.getElementById("delFailed").click();
+	}
+}
+
+function queryRoleList(){
+	window.location = '<@spring.url "/teacherController/teacher_index.htm?li=li10&div=div_1&menuOrder=0"/>';
+}
+
+function targetPage(pageIndex){
+	var userName = $("#userName").val();
+	var phoneNum = $("#phoneNum").val();
+	var baseName = $("#baseName").val();
+	var roomName = $("#roomName").val();
+	window.location = '<@spring.url "/teacherController/teacher_index.htm?li=li10&div=div_1&menuOrder=0&pageIndex='+pageIndex+'&userName='+userName+'&phoneNum='+phoneNum+'&baseName='+baseName+'&roomName='+roomName+'"/>';
+}
+
+function querySerchList(){
+	if(!$("#searchform").validationEngine("validateField","#userName")){
+		var userName = $("#userName").val();
+		var phoneNum = $("#phoneNum").val();
+		var baseName = $("#baseName").val();
+		var roomName = $("#roomName").val();
+		window.location = '<@spring.url "/teacherController/teacher_index.htm?li=li10&div=div_1&menuOrder=0&userName='+userName+'&phoneNum='+phoneNum+'&baseName='+baseName+'&roomName='+roomName+'"/>';
+		}
+}
+
+</script>
+<!--right end-->
+
+
+</body>
+</html>

@@ -1,0 +1,102 @@
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<#import "../decorators/spring.ftl" as spring />
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html >
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+</head>
+<body>
+<!--right-->
+<#include "../decorators/left1.ftl" ><div class="main_right" id="right">
+	<div class="rig_tab">
+		<div class="rig_tab2">
+			<form id="upform">
+			    <h1>权限修改 <span>(注：带*为必填项)</span></h1>
+				<table class="table table-hover  table-bordered" >
+					<tr style="display: none;">
+						<td colspan="2"><input type="text" name="perId" value="${per.id!}" /></td>
+					</tr>
+					<tr>
+						<td width="21%" class="td_right"><em>*</em> 权限名称</td>
+						<td width="79%"><input type="text" name="perName" id="perName" value="${per.name!}" class="validate[required,maxSize[50]] text-input" readonly="readonly"/><a></a></td>
+					</tr>
+	                <tr>
+	                	<td class="td_right"><em>*</em> 权限ID</td>
+	                    <td width="79%"><input type="text" name="perUrl" id="perUrl" value="${per.url!}" class="validate[required,maxSize[100]] text-input" /><a></a></td>
+	                </tr>
+	                <tr>
+	                	<td class="td_right"><em>*</em> 权限PID</td>
+	                    <td width="79%"><input type="text" name="perPid" id="perPid" value="${per.pid!}" class="validate[required,maxSize[100]] text-input" /><a></a></td>
+	                </tr>
+	            	<tr class="button_tr">
+	                	<td>&nbsp;</td>
+	               	 	<td>
+		               	 	<input name="submit" type="submit" value="修 改" class="main_button"/> 	 
+		               	 	<input name="reset" type="button" value="重 置" class="main_button" onclick="window.location=('<@spring.url '/permissionController/toupdateper.htm?perId=${per.id}&li=li11&div=div_1&menuOrder=0'/>')"/> 
+		               	 	<input type="button" class="main_button" value="返 回" onclick="window.location=('<@spring.url '/permissionController/tolistper.htm?li=li11&div=div_1&menuOrder=0'/>')"/>
+	               	 	</td>
+					</tr>   
+				</table>
+			</form>
+		 </div>
+	</div>
+</div>
+
+ <div style="display: none;">
+        	<a id="updateSuccessed" href="#" onclick="showMessageDialog(event,'权限修改成功','<@spring.url '/permissionController/tolistper.htm?li=li11&div=div_1&menuOrder=0'/>','closeWindow();');" ></a>
+        	<a id="updateFailed" href="#" onclick="showMessageDialog(event,'操作失败','','');" ></a>
+ </div>
+
+<script>
+	function update(){
+		var param = null;
+		var postmethod = "POST";
+		var url ="<@spring.url '/permissionController/updateper.htm'/>";
+		var param = $("#upform").serialize();
+		$.ajax({
+			   type: postmethod,
+			   cache: false,
+			   url: url,
+			   data : param,
+			   success: function(data){
+				if(data == 'true'){
+					tip(1,true);
+					return;
+				}
+				tip(1,false);
+			   },
+			   error:function(xhr,err){
+				   window.location.href=url; 
+			}
+		});
+	}
+
+
+	function tip(type,bool){
+		if(type == 1){
+			if(bool){
+				document.getElementById("updateSuccessed").click();
+				return;
+			}
+			document.getElementById("updateFailed").click();
+		}
+	}
+
+
+   jQuery(document).ready(function(){
+          jQuery("#upform").validationEngine('attach', {
+        	  isOverflown: true,
+  	        overflownDIV: "#right",
+            onValidationComplete: function(form, status){
+                if(status == true)
+                	update();
+            }  
+          })
+    });
+</script>
+
+</body>
+</html>

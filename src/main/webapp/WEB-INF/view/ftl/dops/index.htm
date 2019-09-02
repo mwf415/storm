@@ -1,0 +1,97 @@
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<#import "../decorators/spring.ftl" as spring />
+<html >
+<head>
+
+<#include "../decorators/headtitle.ftl" >
+</head>
+<body>
+<!--right-->
+
+<#include "../decorators/left1.ftl" >
+<div class="main_right" id="right">
+	<div class="right_con">
+			<div class="main_search">
+				<form id="searchform" style="height: 30px;">
+					考生姓名 <input name="ksName" type="text" id="ksName" maxlength="18"/> &nbsp; 
+					考生工号 <input name="ksNum" type="text"  size="14" id="ksNum"  />&nbsp; 
+					<!-- 考核时间<input type="text" name="gradeDate" id="gradeDate"/><img onclick="WdatePicker({el:'gradeDate',dateFmt:'yyyy-MM-dd',maxDate:'%y-%M-%d'})" 
+						src="${uri.jssite}/My97DatePicker/skin/datePicker.gif" width="16" height="22" align="absmiddle"> -->
+					
+						<input  type="button" value="搜 索" class="look_02" onclick="querySerchList();"/>
+				<!-- <span style="float: right;"><a href="<@spring.url "/dopsController/add_dops.htm?li=li914&div=div_9&menuOrder=0"/>"><img src="${uri.imgsite}/xiugai.png" title="新增DOPS考评"/>新增DOPS考评</a></span> -->
+				</form>
+			</div>
+		<table class="table table-bordered table-hover">
+	     	<tr class="table_title">
+     	    <td width="5%">编号</td>
+     	   	<td width="15%">考生姓名</td>
+	        <td width="15%">考生工号</td>
+	        <td width="15%">考官姓名</td>
+	        <td width="35%" >操作</td>
+   	      </tr>
+	       	<#if page.list?? && page.list?size gt 0>
+  			<#list page.list as cex>
+    		<tr class="table_td">
+	       	    <td>${cex.activesId!}</td>
+	       	    <td>${cex.ksName!}</td>
+	       	    <td>${cex.ksNum!}</td>
+	       	    <td>${cex.kgName!}</td> 
+	       	    <!-- <td>${cex.kgNum!}</td>   -->
+	       	    <td>
+	       	    	<#if  cex.flag ?? && cex.flag == "0"  > 
+		       	    	<#if type ?? && type=="r" > 
+			       	    	<button type="button" class="btn btn-danger btn-xs" onclick="addDops('${cex.id!}')">
+			       	    		添加DOPS
+			       	    	</button>
+	       	    		<#else> 没有添加DOPS考评
+	       	    		</#if>
+	       	    	<#elseif cex.flag ?? && cex.flag == "1">      
+	       	    		<button type="button" class="btn btn-primary btn-xs" onclick="dopsview('${cex.id}')" > 查看
+						</button>
+						<#if type ?? && type=="r" > 
+			       	    	<button type="button" class="btn btn-warning btn-xs" onclick="updatedops('${cex.id}')" > 修改
+		       	    		</button>
+	       	    		</#if>
+       	    		</#if>
+	       	    </td>
+     	    </tr>
+     	    <tr class="contentTr">
+      	    	<td colspan="6" ><div id="${cex.id}" class="showViewStyle"></div></td>
+   	 		</tr>
+  			</#list>
+  		<#else>
+  			<tr class="table_td"><td colspan="6" align="center">没有符合条件的结果。</td></tr>
+     	</#if>
+   	  </table>
+   	  <#include "../decorators/page.htm" />
+</div>
+</div>      
+  <script type="text/javascript">		
+	function addDops(id){
+	   window.location = '<@spring.url "/dopsController/add_dops.htm?li=${li!}&div=${div!}&menuOrder=${menuOrder!}&id='+id+'"/>';
+	}
+	function dopsview(id){
+		window.location = '<@spring.url "/dopsController/dopsview.htm?&li=${li!}&div=${div!}&menuOrder=${menuOrder!}&id='+id+'"/>';
+	}
+	function updatedops(id){
+		window.location = '<@spring.url "/dopsController/toupdatedops.htm?id=&li=${li!}&div=${div!}&menuOrder=${menuOrder!}&id='+id+'"/>';
+	}
+		
+	function targetPage(pageIndex){
+		var ksName = $("#ksName").val();
+		var ksNum = $("#ksNum").val();
+		var gradeDate = $("#gradeDate").val();				
+		window.location = '<@spring.url "/dopsController/list.htm?li=li914&div=div_9&menuOrder=0&pageIndex='+pageIndex+'&ksName='+ksName+'&ksNum='+ksNum+'&gradeDate='+gradeDate+'"/>';
+	}
+		   
+   function querySerchList(){
+		var ksName = $("#ksName").val();
+		var ksNum = $("#ksNum").val();
+		var gradeDate = $("#gradeDate").val();
+		window.location = '<@spring.url "/dopsController/list.htm?li=li914&div=div_9&menuOrder=0&ksName='+ksName+'&ksNum='+ksNum+'&gradeDate='+gradeDate+'"/>';
+	}
+</script>
+</body>
+</html>

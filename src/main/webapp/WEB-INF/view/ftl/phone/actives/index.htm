@@ -1,0 +1,173 @@
+<#import "../../decorators/uri.ftl" as uri />
+<#import "../../decorators/util.ftl" as util />
+<#import "../../decorators/spring.ftl" as spring />
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0" />
+<#include "../../decorators/headtitle.ftl" >
+
+</head>
+<body style="margin:20px;">
+
+<ul class="nav nav-tabs">
+	<li class="dropdown active">
+		<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+			 菜单 <span class="caret"></span>
+		</a>		
+		<ul class="dropdown-menu">
+			<li>
+				<a href="javascript:void(0);" >教学</a>
+			</li>
+			<li>
+				<a href="javascript:void(0);" onclick="kaoping()">考评</a>
+			</li>
+			<li class="divider"></li>
+			<li>
+				<a href="javascript:void(0);" onclick="changeTop('test')">考试</a>
+			</li>
+			<li>
+				<a href="<@spring.url '/getBookRoom/index.htm'/>" >教室</a>
+			</li>
+		</ul>
+		
+	</li>
+	<li><a href="#">教学</a></li>
+	
+	<li style ="float:right;"><a href="<@spring.url '/wap/loginout.htm'/>">退出</a></li>
+	<li style ="float:right;"><a >${loginName!}</a></li>
+</ul>
+	<table class="table ">
+	  <tbody>
+		  <tr>
+		<td>
+        <a href="<@spring.url '/activesCont/index.htm?li=li54&div=div_5&menuOrder=5&type=s'/>" class="btn btn-info " >
+          <span class="glyphicon glyphicon-circle-arrow-right"></span>  入科教育
+        </a>
+		</td>
+		<td>
+		
+        <a href="<@spring.url '/activesCont/index.htm?li=li56&div=div_5&menuOrder=5&type=s'/>" class="btn btn-info ">
+          <span class="glyphicon glyphicon-object-align-right"></span>  教学查房
+        </a>
+		</td>
+		<td>
+		
+        <a href="<@spring.url '/activesCont/index.htm?li=li57&div=div_5&menuOrder=5&type=s'/>" class="btn btn-info ">
+          <span class="glyphicon glyphicon-pushpin"></span>  病例讨论
+        </a>
+        </td>
+		
+		</tr>
+		<tr>
+
+		<td>
+        <a href="<@spring.url '/activesCont/index.htm?li=li58&div=div_5&menuOrder=5&type=s'/>" class="btn btn-info ">
+          <span class="glyphicon glyphicon-saved"></span>  教学讲座
+        </a>
+		</td>
+		<td>
+		
+        <a href="<@spring.url '/activesCont/index.htm?li=li59&div=div_5&menuOrder=5&type=s'/>" class="btn btn-info ">
+          <span class="glyphicon glyphicon-scissors"></span>  操作训练
+        </a>
+		</td>
+		<td>
+		
+		<a href="<@spring.url '/activesCont/index.htm?li=li55&div=div_5&menuOrder=5&type=s'/>" class="btn btn-info ">
+          <span class="glyphicon glyphicon-briefcase"></span>  出科考试
+        </a>
+		</td>
+		
+		</tr>
+		
+	  </tbody>
+	</table>
+
+<!---->
+<ul class="nav nav-tabs">
+	<#if type ?? && type ="s">
+  		<li class="active"><a href="#">未参加</a></li>
+  		<li><a href="#">已参加</a></li>
+   </#if>
+   <li style="float: right;"  class="disabled"><a href="#" >
+		<#if status ?? && status ==4>
+			入科教育
+		<#elseif status?? && status ==5  >
+			出科考试
+		<#elseif status?? && status ==6  >
+			教学查房
+		<#elseif status?? && status ==7  >
+			病例讨论
+		<#elseif status?? && status ==8  >
+			教学讲座
+		<#elseif status?? && status ==9 >
+			操作训练
+		</#if>	
+		</a>
+	</li>
+  
+</ul>
+
+<div class="panel-group" id="accordion">
+	<#if page.list?? && page.list?size gt 0>
+		<#list page.list as le>
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h4 class="panel-title">
+						<a data-toggle="collapse" data-parent="#accordion" href="#col${le.id}">
+							${le.title!}
+						</a>
+					</h4>
+				</div>
+				<div id="col${le.id}" class="panel-collapse collapse">
+					<div class="panel-body">
+						科室：${le.roomName!}</br>
+						老师：<#if le.activesUsers??>
+								<#list le.activesUsers as au>
+										<#if au.identityId==1>${au.name}&nbsp;</#if>
+								</#list>
+							</#if></br>
+						地点：${le.address!}</br>
+						时间：<#if le.startTime ?? >
+									${le.startTime[0..15]}
+								<#else>
+									没有指定开始时间
+								</#if>
+							</br>
+						<#if status?? && (status ==6 || status ==7)> 
+							病人名：${le.sickPerson!} <br/>
+							病案号：${le.sickNum!}<br/>
+						</#if>
+						时长：${le.takeTime!}<br/>
+						问题或总结：
+							<button type="button" class="btn btn-primary btn-xs"  onclick="pop_userinfo(event,'<@spring.url '/questCont/qusetans.htm?activesId=${le.id!}'/>')">问题</button>
+						<br/>
+						<#if status ?? && status ==5>
+						<#else>
+							${le.org!}
+						</#if>
+					</div>
+				</div>
+			</div>
+		</#list>
+		<#else>
+			没有符合条件的结果
+	</#if>
+</div>
+
+<script>
+function kaoping(){
+	url ="<@spring.url '/judgeController/index.htm?type=h'/>";
+	window.location =url;
+}
+
+
+function changeTop(top){
+	url ="<@spring.url '/index/wap_index.htm?top=" + top+ "'/>";
+	window.location =url;
+}
+
+</script>
+</body>
+</html>

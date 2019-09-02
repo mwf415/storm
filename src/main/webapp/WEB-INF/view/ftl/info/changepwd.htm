@@ -1,0 +1,16 @@
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<#import "../decorators/spring.ftl" as spring />
+<div>
+	<form id="changeform" style="height: 250px;margin-left: 60px;">
+		<hr style="clear: both">
+		<h4>用户名：${user.realName!}</h4><hr>
+		<h4>新密码：<input type="password" name ="userPwd" >
+		</h4>
+		<input type="hidden" name ="loginName" value="${user.loginName!}" >
+		<hr>
+		<input  type="button" value="修改" class="look_02" onclick="changePwd();"/>
+	</form>
+</div>
+
+<!--right end-->

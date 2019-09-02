@@ -1,0 +1,88 @@
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<#import "../decorators/spring.ftl" as spring />
+<!DOCTYPE html>
+<html >
+<head><#include "../decorators/headtitle.ftl" >
+</head>
+<body>
+<!--right-->
+<#include "../decorators/left1.ftl" ><div class="main_right" id="right">
+	<div class="right_con">
+		<div class="main_search">
+			<form id="searchform">
+				<input type="hidden" name="type" value="${type!}"/>
+				<div >
+				<#if type ?? && type == 'y'>
+					换科查询
+				<#elseif type ?? && type =='n'>
+					不换科查询
+				</#if>						&nbsp;&nbsp;&nbsp;
+				
+					科室：<select name="roomName" style="width: 130px;" > 
+					<#if roomValues?? && roomValues?size gt 0>
+						<option value="">请选择</option> 
+						<#list roomValues as roomValue>
+								<option value="${roomValue.value}" <#if roomValue.value==roomName!>selected="selected"</#if> >${roomValue.value}</option>
+						</#list> 
+					</#if>
+					</select>
+						&nbsp;&nbsp;&nbsp;
+					基地：<select name="baseName" style="width: 105px;" > 
+					<#if baseValues?? && baseValues?size gt 0>
+						<option value="">请选择</option> 
+						<#list baseValues as baseValue>
+								<option value="${baseValue.value}" <#if baseValue.value==baseName!>selected="selected"</#if> >${baseValue.value}</option>
+						</#list> 
+					</#if>
+					</select>
+					&nbsp;&nbsp;&nbsp;
+					开始时间：
+					<input id="searchStart" type="text" name="searchStart" style="width: 100px;" />
+						<img onclick="WdatePicker({el:'searchStart',dateFmt:'yyyy-MM-dd'})" 
+								src="${uri.jssite}/My97DatePicker/skin/datePicker.gif" width="16" height="22" align="absmiddle">	
+					&nbsp;
+						<input type="hidden" name="li" value="${li!}"/>
+						<input type="hidden" name="div" value="${div!}"/>
+						<input type="hidden" name="pageIndex" value="${pageIndex!'1'}"/>
+						<button type="button" class="btn btn-danger btn-sm" onclick="queryList()" >搜 索</button>
+						<button type="button" class="btn btn-warning btn-sm" onclick="exportE()" >导出换科excel</button>
+						<span style="float: right;">
+						</span>
+				</div>
+			</form>
+		</div>
+		<!-- 显示数据的div -->
+		<div id="dataDiv">
+		
+		</div>
+	</div>
+</div>
+<!--right end-->
+
+<script type="text/javascript">
+function exportE(){
+	var searchStart = $("#searchStart").val();
+	 if(searchStart == '') {
+		  alert("请注意 :时间不能为空");
+		  return false;
+	}
+	window.location = '<@spring.url "/changeArrTurn/exportexcel.htm?li=${li!}&div=${div!}&type=${type!}&searchStart='+searchStart+'"/>';
+}
+
+function queryList(){
+	var baseName = $('#baseName option:selected').val();
+	var roomName = $('#roomName option:selected').val();
+
+	var searchStart = $("#searchStart").val();
+	 if(searchStart == '') {
+		  alert("请注意 :时间不能为空");
+		  return false;
+	}
+	var url ="<@spring.url '/changeArrTurn/detail.htm?targetID=dataDiv&formID=searchform'/>";
+	ajaxFormRequest("{url:'"+url+"',id:'dataDiv',form:'searchform'}");
+}
+</script>
+
+</body>
+</html>

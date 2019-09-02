@@ -1,0 +1,82 @@
+
+<div style="margin: 30px;">
+		<table class="table table-hover "  >
+		<#if ssu?? >
+			<tr>
+				<td colspan="2">
+					
+				</td>
+			</tr>
+			<tr>
+				<td style="width: 20%">本月最大的进步是什么:&nbsp;&nbsp;</td>
+				<td style="width: 80%">
+					</textarea>${ssu.zdjb!}</textarea>
+				</td>
+			</tr>
+			<tr>
+				<td>印象最深的教学查房:&nbsp;&nbsp;</td>
+				<td>
+						</textarea>${ssu.yyjxcf!}</textarea>
+				</td>
+			</tr>
+			<tr>
+				<td>你认为怎样查房效果好:&nbsp;&nbsp;</td>
+				<td>
+					</textarea>${ssu.ghjxcf!}</textarea>
+				</td>
+			</tr>
+			<tr>
+				<td>最有意义的病例讨论:&nbsp;&nbsp;</td>
+				<td>
+					</textarea>${ssu.yybltl!}</textarea>
+				</td>
+			</tr>
+			<tr>
+				<td>努力的方向:&nbsp;&nbsp;</td>
+				<td>
+						</textarea>${ssu.nlfx!}</textarea>
+				</td>
+			</tr>
+			<tr>
+				<td>误区或不足:&nbsp;&nbsp;</td>
+				<td>
+						</textarea>${ssu.wqbz!}</textarea>
+				</td>
+			</tr>
+			<tr>
+				<td>科内讲座:&nbsp;&nbsp;</td>
+				<td>
+					</textarea>${ssu.knjz!}</textarea>
+				</td>
+			</tr>
+			<tr>
+				<td>出科考试的内容:&nbsp;&nbsp;</td>
+				<td>
+						</textarea>${ssu.ckksnr!}</textarea>
+					
+				</td>
+			</tr>
+			<tr>
+				<td>最深刻的教训:&nbsp;&nbsp;</td>
+				<td>
+					</textarea>${ssu.jx!}</textarea>
+					
+				</td>
+			</tr>
+			<tr>
+				<td>备注:&nbsp;&nbsp;</td>
+				<td>
+					</textarea>${ssu.ext01!}</textarea>
+					
+				</td>
+			</tr>
+		<#else>
+			<tr>
+				<td colspan="2">
+					学生未提交数据
+				</td>
+			</tr>
+		</#if>
+			
+		</table>
+</div>

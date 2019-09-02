@@ -1,0 +1,170 @@
+<#import "../decorators/spring.ftl" as spring />
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html >
+<head><#include "../decorators/headtitle.ftl" >
+</head>
+<body>
+<!--right-->
+<#include "../decorators/left1.ftl" ><div class="main_right" id="right">
+	<div class="rig_tab">
+		<div class="rig_tab2">
+			<h1>新增教师 <span>(注：带*为必填项)</span></h1>
+			<form id="addform">
+				<table class="table table-hover  table-bordered" >
+					<tr>
+						<td width="15%" class="td_right"><em>*</em> 教师名称</td>
+						<td width="35%"><input name="userName" id="userName" type="text" class="validate[required,maxSize[50]] text-input"/><a></a></td>
+						<td width="15%" class="td_right"><em>*</em> 教师编号</td>
+						<td width="35%"><input name="loginName" id="loginName" type="text" class="validate[required,maxSize[50]] text-input"/><a></a></td>						
+					</tr>
+					<tr>
+						<td width="15%" class="td_right"><em>*</em> 教师密码</td>
+						<td width="35%"><input name="userPass" id="userPass" type="text" class="validate[required,maxSize[50]] text-input"/><a></a></td>
+						<td width="15%" class="td_right"> 性别</td>
+						<td width="35%"><input name="sex" id="sex" type="text" /><a></a></td>
+					</tr>
+					<tr>
+						<td width="15%" class="td_right"> 家庭住址</td>
+						<td width="35%"><input name="address" id="address" type="text" /><a></a></td>
+						<td width="15%" class="td_right"> 毕业院校</td>
+						<td width="35%"><input name="gradSchool" id="gradSchool" type="text" /><a></a></td>
+					</tr>
+					<tr>
+						<td width="15%" class="td_right"> 专业</td>
+						<td width="35%"><input name="major" id="major" type="text" /><a></a></td>
+						<td width="15%" class="td_right"> 身份证号</td>
+						<td width="35%"><input name="cardId" id="cardId" type="text" /><a></a></td>
+					</tr>
+					<tr>
+						<td width="15%" class="td_right"> 电话号码</td>
+						<td width="35%"><input name="telPhone" id="telPhone" type="text" /><a></a></td>
+						<td width="15%" class="td_right"> 手机号码</td>
+						<td width="35%"><input name="cellPhone" id="cellPhone" type="text" /><a></a></td>
+					</tr>
+					<tr>
+						<td width="15%" class="td_right"><em>*</em> 专业基地</td>
+						<td width="35%">
+							<select name="baseName" > 
+								<#if baseValues?? && baseValues?size gt 0>
+									<option value="">请选择</option> 
+									<#list baseValues as	baseValue>
+											<option value="${baseValue.value}">${baseValue.value}</option>
+									</#list> 
+								</#if>
+							</select>
+						</td>
+						<td width="15%" class="td_right"> <em>*</em>科室</td>
+						<td width="35%">
+							<select name="roomName"> 
+								<#if roomValues?? && roomValues?size gt 0>
+									<option value="">请选择</option> 
+									<#list roomValues as	roomValue>
+											<option value="${roomValue.value}">${roomValue.value}</option>
+									</#list> 
+								</#if>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td width="15%" class="td_right"> 学历</td>
+						<td width="35%"><input name="degree" id="degree" type="text" /><a></a></td>
+						<td width="15%" class="td_right"> 学位</td>
+						<td width="35%"><input name="xuewei" id="xuewei" type="text" /><a></a></td>
+					</tr>
+					<tr>
+						<td width="15%" class="td_right"> 微信</td>
+						<td width="35%"><input name="wechat" id="wechat" type="text" /><a></a></td>
+						<td width="15%" class="td_right"> QQ</td>
+						<td width="35%"><input name="qq" id="qq" type="text" /><a></a></td>
+					</tr>
+					<tr>
+						<td width="15%" class="td_right"> EMAIL</td>
+						<td width="35%"><input name="email" id="email" type="text" /><a></a></td>
+						<td width="15%" class="td_right"> 执照Id</td>
+						<td width="35%"><input name="licenId" id="licenId" type="text" /><a></a></td>
+					</tr>
+					<tr>
+						<td width="15%" class="td_right"> 职称</td>
+						<td width="35%"><input name="staff" id="staff" type="text" /><a></a></td>
+						<td width="15%" class="td_right"> 获取职称时间</td>
+						<td width="35%"><input readonly name="staffTime" id="staffTime" type="text" /><img onclick="WdatePicker({el:'staffTime',dateFmt:'yyyy-MM-dd HH:mm',maxDate:'%y-%M-%d'})" 
+						src="${uri.jssite}/My97DatePicker/skin/datePicker.gif" width="16" height="22" align="absmiddle"></td>
+					</tr>
+					
+	                
+	            	<tr class="button_tr">
+	                	<td>&nbsp;</td>
+	               	 	<td>
+		               	<input  type="submit" value="新 建" class="main_button"/>&nbsp;&nbsp;
+	               	 	</td>
+					</tr>   
+				</table>
+			</form>
+		</div>
+	</div>
+
+</div>
+
+<div style="display: none;">
+        	<a id="addSuccessed" href="#" onclick="showMessageDialog(event,'教师新建成功','<@spring.url '/teacherController/teacher_index.htm?li=li10&div=div_1&menuOrder=0'/>','closeWindow();');" ></a>
+        	<a id="addFailed" href="#" onclick="showMessageDialog(event,'教师新建失败','','');" ></a>
+ </div>
+
+<script>
+	function addRole(){
+		var param = null;
+		var postmethod = "POST";
+		var url ="<@spring.url '/teacherContrller/teacher_submit.htm'/>";
+		var param = $("#addform").serialize();
+		$.ajax({
+			   type: postmethod,
+			   cache: false,
+			   url: url,
+			   data : param,
+			   success: function(data){
+			    if(!validateFieldMs(data)){
+					return;
+				}
+				if(data == 'true'){
+					tip(1,true);
+					return;
+				}else if(data == 'false'){
+					tip(1,false);
+					return;
+				}
+				showMessageDialog(null,data,'','');
+			   },
+			   error:function(xhr,err){
+				   window.location.href=url; 
+			}
+		});
+	}
+
+	function tip(type,bool){
+		if(type == 1){
+			if(bool){
+				document.getElementById("addSuccessed").click();
+				return;
+			}
+			document.getElementById("addFailed").click();
+		}
+	}
+
+   jQuery(document).ready(function(){
+          jQuery("#addform").validationEngine('attach', {
+        	  isOverflown: true,
+  	        overflownDIV: "#right",
+            onValidationComplete: function(form, status){
+                //如果表单通过验证，将调用该js进入后台
+                if(status == true)
+            		addRole();
+            }  
+          })
+    });
+
+</script>
+</body>
+</html>

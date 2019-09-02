@@ -1,0 +1,134 @@
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<#import "../decorators/spring.ftl" as spring />
+<!DOCTYPE html>
+<html >
+<head>
+<#include "../decorators/headtitle.ftl" >
+<script type="text/javascript">
+function selfSum(){
+	var url = "<@spring.url '/selfSum/sum.htm'/>";
+	$("#addSelfSum").attr("action",url).submit();
+}
+</script>
+
+</head>
+<body>
+<!--right-->
+<#include "../decorators/left1.ftl" >
+<div class="main_right" id="right">
+	<div class="right_con">
+			<form id="searchform">
+				<#if type ?? && type=="h">
+					科室：<select name="roomName" style="width: 130px;" > 
+					<#if roomValues ?? && roomValues?size gt 0>
+						<option value="">请选择</option> 
+						<#list roomValues as roomValue>
+								<option value="${roomValue.value}" <#if roomValue.value==roomName!>selected="selected"</#if> >${roomValue.value}</option>
+						</#list> 
+					</#if>
+					</select>
+				</#if>
+				&nbsp;&nbsp;&nbsp;
+									
+				责任教师:<input type="text" name="teacherName">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+				学生姓名:<input type="text" name="userName">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+				
+				时间：
+						<input id="searchStart" type="text" name="searchStart" />
+							<img onclick="WdatePicker({el:'searchStart',dateFmt:'yyyy-MM-dd'})" 
+									src="${uri.jssite}/My97DatePicker/skin/datePicker.gif" width="16" height="22" align="absmiddle">	
+									
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+				
+					<input type="hidden" name="li" value="${li!}"/>
+					<input type="hidden" name="div" value="${div!}"/>
+					<input type="hidden" name="type" value="${type!}"/>
+					<input type="hidden" name="pageIndex" value="${pageIndex!'1'}"/>
+					<button type="button" class="btn btn-danger btn-sm" onclick="queryList()" >搜 索</button>
+				</form>
+			</div>
+		
+		<!-- 显示数据的div -->
+		<div id="dataDiv">
+			<div class="main_right" id="right">
+				<table id="tb" class="table table-hover table-bordered" > 
+					<tr class="table_title">
+						
+						<td width="10%">id</td>
+						<td width="10%">科室</td>
+						<td width="10%">创建老师</td>
+						<td width="10%">学生姓名</td>
+						<td width="10%">老师评价</td>
+						<td width="10%">学生评价</td>
+						<td width="10%">创建时间</td>  
+					</tr>
+					<#if page.list ?? && page.list ?size gt 0>
+					<#list page.list  as judgeT2s>
+					<tr class="table_td">
+						<td>${judgeT2s.activesId!}</td>
+						<td>${judgeT2s.roomName!}</td>
+						<td>${judgeT2s.teacherName!}</td>
+						<td>${judgeT2s.userName!}</td>
+						<td>
+							<#if  judgeT2s.isOver?? && judgeT2s.isOver==1>
+								<button type="button" class="btn btn-primary btn-xs"  onclick="pop_userinfo(event,'<@spring.url '/judgeController/show.htm?id=${judgeT2s.id!}'/>')">老师评价</button>
+							<#else>
+								<#if type?? && type=="r" >
+									<a href="<@spring.url '/judgeController/edit.htm?id=${judgeT2s.id!}&li=${li!}&div=${div!}&menuOrder=${menuOrder!}&type=r'/>">	
+										<button type="button" class="btn btn-danger btn-xs">添加考评</button>
+									</a>
+								<#else>
+									未评价
+								</#if>	
+							</#if>
+						</td>
+						
+						<td>
+							<#if judgeT2s.selfStatus?? && judgeT2s.selfStatus==1>
+								<button type="button" class="btn btn-primary btn-xs"  onclick="pop_userinfo(event,'<@spring.url '/selfSum/show.htm?id=${judgeT2s.activesId!}&loginName=${judgeT2s.loginName!}'/>')">学生评价</button>
+							<#else>
+								<#if type== "s">
+									<button type="button" class="btn btn-danger btn-xs"  onclick="pop_userinfo(event,'<@spring.url '/selfSum/add.htm?id=${judgeT2s.activesId}&judgeT2sId=${judgeT2s.id}'/>')">添加评价</button>
+								<#else>
+									未添加
+								</#if>
+							</#if>
+						</td>
+						<td>
+							<#if judgeT2s.createTime ?? >
+								${judgeT2s.createTime[0..10]}
+							</#if>
+						</td>
+					</tr>
+					</#list>
+					<#else>
+			  			<tr class="table_td"><td colspan="12" align="center">没有符合条件的结果。</td></tr>
+					</#if>
+				</table>
+				<#include "../decorators/page.htm" />
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+<script type="text/javascript">
+
+	
+function AddCheRoom(){
+	var url ="<@spring.url '/judgeController/add.htm'/>";
+	ajaxFormRequest("{url:'"+url+"',id:'dataDiv',form:'searchform'}");
+}
+
+function queryList(){
+	var url ="<@spring.url '/judgeController/index.htm?targetID=dataDiv&formID=searchform'/>";
+	$("#searchform").attr("action",url).submit();
+}	
+
+function targetPage(pageIndex){
+	window.location = '<@spring.url "/judgeController/index.htm?li=${li!}&div=${div!}&menuOrder=0&teachernum=${teachernum!}&searchEnd=${searchEnd!}&searchStart=${searchStart!}&type=${type!}&pageIndex='+pageIndex+'"/>';
+}
+
+</script> 
+</body>
+</html>

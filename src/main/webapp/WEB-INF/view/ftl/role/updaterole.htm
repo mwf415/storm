@@ -1,0 +1,98 @@
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<#import "../decorators/spring.ftl" as spring />
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html >
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<#include "../decorators/headtitle.ftl" >
+</head>
+<body>
+<!--right-->
+<#include "../decorators/left1.ftl" ><div class="main_right" id="right">
+	<div class="rig_tab">
+		<div class="rig_tab2">
+			<form id="upform">
+			    <h1>角色修改 <span>(注：带*为必填项)</span></h1>
+				<table class="table table-hover  table-bordered" >
+					<tr style="display: none;">
+						<td colspan="2"><input type="text" name="roleId" value="${role.id!}" /></td>
+					</tr>
+					<tr>
+						<td width="21%" class="td_right"><em>*</em> 角色名称</td>
+						<td width="79%"><input type="text" name="roleName" id="roleName" value="${role.name!}" class="validate[required,maxSize[50]] text-input" readonly="readonly"/><a></a></td>
+					</tr>
+	                <tr>
+	                	<td class="td_right"><em>*</em> 描述信息</td>
+	                    <td><textarea cols="60" rows="7" name="roleDes" id="roleDes" class="validate[required,maxSize[250]] text-input">${role.des!}</textarea><a></a></td>
+	                </tr>
+	            	<tr class="button_tr">
+	                	<td>&nbsp;</td>
+	               	 	<td>
+		               	 	<input name="submit" type="submit" value="修 改" class="main_button"/> 	 
+		               	 	<input name="reset" type="button" value="重 置" class="main_button" onclick="window.location=('<@spring.url '/userRoleController/toupdaterole.htm?roleId=${role.id}&li=li12&div=div_1&menuOrder=0'/>')"/> 
+		               	 	<input type="button" class="main_button" value="返 回" onclick="window.location=('<@spring.url '/userRoleController/tolistrole.htm?li=li12&div=div_1&menuOrder=0'/>')"/>
+	               	 	</td>
+					</tr>   
+				</table>
+			</form>
+		 </div>
+	</div>
+</div>
+
+ <div style="display: none;">
+        	<a id="updateSuccessed" href="#" onclick="showMessageDialog(event,'角色修改成功','<@spring.url '/userRoleController/tolistrole.htm?li=li12&div=div_1&menuOrder=0'/>','closeWindow();');" ></a>
+        	<a id="updateFailed" href="#" onclick="showMessageDialog(event,'操作失败','','');" ></a>
+ </div>
+
+<script>
+	function update(){
+		var param = null;
+		var postmethod = "POST";
+		var url ="<@spring.url '/userRoleController/updaterole.htm'/>";
+		var param = $("#upform").serialize();
+		$.ajax({
+			   type: postmethod,
+			   cache: false,
+			   url: url,
+			   data : param,
+			   success: function(data){
+				if(data == 'true'){
+					tip(1,true);
+					return;
+				}
+				tip(1,false);
+			   },
+			   error:function(xhr,err){
+				   window.location.href=url; 
+			}
+		});
+	}
+
+
+	function tip(type,bool){
+		if(type == 1){
+			if(bool){
+				document.getElementById("updateSuccessed").click();
+				return;
+			}
+			document.getElementById("updateFailed").click();
+		}
+	}
+
+
+   jQuery(document).ready(function(){
+          jQuery("#upform").validationEngine('attach', {
+        	  isOverflown: true,
+  	        overflownDIV: "#right",
+            onValidationComplete: function(form, status){
+                if(status == true)
+                	update();
+            }  
+          })
+    });
+</script>
+
+</body>
+</html>

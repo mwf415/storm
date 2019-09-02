@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youyicn.dao.cycle.ActivesQuestUserMapper">
+
+	<insert id="add" parameterType="com.youyicn.entity.cycle.ActivesQuestUser" >
+		insert into cycle_actives_quest_user
+		(activesId,questText,des,loginName,name,identityId ) 
+			values	
+		(#{activesId},#{questText},#{des},#{loginName},#{name},#{identityId})
+	</insert>
+	
+	<select id="getActivesQuestUser"  resultType="com.youyicn.entity.cycle.ActivesQuestUser">
+		select * from cycle_actives_quest_user where 1=1 and activesId=#{activesId} and loginName = #{loginName}
+	</select>
+	
+	
+	<delete id="delByActivesId"  parameterType="Integer" >
+			delete from cycle_actives_quest_user where activesId = #{activesId} 
+	</delete>
+	
+</mapper>

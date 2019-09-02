@@ -1,0 +1,83 @@
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<#import "../decorators/spring.ftl" as spring />
+<style>
+.table_td td{
+	padding-left:3px;
+}
+</style>
+<div>
+<form id="arrTeacherAdd" name="arrTeacherAdd" action="<@spring.url '/arrTeacherCont/arrTeachersum.htm'/>">
+	<input type="hidden" name="arrTurnId" value="${arrTurn.arrTurnId!}" >
+	<input type="hidden" name="searchStart" value="${searchStart!}" >
+	<table class="table table-hover  table-bordered" >
+		<tr>
+			<td width="21%" class="td_right"><em>*</em> 学生编号：</td>
+			<td width="79%"><input type="text"  readonly="readonly"  value="${arrTurn.loginName!}" /><a></a></td>
+			<td width="79%"><input type="hidden"  readonly="readonly" name="arrTurnId" value="${arrTurn.arrTurnId!}" /><a></a></td>
+		</tr>
+		
+		<tr>
+			<td width="21%" class="td_right"><em>*</em> 学员姓名：</td>
+			<td width="79%"><input  type="text" readonly="readonly" value="${arrTurn.userName!}"   /><a></a></td>
+		</tr>
+		<tr>
+			<td width="21%" class="td_right"><em>*</em> 学生年级：</td>
+			<td width="79%"><input  type="text"  readonly="readonly" value="${arrTurn.grade!}"   /><a></a></td>
+		</tr>
+		<tr>
+			<td width="21%" class="td_right"><em>*</em>轮转科室：</td>
+			<td width="79%"><input  type="text"  readonly="readonly" value="${arrTurn.roomName!}"   /><a></a></td>
+		</tr>
+		<tr>
+			<td width="21%" class="td_right"><em>*</em>开始时间：</td>
+			<td width="79%"><input  type="text"  readonly="readonly" value="${arrTurn.startTime!}"   /><a></a></td>
+		</tr>
+		<tr>
+			<td width="21%" class="td_right"><em>*</em> 结束时间：</td>
+			<td width="79%"><input  type="text"  readonly="readonly" value="${arrTurn.endTime!}"  /><a></a></td>
+		</tr>
+		
+		<tr>
+			<td width="21%" class="td_right"><em>*</em>指导老师1：</td>
+			<td width="79%">
+				<select name="teacherparm1" > 
+								<#if teacherList?? && teacherList ? size gt 0>
+									<option value="">请选择</option> 
+									<#list teacherList as teacher>
+										<option value="${teacher.loginName!}:${teacher.realName!}">${teacher.realName!}</option>
+											
+									</#list> 
+								</#if>
+							</select>&nbsp;&nbsp;&nbsp;&nbsp;
+			</td>
+		</tr>
+		<tr>
+			<td width="21%" class="td_right"><em>*</em>指导老师2：</td>
+			<td width="79%">	
+				<select name="teacherparm2" > 
+					<#if teacherList?? && teacherList ? size gt 0>
+						<option value="">请选择</option> 
+						<#list teacherList as teacher>
+							<option value="${teacher.loginName!}:${teacher.realName!}">${teacher.realName!}</option>
+								
+						</#list> 
+					</#if>
+				</select>&nbsp;&nbsp;&nbsp;&nbsp;
+			</td>
+		</tr>
+       	<tr class="button_tr">
+           	<td>&nbsp;</td>
+        	<td><button type="submit" class="btn btn-danger">提交</button>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        </tr>   
+	</table>
+</form>
+</div>
+
+<script type="text/javascript">
+
+//提交安排老师的按钮
+
+</script>
+
+<!--right end-->

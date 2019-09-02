@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.youyicn.dao.cycle.DopsMapper" >
+  <resultMap id="BaseResultMap" type="com.youyicn.entity.cycle.Dops" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="activesId" property="activesId" jdbcType="INTEGER" />
+    
+    <result column="kgName" property="kgName" jdbcType="VARCHAR" />
+    
+    <result column="kgNum" property="kgNum" jdbcType="VARCHAR" />
+    <result column="gradeDate" property="gradeDate" jdbcType="DATE" />
+    <result column="gradeTime" property="gradeTime" jdbcType="VARCHAR" />
+    <result column="ksName" property="ksName" jdbcType="VARCHAR" />
+    <result column="ksNum" property="ksNum" jdbcType="VARCHAR" />
+    <result column="ksIdentity" property="ksIdentity" jdbcType="VARCHAR" />
+    <result column="kgIdentity" property="kgIdentity" jdbcType="VARCHAR" />
+    <result column="khaddress" property="khaddress" jdbcType="VARCHAR" />
+    <result column="khmudi" property="khmudi" jdbcType="VARCHAR" />
+    <result column="blh" property="blh" jdbcType="VARCHAR" />
+    <result column="bage" property="bage" jdbcType="VARCHAR" />
+    <result column="bsex" property="bsex" jdbcType="VARCHAR" />
+    <result column="bfh" property="bfh" jdbcType="VARCHAR" />
+    <result column="bch" property="bch" jdbcType="VARCHAR" />
+    <result column="complexDegree" property="complexDegree" jdbcType="VARCHAR" />
+    <result column="isFirst" property="isFirst" jdbcType="VARCHAR" />
+    <result column="coordination" property="coordination" jdbcType="VARCHAR" />
+    <result column="mtjq" property="mtjq" jdbcType="VARCHAR" />
+    <result column="tgjc" property="tgjc" jdbcType="VARCHAR" />
+    <result column="zysy" property="zysy" jdbcType="VARCHAR" />
+    <result column="lcpd" property="lcpd" jdbcType="VARCHAR" />
+    <result column="zxjy" property="zxjy" jdbcType="VARCHAR" />
+    <result column="zznl" property="zznl" jdbcType="VARCHAR" />
+    <result column="ztlc" property="ztlc" jdbcType="VARCHAR" />
+    
+    <result column="aztlc" property="aztlc" jdbcType="VARCHAR" />
+    <result column="bztlc" property="bztlc" jdbcType="VARCHAR" />
+    <result column="zjzl" property="zjzl" jdbcType="VARCHAR" />
+    <result column="ljwt" property="ljwt" jdbcType="VARCHAR" />
+    
+    <result column="kgmy" property="kgmy" jdbcType="VARCHAR" />
+    <result column="k1" property="k1" jdbcType="VARCHAR" />
+    <result column="ksmy" property="ksmy" jdbcType="VARCHAR" />
+    <result column="k2" property="k2" jdbcType="VARCHAR" />
+    <result column="gcTime" property="gcTime" jdbcType="VARCHAR" />
+    <result column="hkTime" property="hkTime" jdbcType="VARCHAR" />
+    <result column="score" property="score" jdbcType="VARCHAR" />
+
+    <result column="flag" property="flag" jdbcType="VARCHAR" />
+    <result column="baseName" property="baseName" jdbcType="VARCHAR" />
+    <result column="roomName" property="roomName" jdbcType="VARCHAR" />
+
+
+  </resultMap>
+  
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.youyicn.entity.cycle.Dops" >
+    insert into cycle_dops (
+    	activesId,  kgName,kgNum,gradeDate,gradeTime,ksName,ksNum,ksIdentity,kgIdentity,khaddress,khmudi,blh,bage,bsex,bfh,bch,
+		complexDegree,isFirst,coordination,mtjq,tgjc,zysy,lcpd,zxjy,zznl,ztlc,
+		aztlc,bztlc,zjzl,ljwt,
+		kgmy,k1,ksmy,k2,gcTime,hkTime,score,flag,baseName,roomName
+      )
+    values (#{activesId}, #{kgName},#{kgNum},
+				#{gradeDate},
+				#{gradeTime},
+				#{ksName},
+				#{ksNum},
+				#{ksIdentity},
+				#{kgIdentity},
+				#{khaddress},
+				#{khmudi},
+				#{blh},
+				#{bage},
+				#{bsex},
+				#{bfh},
+				#{bch},
+				#{complexDegree},
+				#{isFirst},
+				#{coordination},
+				#{mtjq},
+				#{tgjc},
+				#{zysy},
+				#{lcpd},
+				#{zxjy},
+				#{zznl},
+				#{ztlc},
+				
+				#{aztlc},
+			    #{bztlc},
+			    #{zjzl},
+			    #{ljwt},
+			    
+				#{kgmy},
+				#{k1},
+				#{ksmy},
+				#{k2},
+
+				#{gcTime},
+				#{hkTime},
+				#{score},
+				#{flag},
+				#{baseName},
+				#{roomName}
+      )
+  </insert>
+  
+    <select id="findAll" resultMap="BaseResultMap" >
+  	 select * from cycle_dops where 1=1
+
+		<if test="ksName!=null">
+			and ksName=#{ksName}
+		</if>
+		<if test="ksNum!=null">
+			and ksNum=#{ksNum}
+		</if>
+		<if test="roomName !=null and  roomName !=''">
+			and roomName=#{roomName}
+		</if>
+		<if test="baseName !=null and baseName !=''">
+			and baseName=#{baseName}
+		</if>
+		<if test="kgNum !=null and kgNum != ''">
+			and kgNum=#{kgNum}
+		</if>
+		<if test="gradeDate!=null">
+			and gradeDate=#{gradeDate}
+		</if>
+		order by id desc
+  	</select>
+  	
+  	<select id="findById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+  	 select *  from cycle_dops where id = #{id,jdbcType=BIGINT}
+  	</select>
+  	
+  	<delete id="deleteById" parameterType="java.lang.Integer" >
+    	delete from cycle_dops where id = #{id,jdbcType=BIGINT}
+    </delete>
+    
+    <delete id="delByActivesId" parameterType="java.lang.Integer" >
+    	delete from cycle_dops where activesId = #{activesId,jdbcType=INTEGER}
+    </delete>
+    
+     <update id="updateById" parameterType="com.youyicn.entity.cycle.Dops" >
+	    update cycle_dops
+	    set          
+			gradeDate=#{gradeDate},          
+			gradeTime=#{gradeTime},        
+			ksIdentity=#{ksIdentity},
+			kgIdentity=#{kgIdentity},      
+			khaddress=#{khaddress},        
+			khmudi=#{khmudi},              
+			blh=#{blh},                    
+			bage=#{bage},                  
+			bsex=#{bsex},                  
+			bfh=#{bfh},                    
+			bch=#{bch},                                
+			complexDegree=#{complexDegree},
+			isFirst=#{isFirst},
+			coordination=#{coordination},     
+			mtjq=#{mtjq},                                      
+			tgjc=#{tgjc},                                      
+			zysy=#{zysy},                                      
+			lcpd=#{lcpd},                                      
+			zxjy=#{zxjy},                                       
+			zznl=#{zznl},                                       
+			ztlc=#{ztlc},
+			 
+			aztlc=#{aztlc},
+			bztlc=#{bztlc},
+			zjzl=#{zjzl},
+			ljwt=#{ljwt},
+			                                     
+			kgmy=#{kgmy},                  
+			k1=#{k1},                      
+			ksmy=#{ksmy},                  
+			k2=#{k2},                                      
+			gcTime=#{gcTime},
+			hkTime=#{hkTime},
+			score=#{score},
+			flag=#{flag}                   
+                   
+	    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+
+   
+  
+</mapper>

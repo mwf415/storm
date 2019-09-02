@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youyicn.dao.cycle.CycleScoreModelMapper">
+
+    <resultMap id="cycleScoreModelMap" type="cycleScoreModel">
+        <id column="model_id" property="modelId" jdbcType="INTEGER"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="model_name" property="modelName" jdbcType="VARCHAR"/>
+        <result column="score_item" property="scoreItem" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!-- 查询所有评分模板 -->
+    <select id="findAllScoreModelList" resultMap="cycleScoreModelMap">
+		select * from cycle_score_model
+	</select>
+
+    <!--添加评分模板-->
+    <insert id="addScoreModel" parameterType="cycleScoreModel">
+		insert cycle_score_model(model_id,user_id,model_name,score_item,remark)
+		values (null,${userId},#{modelName},#{scoreItem},#{remark})
+	</insert>
+
+    <!--通过模板Id查询评分模板详情-->
+    <select id="findScoreModelById" parameterType="Integer" resultMap="cycleScoreModelMap">
+        select model_id,user_id,model_name,score_item,remark from cycle_score_model where model_id = #{modelId}
+    </select>
+
+    <!--修改评分模板-->
+    <update id="editScoreModel" parameterType="cycleScoreModel">
+         update cycle_score_model set user_id = #{userId},model_name=#{modelName},score_item=#{scoreItem},remark=#{remark}
+         where model_id = #{modelId}
+    </update>
+
+    <!--通过模板ID删除评分模板-->
+    <delete id="deleteScoreModelById" parameterType="Integer">
+        delete from cycle_score_model where model_id = #{modelId}
+    </delete>
+</mapper>

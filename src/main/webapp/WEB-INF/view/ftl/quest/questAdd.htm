@@ -1,0 +1,47 @@
+<#import "../decorators/uri.ftl" as uri /> 
+<#import "../decorators/util.ftl" as util /> 
+<#import "../decorators/spring.ftl" as spring />
+
+<div style="margin: 30px;">
+	<#if questList ?? && questList?size gt 0>
+		<#list questList as quest>
+			<div class="panel panel-primary">
+			    <div class="panel-heading">
+			        <h3 class="panel-title">你已经提交过问题，以下是你的问题</h3>
+			    </div>
+			    <div class="panel-body">
+					${quest.questTxt}
+			    </div>
+			</div>
+			<#if type?? && type=="t">
+			<div class="form-group">
+			    <div class="col-sm-offset-2 col-sm-10">
+				      <button type="button" class="btn btn-default" onclick="delActivesQuest(${quest.activesId})">删除问题</button>
+			    </div>
+			  </div>
+			  </#if>
+		</#list>
+	<#else>
+		<#if type?? && type=="t">
+			<form id="planAdd8" name="planAdd8" role="form">
+			  <div class="form-group">
+			    <label for="name">添加问题</label>
+					<input type="text" style="display: none" name="activesId" value="${activesId!}" /> 
+					<textarea id="questTxt" name="questTxt" class="form-control ckeditor" rows="5"></textarea>
+					<script type="text/javascript">CKEDITOR.replace('questTxt');</script>
+				</div>
+				<div class="form-group">
+				    <div class="col-sm-offset-2 col-sm-10">
+					      <button type="button" class="btn btn-default" value="提交" onclick="questSum()">提交</button>
+				    </div>
+				  </div>
+			</form>
+		<#else>
+			 <div class="form-group">
+			    <label for="name">该活动暂未提交问题</label>
+			</div>
+		</#if>
+	</#if>
+	
+</div>
+	

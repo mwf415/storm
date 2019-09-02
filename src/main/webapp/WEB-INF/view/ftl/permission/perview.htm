@@ -1,0 +1,40 @@
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<#import "../decorators/spring.ftl" as spring />
+<html >
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+</head>
+<body>
+<!--right-->
+
+<#include "../decorators/left1.ftl" ><div class="main_right" id="right">
+ <div class="right_em_con">
+      <div class="right_em_con2">
+        <table class="table table-bordered table-hover">
+           <tr>
+             <td width="15%" class="td_r">ID</td>
+             <td width="85%"><span>${per.id!}</span></td>
+          </tr>	
+          <tr>
+            <td class="td_r">权限名称</td>
+            <td width="85%"><span>${per.name!}</span></td>
+          </tr>
+          <tr>
+            <td class="td_r">权限ID</td>
+            <td width="85%"><span>${per.url!}</span></td>
+          </tr> 
+          <tr>
+            <td class="td_r">权限PID</td>
+            <td width="85%"><span>${per.pid!}</span></td>
+          </tr>   
+          <tr>
+            <td class="td_r"></td>
+          	<td><input type="button" class="main_button" value="返 回" onclick="window.location=('<@spring.url '/permissionController/tolistper.htm?li=li11&div=div_1&menuOrder=0'/>')"/></td>
+          </tr>   
+        </table>
+      </div>
+      <br/><br/>
+</div>
+</div>

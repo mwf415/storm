@@ -1,0 +1,23 @@
+<table class="main_page">
+		<tr>
+			<td>&nbsp;搜索到 <b>${page.total!}</b> 条记录
+			 	共 <b>${page.pages!}</b> 页    第 <b>${page.pageNum!}</b> 页   
+			  	每页 <b>${page.size!}</b> 条记录
+			  	<span class="page_num">
+				  	<a href="javascript:void(0);" onclick="targetPage(1)">首页</a>  
+				  	<#if page.pageNum gt 1>
+		                <a href="javascript:void(0);" onclick="targetPage(${page.pageNum-1})">上一页</a>
+		             <#else>
+		              	<a href="javascript:void(0);">上一页</a>
+	              	</#if>
+	   
+				  	<#if page.pageNum < page.pages>
+		                <a href="javascript:void(0);" onclick="targetPage(${page.pageNum+1})">下一页</a>
+		              <#else>
+		              	<a href="javascript:void(0);">下一页</a>
+	              	</#if>  
+	              	<a href="javascript:void(0);" onclick="targetPage(${page.pages})">尾页</a>  
+				 </span>
+			</td>
+		</tr>
+</table> 

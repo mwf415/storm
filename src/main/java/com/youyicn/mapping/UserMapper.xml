@@ -1,0 +1,500 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.youyicn.dao.cycle.UserMapper" >
+  <resultMap id="BaseResultMap" type="com.youyicn.entity.User" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="loginName" property="loginName" jdbcType="VARCHAR" />
+    <result column="real_name" property="realName" jdbcType="VARCHAR" />
+    <result column="user_pwd" property="userPwd" jdbcType="VARCHAR" />
+    <result column="identity_id" property="identityId" jdbcType="INTEGER" />
+    <result column="sex" property="sex" jdbcType="VARCHAR" />
+    <result column="qualification_id" property="qualificationId" jdbcType="INTEGER" />
+    <result column="dept" property="dept" jdbcType="VARCHAR" />
+    <result column="nation" property="nation" jdbcType="INTEGER" />
+    <result column="card_no" property="cardNo" jdbcType="VARCHAR" />
+    <result column="birth_time" property="birthTime" jdbcType="TIMESTAMP" />
+    <result column="education" property="education" jdbcType="INTEGER" />
+    <result column="image" property="image" jdbcType="VARCHAR" />
+    <result column="is_admin" property="isAdmin" jdbcType="TINYINT" />
+    <result column="user_type_id" property="userTypeId" jdbcType="INTEGER" />
+    <result column="is_login" property="isLogin" jdbcType="TINYINT" />
+    <result column="login_ip" property="loginIp" jdbcType="VARCHAR" />
+    <result column="department_id" property="departmentId" jdbcType="INTEGER" />
+    <result column="usb_key" property="usbKey" jdbcType="TINYINT" />
+    <result column="module_manager" property="moduleManager" jdbcType="VARCHAR" />
+
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="loginName" property="loginName" jdbcType="VARCHAR" />
+    <result column="hospitalId" property="hospitalId" jdbcType="VARCHAR" />
+    <result column="baseName" property="baseName" jdbcType="VARCHAR" />
+    <result column="roomName" property="roomName" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="gradSchool" property="gradSchool" jdbcType="VARCHAR" />
+    <result column="isAt" property="isAt" jdbcType="INTEGER" />
+	<result column="userNum" property="userNum" jdbcType="VARCHAR" />
+    <result column="major" property="major" jdbcType="VARCHAR" />
+    <result column="degree" property="degree" jdbcType="VARCHAR" />
+    <result column="xuewei" property="xuewei" jdbcType="VARCHAR" />
+    <result column="certificationNum" property="certificationNum" jdbcType="VARCHAR" />
+    <result column="cellPhone" property="cellPhone" jdbcType="VARCHAR" />
+    <result column="staff" property="staff" jdbcType="VARCHAR" />
+
+    <result column="trainTime" property="trainTime" jdbcType="INTEGER" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="grade" property="grade" jdbcType="INTEGER" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+	    id, loginName, real_name, user_pwd, identity_id, sex, qualification_id, dept, nation, userNum,
+	    card_no, birth_time, education, image, is_admin, user_type_id, is_login, login_ip, department_id,
+	    usb_key, module_manager,status ,loginName,hospitalId,baseName,roomName,address,gradSchool,
+	    major,degree,xuewei,certificationNum,cellPhone,staff,trainTime,email,grade,isAt
+  </sql>
+
+
+  <select id="getbyId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from user
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="countNum" resultType="int" parameterType="java.lang.Integer" >
+    select count(*)
+    from user
+    where identity_id = #{identityId,jdbcType=INTEGER}
+  </select>
+
+  <select id="getByNum" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from user
+    where loginName = #{loginName,jdbcType=VARCHAR}
+  </select>
+
+  <select id="getTByRoom" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from user
+    where roomName = #{roomName,jdbcType=VARCHAR} and identity_id = 1
+  </select>
+
+  <select id="getUByRoom" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from user
+    where roomName = #{roomName,jdbcType=VARCHAR} and identity_id = 2
+  </select>
+
+   <select id="getTByBase" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from user
+    where baseName = #{baseName,jdbcType=VARCHAR} and identity_id = 1
+  </select>
+
+  <select id="getUByBase" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from user
+    where baseName = #{baseName,jdbcType=VARCHAR} and identity_id = 2
+  </select>
+
+  <delete id="delUser" parameterType="java.lang.Integer" >
+    delete from user
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+
+  <insert id="addUser" parameterType="com.youyicn.entity.User" >
+    insert into user (id, loginName, real_name, userNum,
+      user_pwd, identity_id, sex,
+      qualification_id, dept, nation,
+      card_no, birth_time, education,
+      image, is_admin, user_type_id,
+      is_login, login_ip, department_id,
+      usb_key, module_manager ,
+      status ,loginName,hospitalId,baseName,roomName,address,gradSchool,
+      major,degree,xuewei,certificationNum,cellPhone,staff,trainTime,email,grade
+      )
+    values (#{id,jdbcType=INTEGER}, #{loginName,jdbcType=VARCHAR}, #{realName,jdbcType=VARCHAR},#{userNum,jdbcType=VARCHAR},
+      #{userPwd,jdbcType=VARCHAR}, #{identityId,jdbcType=INTEGER}, #{sex,jdbcType=VARCHAR},
+      #{qualificationId,jdbcType=INTEGER}, #{dept,jdbcType=VARCHAR}, #{nation,jdbcType=INTEGER},
+      #{cardNo,jdbcType=VARCHAR}, #{birthTime,jdbcType=TIMESTAMP}, #{education,jdbcType=INTEGER},
+      #{image,jdbcType=VARCHAR}, #{isAdmin,jdbcType=TINYINT}, #{userTypeId,jdbcType=INTEGER},
+      #{isLogin,jdbcType=TINYINT}, #{loginIp,jdbcType=VARCHAR}, #{departmentId,jdbcType=INTEGER},
+      #{usbKey,jdbcType=TINYINT}, #{moduleManager,jdbcType=VARCHAR},
+      #{status,jdbcType=INTEGER},#{loginName,jdbcType=VARCHAR},#{hospitalId,jdbcType=VARCHAR},
+      #{baseName,jdbcType=VARCHAR},#{roomName,jdbcType=VARCHAR},#{address,jdbcType=VARCHAR},
+      #{gradSchool,jdbcType=VARCHAR},#{major,jdbcType=VARCHAR},#{degree,jdbcType=VARCHAR},
+      #{xuewei,jdbcType=VARCHAR},#{certificationNum,jdbcType=VARCHAR},#{cellPhone,jdbcType=VARCHAR},
+      #{staff,jdbcType=VARCHAR},#{trainTime,jdbcType=TINYINT},#{email,jdbcType=VARCHAR},#{grade,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.youyicn.entity.User" >
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userNum != null" >
+        userNum,
+      </if>
+      <if test="realName != null" >
+        real_name,
+      </if>
+      <if test="userPwd != null" >
+        user_pwd,
+      </if>
+      <if test="identityId != null" >
+        identity_id,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="qualificationId != null" >
+        qualification_id,
+      </if>
+      <if test="dept != null" >
+        dept,
+      </if>
+      <if test="nation != null" >
+        nation,
+      </if>
+      <if test="cardNo != null" >
+        card_no,
+      </if>
+      <if test="birthTime != null" >
+        birth_time,
+      </if>
+      <if test="education != null" >
+        education,
+      </if>
+      <if test="image != null" >
+        image,
+      </if>
+      <if test="isAdmin != null" >
+        is_admin,
+      </if>
+      <if test="userTypeId != null" >
+        user_type_id,
+      </if>
+      <if test="isLogin != null" >
+        is_login,
+      </if>
+      <if test="loginIp != null" >
+        login_ip,
+      </if>
+      <if test="departmentId != null" >
+        department_id,
+      </if>
+      <if test="usbKey != null" >
+        usb_key,
+      </if>
+
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="loginName != null" >
+        loginName,
+      </if>
+      <if test="hospitalId != null" >
+        hospitalId,
+      </if>
+      <if test="baseName != null" >
+        baseName,
+      </if>
+      <if test="roomName != null" >
+        roomName,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="gradSchool != null" >
+        gradSchool,
+      </if>
+
+      <if test="major != null" >
+        major,
+      </if>
+      <if test="degree != null" >
+        degree,
+      </if>
+      <if test="xuewei != null" >
+        xuewei,
+      </if>
+      <if test="certificationNum != null" >
+        certificationNum,
+      </if>
+      <if test="cellPhone != null" >
+        cellPhone,
+      </if>
+      <if test="staff != null" >
+        staff,
+      </if>
+
+      <if test="trainTime != null" >
+        trainTime,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="grade != null" >
+        grade,
+      </if>
+      <if test="isAt != null" >
+        isAt,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userNum != null" >
+        #{userNum,jdbcType=VARCHAR},
+      </if>
+      <if test="realName != null" >
+        #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="userPwd != null" >
+        #{userPwd,jdbcType=VARCHAR},
+      </if>
+      <if test="identityId != null" >
+        #{identityId,jdbcType=INTEGER},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="qualificationId != null" >
+        #{qualificationId,jdbcType=INTEGER},
+      </if>
+      <if test="dept != null" >
+        #{dept,jdbcType=VARCHAR},
+      </if>
+      <if test="nation != null" >
+        #{nation,jdbcType=INTEGER},
+      </if>
+      <if test="cardNo != null" >
+        #{cardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="birthTime != null" >
+        #{birthTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="education != null" >
+        #{education,jdbcType=INTEGER},
+      </if>
+      <if test="image != null" >
+        #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="isAdmin != null" >
+        #{isAdmin,jdbcType=TINYINT},
+      </if>
+      <if test="userTypeId != null" >
+        #{userTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="isLogin != null" >
+        #{isLogin,jdbcType=TINYINT},
+      </if>
+      <if test="loginIp != null" >
+        #{loginIp,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentId != null" >
+        #{departmentId,jdbcType=INTEGER},
+      </if>
+      <if test="usbKey != null" >
+        #{usbKey,jdbcType=TINYINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="loginName != null" >
+        #{loginName,jdbcType=VARCHAR},
+      </if>
+      <if test="hospitalId != null" >
+        #{hospitalId,jdbcType=VARCHAR},
+      </if>
+      <if test="baseName != null" >
+        #{baseName,jdbcType=VARCHAR},
+      </if>
+      <if test="roomName != null" >
+        #{roomName,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="gradSchool != null" >
+        #{gradSchool,jdbcType=VARCHAR},
+      </if>
+      <if test="major != null" >
+        #{major,jdbcType=VARCHAR},
+      </if>
+      <if test="degree != null" >
+        #{degree,jdbcType=VARCHAR},
+      </if>
+      <if test="xuewei != null" >
+        #{xuewei,jdbcType=VARCHAR},
+      </if>
+      <if test="certificationNum != null" >
+        #{certificationNum,jdbcType=VARCHAR},
+      </if>
+      <if test="cellPhone != null" >
+        #{cellPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="staff != null" >
+        #{staff,jdbcType=VARCHAR},
+      </if>
+      <if test="trainTime != null" >
+        #{trainTime,jdbcType=TINYINT},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="grade != null" >
+        #{grade,jdbcType=INTEGER},
+      </if>
+      <if test="isAt != null" >
+        #{isAt,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="editUser" parameterType="com.youyicn.entity.User" >
+    update user
+    <set >
+      <if test="loginName != null" >
+        loginName = #{loginName,jdbcType=VARCHAR},
+      </if>
+      <if test="realName != null" >
+        real_name = #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="userPwd != null" >
+        user_pwd = #{userPwd,jdbcType=VARCHAR},
+      </if>
+      <if test="identityId != null" >
+        identity_id = #{identityId,jdbcType=INTEGER},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="qualificationId != null" >
+        qualification_id = #{qualificationId,jdbcType=INTEGER},
+      </if>
+      <if test="dept != null" >
+        dept = #{dept,jdbcType=VARCHAR},
+      </if>
+      <if test="nation != null" >
+        nation = #{nation,jdbcType=INTEGER},
+      </if>
+      <if test="cardNo != null" >
+        card_no = #{cardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="birthTime != null" >
+        birth_time = #{birthTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="education != null" >
+        education = #{education,jdbcType=INTEGER},
+      </if>
+      <if test="image != null" >
+        image = #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="isAdmin != null" >
+        is_admin = #{isAdmin,jdbcType=TINYINT},
+      </if>
+      <if test="userTypeId != null" >
+        user_type_id = #{userTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="isLogin != null" >
+        is_login = #{isLogin,jdbcType=TINYINT},
+      </if>
+      <if test="loginIp != null" >
+        login_ip = #{loginIp,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentId != null" >
+        department_id = #{departmentId,jdbcType=INTEGER},
+      </if>
+      <if test="usbKey != null" >
+        usb_key = #{usbKey,jdbcType=TINYINT},
+      </if>
+      <if test="moduleManager != null" >
+        module_manager = #{moduleManager,jdbcType=VARCHAR},
+      </if>
+      <if test="isAt != null" >
+        isAt = #{isAt,jdbcType=INTEGER},
+      </if>
+
+      <if test="baseName != null" >
+        baseName = #{baseName,jdbcType=VARCHAR},
+      </if>
+      <if test="roomName != null" >
+        roomName = #{roomName,jdbcType=VARCHAR},
+      </if>
+
+
+
+
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.youyicn.entity.User" >
+    update user
+    set loginName = #{loginName,jdbcType=VARCHAR},
+      real_name = #{realName,jdbcType=VARCHAR},
+      userNum = #{userNum,jdbcType=VARCHAR},
+      user_pwd = #{userPwd,jdbcType=VARCHAR},
+      identity_id = #{identityId,jdbcType=INTEGER},
+      sex = #{sex,jdbcType=VARCHAR},
+      qualification_id = #{qualificationId,jdbcType=INTEGER},
+      dept = #{dept,jdbcType=VARCHAR},
+      nation = #{nation,jdbcType=INTEGER},
+      card_no = #{cardNo,jdbcType=VARCHAR},
+      birth_time = #{birthTime,jdbcType=TIMESTAMP},
+      education = #{education,jdbcType=INTEGER},
+      image = #{image,jdbcType=VARCHAR},
+      is_admin = #{isAdmin,jdbcType=TINYINT},
+      user_type_id = #{userTypeId,jdbcType=INTEGER},
+      is_login = #{isLogin,jdbcType=TINYINT},
+      login_ip = #{loginIp,jdbcType=VARCHAR},
+      department_id = #{departmentId,jdbcType=INTEGER},
+      usb_key = #{usbKey,jdbcType=TINYINT},
+      module_manager = #{moduleManager,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+  <!-- 根据用户查询条件查询用户 -->
+	<select id="getByCondition" parameterType="com.youyicn.entity.User" resultMap="BaseResultMap">
+		select  * 	from user where 1=1
+		<if test="baseName !=null and baseName !=''"><!-- 专业基地查询 -->
+			and baseName=#{baseName}
+		</if>
+		<if test="roomName !=null and roomName !=''"><!-- 专业基地查询 -->
+			and roomName=#{roomName}
+		</if>
+		<if test="realName !=null and realName !=''"><!-- 专业基地查询 -->
+			and real_name like #{realName}
+		</if>
+		<if test="grade!=null and grade !=''"><!-- 级别查询 -->
+			and grade=#{grade}
+		</if>
+		<if test="trainTime !=null and trainTime != ''"><!-- 级别查询 -->
+			and trainTime=#{trainTime}
+		</if>
+		<if test="identityId !=null and identityId != ''"><!-- 级别查询 -->
+			and identity_id=#{identityId,jdbcType=INTEGER}
+		</if>
+		order by id desc
+	</select>
+
+	  <select id="getUnCheUser" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+		    select
+		    <include refid="Base_Column_List" />
+		    from user where status = #{status,jdbcType=INTEGER}
+	</select>
+
+
+	  <update id="updateUserStatus" parameterType="com.youyicn.entity.User" >
+	    update user
+	    set status= #{status,jdbcType=INTEGER}
+	    where id = #{id,jdbcType=INTEGER}
+	  </update>
+
+</mapper>

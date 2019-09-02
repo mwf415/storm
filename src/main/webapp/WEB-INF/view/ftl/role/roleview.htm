@@ -1,0 +1,41 @@
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<#import "../decorators/spring.ftl" as spring />
+<html >
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<#include "../decorators/headtitle.ftl" >
+</head>
+<body>
+<!--right-->
+
+<#include "../decorators/left1.ftl" ><div class="main_right" id="right">
+ <div class="right_em_con">
+      <div class="title">
+        <ul>
+          <li class="on">基本信息</li>
+         </ul>
+       </div>
+      <div class="right_em_con2">
+       <table class="table table-bordered table-hover">
+           <tr>
+             <td width="15%" class="td_r">角色ID</td>
+             <td width="85%"><span>${role.id!}</span></td>
+          </tr>	
+          <tr>
+            <td class="td_r">角色名称</td>
+            <td width="85%"><span>${role.name!}</span></td>
+          </tr>
+          <tr>
+            <td class="td_r">描述信息</td>
+            <td><textarea cols="80" rows="6" readonly="readonly">${role.des!}</textarea></td>
+          </tr>  
+          <tr>
+          	<td class="td_r"></td>
+          	<td><input type="button" class="main_button" value="返 回" onclick="window.location=('<@spring.url '/userRoleController/tolistrole.htm?li=li12&div=div_1&menuOrder=0'/>')"/></td>
+          </tr>    
+        </table>
+      </div>
+      <br/><br/>
+</div>
+</div>

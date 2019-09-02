@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youyicn.dao.cycle.ActivesMapper">
+<resultMap id="BaseResultMap" type="com.youyicn.entity.cycle.Actives" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="text" property="text" jdbcType="VARCHAR" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="startTime" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="endTime" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="baseName" property="baseName" jdbcType="VARCHAR" />
+    <result column="roomName" property="roomName" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="searchStart" property="searchStart" jdbcType="TIMESTAMP" />
+    <result column="searchEnd" property="searchEnd" jdbcType="TIMESTAMP" />
+    <result column="sickPerson" property="sickPerson" jdbcType="VARCHAR" />
+    <result column="sickNum" property="sickNum" jdbcType="VARCHAR" />
+    <result column="takeTime" property="takeTime" jdbcType="INTEGER" />
+    <result column="isOver" property="isOver" jdbcType="INTEGER" />
+    <result column="org" property="org" jdbcType="VARCHAR" />
+    <result column="des" property="des" jdbcType="VARCHAR" />
+    <result column="creater" property="creater" jdbcType="VARCHAR" />
+    <result column="ext02" property="ext02" jdbcType="VARCHAR" />
+    <result column="ext01" property="ext01" jdbcType="VARCHAR" />
+    <result column="fileNum" property="fileNum" jdbcType="INTEGER" />
+    <result column="userNum" property="userNum" jdbcType="INTEGER" />
+    <collection property="activesUsers" column="id" ofType="ActivesUser" select="com.youyicn.dao.cycle.ActivesUserMapper.getUserByactivesIdRelate"></collection>
+  </resultMap>
+    <!-- 首页数据查询 -->
+	<resultMap id="selectMap" type="com.youyicn.entity.cycle.GroupByEntity" >
+		<result property="baseName" column="baseName" jdbcType="VARCHAR" />
+		<result property="roomName" column="roomName" jdbcType="VARCHAR" />
+		<result property="startTime" column="startTime" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<select id="getNumByStatus"  resultType="int">
+		select count(id) from cycle_actives where status = ${status} 
+		<if test="searchStart !=null and searchStart !='' and  searchEnd !=null and searchEnd !=''  ">
+			and  startTime between STR_TO_DATE(${searchStart},'%Y-%m-%d %H:%i:%s') and STR_TO_DATE(${searchEnd},'%Y-%m-%d %H:%i:%s')
+		</if>
+		order by startTime desc
+	</select>
+
+	<update id="updateIsInById" parameterType="Integer">
+		update  cycle_actives set isOver =1 where id =#{id}
+	</update>
+	
+	<update id="updateFileNum" >
+		update  cycle_actives set fileNum =#{fileNum} where id =#{id}
+	</update>
+	
+	<select id="getById" parameterType="com.youyicn.entity.cycle.Actives" resultType="com.youyicn.entity.cycle.Actives">
+		select * from cycle_actives where id=#{id}
+	</select>
+			
+	<select id="getIndexResult"  resultMap="BaseResultMap">
+		select *  from cycle_actives where 1=1 
+		<if test="searchStart !=null and searchStart !='' and  searchEnd !=null and searchEnd !=''  ">
+			and  startTime between STR_TO_DATE(${searchStart},'%Y-%m-%d %H:%i:%s') and STR_TO_DATE(${searchEnd},'%Y-%m-%d %H:%i:%s')
+		</if>
+		order by startTime desc
+	</select>
+	
+	<!--主要是为了self查询的不断重复查询-->
+	<select id="getByIdHasAsso" parameterType="Integer" resultMap="BaseResultMap">
+		select * from cycle_actives where id = #{id} 
+	</select>
+	
+	<select id="getByCon" parameterType="com.youyicn.entity.cycle.Actives" resultMap="BaseResultMap">
+		select * from cycle_actives where 1=1 
+		<if test="roomName!=null and roomName!=''">
+			and roomName=#{roomName}
+		</if> 
+		<if test="baseName!=null and baseName!=''">
+			and baseName=#{baseName}
+		</if> 
+		<if test="isOver !=null and isOver !='' ">
+			and isOver =#{isOver}
+		</if>
+		<if test="creater !=null">
+			and creater=#{creater}
+		</if> 
+		<if test="searchStart!=null and searchEnd!=null">
+			and startTime <![CDATA[>=]]> #{searchStart} and startTime <![CDATA[<=]]> #{searchEnd} 
+		</if>
+		<if test="status!=null">
+			and status=#{status}
+		</if>
+		
+		order by startTime desc
+	</select>
+	
+	<select id="getActivesByForm" parameterType="com.youyicn.entity.cycle.Actives" resultType="com.youyicn.entity.cycle.Actives">
+		select tt.id id, ttt.name teacherName , tt.userNum , tt.baseName ,tt.roomName,tt.status,tt.title,tt.startTime,tt.takeTime,tt.org from  (
+			select COUNT(t.tid) userNum ,a.id id , a.baseName baseName ,a.roomName roomName,a.status status,a.title title,a.startTime startTime,a.takeTime takeTime,a.org org  
+			from cycle_actives a LEFT JOIN 
+				(select cau1.activesId tid from cycle_actives_user cau1 where identityId =1) t on a.id = t.tid
+					    where  a.startTime  &gt;= #{searchStart} and  a.startTime  &lt;= #{searchEnd} 
+					    <if test="baseName != null and baseName !=''">
+							and a.org =#{baseName} 
+						</if>
+						<if test="roomName != null and roomName !=''">
+							and a.org=#{roomName}
+						</if>
+					      GROUP BY a.id 
+					)tt 
+			LEFT JOIN  (select cau2.activesId tid, cau2.name name from cycle_actives_user cau2 where identityId =2 ) ttt on tt.id =ttt.tid
+		order by 
+			<if test="baseName != null and baseName !=''">
+				tt.baseName ,
+			</if>
+			<if test="roomName != null and roomName !=''">
+				tt.roomName ,
+			</if>
+			<if test="ext01 != null and ext01 !=''">
+				ttt.name ,
+			</if>
+		 tt.status desc
+	</select>
+	
+	<insert id="add" parameterType="com.youyicn.entity.cycle.Actives"  keyProperty="id" useGeneratedKeys="true">
+		insert into cycle_actives (createTime,startTime,roomName,
+			creater,status,baseName,address,isOver,sickNum,org,sickPerson,takeTime,title,	ext01) 
+			values	
+		(#{createTime},#{startTime},#{roomName},
+			#{creater},#{status},#{baseName},#{address},#{isOver},#{sickNum},#{org},#{sickPerson},#{takeTime},#{title},
+			#{ext01})
+	</insert>
+	
+	<delete id="delById" parameterType="com.youyicn.entity.cycle.Actives" >
+		delete  from cycle_actives where id = #{id}
+	</delete>
+	
+	<select id="selectCount" resultMap="selectMap" parameterType="com.youyicn.entity.cycle.Actives">
+		select baseName,roomName ,startTime from cycle_actives   
+			where  startTime BETWEEN #{searchStart} and #{searchEnd}
+		<if test="creater !=null">
+			and creater = #{creater} 
+		</if>
+	</select>
+	<select id="getRoomStat" resultType="com.youyicn.model.RoomStat">
+		<!-- 统计科室情况 -->
+		SELECT t5.*, t6.offiNum, t6.unOffiNum, t6.takeTime, t6.activeNum, t6.avgTime FROM (SELECT t5.roomName roomName, SUM(t5.offiNum) offiNum, SUM(t5.unOffiNum) unOffiNum, SUM(t5.takeTime) takeTime, SUM(t5.activeNum) activeNum, SUM(t5.takeTime)/SUM(t5.activeNum) avgTime FROM
+		(SELECT t4.roomName roomName, t4.`status`,SUM(t4.offiNum) offiNum, SUM(t4.stuNum) stuNum, SUM(t4.unOffiNum) unOffiNum, SUM(t4.fileNum) fileNum, COUNT(*) activeNum, SUM(t4.takeTime) takeTime FROM 
+		(SELECT ca.id, ca.status, ca.fileNum, ca.takeTime, ca.roomName, t1.offiNum, t2.stuNum, t3.unOffiNum
+		FROM cycle_actives ca 
+		LEFT JOIN (SELECT count(*) offiNum, activesId FROM cycle_actives_user WHERE identityId=1 GROUP BY activesId) t1 ON ca.id=t1.activesId
+		LEFT JOIN (SELECT count(*) stuNum, activesId FROM cycle_actives_user WHERE identityId=2 GROUP BY activesId) t2 ON ca.id=t2.activesId
+		LEFT JOIN (SELECT count(*) unOffiNum, activesId FROM cycle_actives_user WHERE identityId=3 GROUP BY activesId) t3 ON ca.id=t3.activesId
+		WHERE ca.createTime>#{startTime} AND ca.createTime&lt;#{endTime}) t4
+		GROUP BY t4.roomName, t4.`status`) t5
+		GROUP BY t5.roomName) t6
+		
+		<!-- 统计教师数，在培学员，入科学员，出科学员 -->
+		JOIN (SELECT cr.value roomName, t4.teacherNum, t1.inTrain inTrain, t2.inRoom inRoom, t3.outRoom outRoom, t7.onDetyMount onDetyMount, t7.mngMount mngMount, t7.uploadFileCount uploadFileCount FROM
+		cycle_room cr  
+		LEFT JOIN (SELECT roomName, COUNT(*) inTrain FROM cycle_arrturn WHERE NOW()>startTime AND NOW()&lt;endTime GROUP BY roomName) t1 ON cr.value=t1.roomName
+		LEFT JOIN (SELECT roomName, COUNT(*) inRoom FROM cycle_arrturn WHERE startTime>#{startTime} AND startTime&lt;#{endTime} GROUP BY roomName) t2 ON cr.value=t2.roomName
+		LEFT JOIN (SELECT roomName, COUNT(*) outRoom FROM cycle_arrturn WHERE endTime>#{startTime} AND endTime&lt;#{endTime} GROUP BY roomName) t3 ON cr.value=t3.roomName
+		LEFT JOIN (SELECT roomName, COUNT(*) teacherNum FROM `user` GROUP BY roomName) t4  ON cr.value=t4.roomName 
+		LEFT JOIN (SELECT roomName, SUM(onDetyMount) onDetyMount,SUM(uploadFileCount) uploadFileCount, SUM(mngMount) mngMount FROM cycle_sumscore WHERE createTime>#{startTime} and createTime&lt;#{endTime} GROUP BY roomName) t7 ON cr.value=t7.roomName) t5 ON t5.roomName=t6.roomName
+	</select>
+	<select id="getActiveStat" resultType="com.youyicn.model.ActiveStat">
+		<!-- 根据科室和活动分组，统计活动参加教师人数offiNum，学生人数，文件上传数，活动次数等 -->
+		SELECT t4.roomName, t4.`status`,SUM(t4.offiNum) offiNum, SUM(t4.stuNum) stuNum, SUM(t4.unOffiNum) unOffiNum, SUM(t4.fileNum) fileNum, COUNT(*) activeNum, SUM(t4.takeTime) takeTime from 
+		(SELECT ca.id, ca.status, ca.fileNum, ca.takeTime, ca.roomName, t1.offiNum, t2.stuNum, t3.unOffiNum
+		FROM cycle_actives ca 
+		LEFT JOIN (SELECT COUNT(*) offiNum, activesId FROM cycle_actives_user WHERE identityId=1 GROUP BY activesId) t1 ON ca.id=t1.activesId
+		LEFT JOIN (SELECT COUNT(*) stuNum, activesId FROM cycle_actives_user WHERE identityId=2 GROUP BY activesId) t2 ON ca.id=t2.activesId
+		LEFT JOIN (SELECT COUNT(*) unOffiNum, activesId FROM cycle_actives_user WHERE identityId=3 GROUP BY activesId) t3 ON ca.id=t3.activesId
+		WHERE ca.createTime>#{startTime} AND ca.createTime&lt;#{endTime}) t4
+		GROUP BY t4.roomName, t4.`status`
+	</select>
+	
+	
+	<select id="getByLoginStartTimeEndTime" resultType="com.youyicn.entity.cycle.ActivesSingle">
+		SELECT c.* ,d.name teacherName from cycle_actives_user d JOIN 
+	(select a.* from cycle_actives a 
+			left JOIN cycle_actives_user b on a.id = b.activesId 
+	WHERE  a.startTime > #{startTime} and a.startTime &lt; #{endTime} and a.`status`=#{status} and b.loginName=#{loginName} ) c 
+		on c.id = d.activesId and d.identityId=1
+	</select>
+	
+	<select id="getByLoginStartTimeEndTimeCount"	 resultType="java.lang.Integer">
+			SELECT count(*) from cycle_actives_user d JOIN 
+		(select a.* from cycle_actives a 
+				left JOIN cycle_actives_user b on a.id = b.activesId 
+		WHERE  a.startTime > #{startTime} and a.startTime &lt; #{endTime} and a.`status`=#{status} and b.loginName=#{loginName} ) c 
+			on c.id = d.activesId and d.identityId=1
+	</select>
+</mapper>

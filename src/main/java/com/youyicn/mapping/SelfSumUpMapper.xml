@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youyicn.dao.cycle.SelfSumUpMapper">
+
+	<!-- 添加教学查房安排 -->
+	<insert id="insert" parameterType="com.youyicn.entity.cycle.SelfSumUp" >
+		insert into cycle_selfsumup 
+		(activesId,loginName,   zdjb,    yyjxcf,     ghjxcf,   yybltl ,createTime ,   nlfx   ,wqbz ,knjz,
+		ckksnr   ,jx ,ext01) 
+			values	
+		( #{activesId},#{loginName},#{zdjb},#{yyjxcf},#{ghjxcf},#{yybltl},#{createTime},#{nlfx},#{wqbz},#{knjz},
+		#{ckksnr},#{jx},#{ext01})
+	</insert>
+	
+	<update id="update"  parameterType="com.youyicn.entity.cycle.SelfSumUp" >
+		update cycle_selfsumup 
+		set  
+		zdjb=#{zdjb},    
+		yyjxcf=#{yyjxcf},     
+		ghjxcf=#{ghjxcf},   
+		yybltl=#{yybltl} ,
+		createTime= #{createTime},   
+		nlfx= #{nlfx}  ,
+		wqbz= #{wqbz},
+		knjz=#{knjz},
+		ckksnr=#{ckksnr},
+		jx=#{jx} ,
+		ext01=#{ext01}  
+		where id =#{id}
+	</update>
+
+	<select id="getById" parameterType="com.youyicn.entity.cycle.SelfSumUp" resultType="com.youyicn.entity.cycle.SelfSumUp">
+		select * from cycle_selfsumup where id =#{id} 
+	</select>
+	<select id="getByAcitvesIdAndUser"  resultType="com.youyicn.entity.cycle.SelfSumUp">
+		select * from cycle_selfsumup where activesId =#{activesId} and loginName =${loginName}
+	</select>
+	
+	
+	<delete id="del" parameterType="Integer">
+		delete from cycle_selfsumup where id=#{id}
+	</delete>
+	
+	<delete id="delByActivesId" parameterType="Integer">
+		delete from cycle_selfsumup where activesId=#{activesId}
+	</delete>
+	
+</mapper>

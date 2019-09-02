@@ -1,0 +1,88 @@
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<#import "../decorators/spring.ftl" as spring />
+<style>
+.table_td td{
+	border-left:1px solid #FFF;
+}
+.td_table {
+	width: "2000px";
+	border: "0px"; 
+	cellspacing: "0"; 
+	cellpadding: "0";
+}
+.big_table {
+	width: "2000px";
+	border: "0px"; 
+	cellspacing: "0"; 
+	cellpadding: "0";
+}
+</style>
+<#include "../decorators/left1.ftl" >
+<div class="main_right" id="right">
+	<table cellpadding="0px" cellspacing="1px" class="main_table" style="width:2100px;">
+		<tr class="table_title">
+			<td width="100px;">用户姓名</td>
+			<td width="100px;">基地名称</td>
+			<td width="1800px;">详情</td>
+		</tr>
+		<#if resultMap?exists >
+			<#list resultMap?keys as key> 
+			<tr class="table_td">
+				<#assign arrturnList = resultMap[key]> 
+				<#list arrturnList as at>
+					<#if at_index == 0>
+						<td>${at.userName}</td>
+						<td>${at.basename}</td>
+					</#if>
+				</#list>
+				<td>
+					<table class="td_table" >
+						<tr>
+						<#list arrturnList as arrturn>
+							<td> ${arrturn.startTime[0..10]}<br/>${arrturn.roomName}</td>
+						</#list>
+						</tr>
+					</table>
+				</td>
+				
+			</tr>
+			</#list>
+		<#else>
+  		<tr class="table_td"><td colspan="12" align="center">没有符合条件的结果。</td></tr>
+	</#if>
+	</table>
+</div>
+<script type="text/javascript">
+
+function questView(id){
+	var url ="<@spring.url '/tcheRoomController/qusetview.htm?randomNum=" + id + "'/>";
+	ajaxFormRequest("{url:'"+url+"',id:'dataDiv',form:'searchform'}");
+}
+//查看资料
+function cheFile(id){
+	var url ="<@spring.url '/file/filelist.htm?paramPath=" + id + "'/>";
+	ajaxFormRequest("{url:'"+url+"',id:'dataDiv',form:'searchform'}");
+}
+//提出问题
+function questDel(id){
+	if (window.confirm('会删除此次查房的所有问题，学生回答的你也会被删除 ，你确定吗？')) {
+		var url ="<@spring.url '/tcheRoomController/qusetdel.htm?randomNum=" + id + "'/>";
+		ajaxFormRequest("{url:'"+url+"',id:'dataDiv',form:'searchform'}");
+	}
+}
+//上传资料
+function sickFile(id){
+	var url ="<@spring.url '/cheroom/upfile.htm?paramPath=" + id + "'/>";
+	ajaxFormRequest("{url:'"+url+"',id:'dataDiv',form:'searchform'}");
+}
+function questAdd(id){
+	var url ="<@spring.url '/tcheRoomController/qusetadd.htm?li=6&randomNum=" + id + "'/>";
+	ajaxFormRequest("{url:'"+url+"',id:'dataDiv',form:'searchform'}");
+}
+
+function targetPage(pageIndex){
+	window.location = '<@spring.url "/tcheRoomController/tcheRoomlist.htm?li=${li!}&div=${div!}&menuOrder=0&searchEnd=${searchEnd!}&searchStart=${searchStart!}&pageIndex='+pageIndex+'"/>';
+}
+</script>
+<!--right end-->

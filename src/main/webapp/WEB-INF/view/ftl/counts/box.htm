@@ -1,0 +1,313 @@
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<#import "../decorators/spring.ftl" as spring />
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+<div class="right_em_con">
+	<div class="title"> 
+		<ul>
+			<li class="on" onclick="JavaScript:Change('con_','0','tours_',8)" id="con_0">入科教育</li>
+			<li onclick="JavaScript:Change('con_','1','tours_',8)" id="con_1">教学查房</li>
+			<li onclick="JavaScript:Change('con_','2','tours_',8)" id="con_2">病例讨论</li>
+			<li onclick="JavaScript:Change('con_','3','tours_',8)" id="con_3">教学讲座</li>
+			<li onclick="JavaScript:Change('con_','4','tours_',8)" id="con_4">操作训练</li>
+			<li onclick="JavaScript:Change('con_','5','tours_',8)" id="con_5">出科考试</li>
+			<li onclick="JavaScript:Change('con_','8','tours_',8)" id="con_8">其他活动</li>
+			<li onclick="JavaScript:Change('con_','6','tours_',8)" id="con_6">评价与回顾</li>
+			<li onclick="JavaScript:Change('con_','7','tours_',8)" id="con_7">工作记录</li>
+		</ul>
+	</div>
+	<div class="right_em_con2">
+		<table  id="tours_0" class="tab_open01 table table-bordered table-hover">
+			<tr>
+				<td width="7%">责任老师</td>
+				<td width="10%">开始时间</td>
+				<td width="15%">标题</td>
+				<td width="7%">地点</td>
+				<td width="5%">时长</td>
+				<td width="5%">操作</td>
+			</tr>
+			<#if actList4 ?? && actList4 ?size gt 0>
+				<#list actList4  as cheRoom>
+				<tr class="table_td">
+					<td>${cheRoom.teacherName!}</td>
+					<td>${cheRoom.startTime!}</td>
+					<td>${cheRoom.title!}</td>
+					<td>${cheRoom.address!}</td>
+					<td>${cheRoom.takeTime!}</td>
+					<td>
+						<button type="button" class="btn btn-primary btn-xs"  
+						onclick="pop_userinfo(event,'<@spring.url '/inLearn/ziliao_detail.htm?roomName=${cheRoom.roomName!}'/>')">入科资料</button>  
+					</td>
+				</tr>
+				</#list>
+			<#else>
+	  			<tr class="table_td"><td colspan="3" align="center">没有符合条件的结果。</td></tr>
+			</#if>
+			
+		</table>
+		
+		<div id="tours_1"  style="display:none;">      
+			<table class="table table-bordered table-hover">
+				<tr>
+					<td width="7%">责任老师</td>
+					<td width="10%">开始时间</td>
+					<td width="15%">疾病名称</td>
+					<td width="7%">病人姓名</td>
+					<td width="5%">病案号</td>
+					<td width="7%">地点</td>
+					<td width="5%">时长</td>
+					<td width="5%">操作</td>
+				</tr>
+				<#if actList5 ?? && actList5 ?size gt 0>
+					<#list actList5  as cheRoom>
+					<tr class="table_td">
+						<td>${cheRoom.teacherName!}</td>
+						<td>${cheRoom.startTime!}</td>
+						<td>${cheRoom.title!}</td>
+						<td>${cheRoom.sickPerson!}</td>
+						<td>${cheRoom.sickNum!}</td>
+						<td>${cheRoom.address!}</td>
+						<td>${cheRoom.takeTime!}</td>
+						<td>
+							<button  type="button" class="btn btn-primary btn-xs" 
+								onclick="pop_userinfo(event,'<@spring.url '/questCont/questSee.htm?loginName=${loginName!}&activesId=${cheRoom.id!}'/>')">学生答题</button>
+							<button type="button" class="btn btn-primary btn-xs"  onclick="pop_userinfo(event,'<@spring.url '/file/filelist.htm?activesId=${cheRoom.id!}'/>')">查看资料</button>
+						</td>
+					</tr>
+					</#list>
+				<#else>
+		  			<tr class="table_td"><td colspan="3" align="center">没有符合条件的结果。</td></tr>
+				</#if>
+			</table>
+		</div>
+		<div id="tours_2"  style="display:none;">      
+			<table class="table table-bordered table-hover">
+				<tr>
+					<td width="7%">责任老师</td>
+					<td width="10%">开始时间</td>
+					<td width="15%">疾病名称</td>
+					<td width="7%">病人姓名</td>
+					<td width="5%">病案号</td>
+					<td width="7%">地点</td>
+					<td width="5%">时长</td>
+					<td width="5%">操作</td>
+				</tr>
+				<#if actList6 ?? && actList6 ?size gt 0>
+					<#list actList6  as cheRoom>
+					<tr class="table_td">
+						<td>${cheRoom.teacherName!}</td>
+						<td>${cheRoom.startTime!}</td>
+						<td>${cheRoom.title!}</td>
+						<td>${cheRoom.sickPerson!}</td>
+						<td>${cheRoom.sickNum!}</td>
+						<td>${cheRoom.address!}</td>
+						<td>${cheRoom.takeTime!}</td>
+						<td>
+							<button  type="button" class="btn btn-primary btn-xs" 
+								onclick="pop_userinfo(event,'<@spring.url '/questCont/questSee.htm?loginName=${loginName!}&activesId=${cheRoom.id!}'/>')">学生答题</button>
+							<button type="button" class="btn btn-primary btn-xs"  onclick="pop_userinfo(event,'<@spring.url '/file/filelist.htm?activesId=${cheRoom.id!}'/>')">查看资料</button>
+
+						</td>
+					</tr>
+					</#list>
+				<#else>
+		  			<tr class="table_td"><td colspan="3" align="center">没有符合条件的结果。</td></tr>
+				</#if>
+				
+			</table>
+		</div>
+		<div id="tours_3"  style="display:none;">      
+			<table class="table table-bordered table-hover">
+				<tr>
+					<td width="7%">责任老师</td>
+					<td width="10%">开始时间</td>
+					<td width="10%">标题</td>
+					<td width="7%">地点</td>
+					<td width="5%">时长</td>
+					<td width="5%">操作</td>
+				</tr>
+				<#if actList7 ?? && actList7 ?size gt 0>
+					<#list actList7  as cheRoom>
+					<tr class="table_td">
+						<td>${cheRoom.teacherName!}</td>
+						<td>${cheRoom.startTime!}</td>
+						<td>${cheRoom.title!}</td>
+						<td>${cheRoom.address!}</td>
+						<td>${cheRoom.takeTime!}</td>
+						<td>
+							<button  type="button" class="btn btn-primary btn-xs" 
+							onclick="pop_userinfo(event,'<@spring.url '/questCont/questSee.htm?loginName=${loginName!}&activesId=${cheRoom.id!}'/>')">学生答题</button>
+							<button type="button" class="btn btn-primary btn-xs"  onclick="pop_userinfo(event,'<@spring.url '/file/filelist.htm?activesId=${cheRoom.id!}'/>')">查看资料</button>
+						
+						</td>
+					</tr>
+					</#list>
+				<#else>
+		  			<tr class="table_td"><td colspan="3" align="center">没有符合条件的结果。</td></tr>
+				</#if>
+				
+			</table>
+		</div>
+		<div id="tours_4"  style="display:none;">      
+			<table class="table table-bordered table-hover">
+				<tr>
+					<td width="7%">责任老师</td>
+					<td width="10%">开始时间</td>
+					<td width="10%">标题</td>
+					<td width="7%">地点</td>
+					<td width="5%">时长</td>
+					<td width="5%">操作</td>
+				</tr>
+				<#if actList8 ?? && actList8 ?size gt 0>
+					<#list actList8  as cheRoom>
+					<tr class="table_td">
+						<td>${cheRoom.teacherName!}</td>
+						<td>${cheRoom.startTime!}</td>
+						<td>${cheRoom.title!}</td>
+						<td>${cheRoom.address!}</td>
+						<td>${cheRoom.takeTime!}</td>
+						<td>
+							<button  type="button" class="btn btn-primary btn-xs" 
+							onclick="pop_userinfo(event,'<@spring.url '/questCont/questSee.htm?loginName=${loginName!}&activesId=${cheRoom.id!}'/>')">学生答题</button>
+							<button type="button" class="btn btn-primary btn-xs"  onclick="pop_userinfo(event,'<@spring.url '/file/filelist.htm?activesId=${cheRoom.id!}'/>')">查看资料</button>
+						
+						</td>
+					</tr>
+					</#list>
+				<#else>
+		  			<tr class="table_td"><td colspan="3" align="center">没有符合条件的结果。</td></tr>
+				</#if>
+			</table>
+		</div>
+		<div id="tours_5"  style="display:none;">      
+			<table class="table table-bordered table-hover">
+				<tr>
+					<td width="7%">责任老师</td>
+					<td width="10%">开始时间</td>
+					<td width="10%">标题</td>
+					<td width="7%">地点</td>
+					<td width="5%">时长</td>
+					<td width="5%">操作</td>
+				</tr>
+				<#if actList9 ?? && actList9 ?size gt 0>
+					<#list actList9  as cheRoom>
+					<tr class="table_td">
+						<td>${cheRoom.teacherName!}</td>
+						<td>${cheRoom.startTime!}</td>
+						<td>${cheRoom.title!}</td>
+						<td>${cheRoom.address!}</td>
+						<td>${cheRoom.takeTime!}</td>
+						<td>
+							<button  type="button" class="btn btn-primary btn-xs" 
+							onclick="pop_userinfo(event,'<@spring.url '/questCont/questSee.htm?loginName=${loginName!}&activesId=${cheRoom.id!}'/>')">学生答题</button>
+						</td>
+					</tr>
+					</#list>
+				<#else>
+		  			<tr class="table_td"><td colspan="3" align="center">没有符合条件的结果。</td></tr>
+				</#if>
+				
+			</table>
+		</div>
+		<div id="tours_8"  style="display:none;">      
+			<table class="table table-bordered table-hover">
+				<tr>
+					<td width="7%">责任老师</td>
+					<td width="10%">开始时间</td>
+					<td width="10%">标题</td>
+					<td width="7%">地点</td>
+					<td width="5%">时长</td>
+					<td width="5%">操作</td>
+				</tr>
+				<#if actList3 ?? && actList3 ?size gt 0>
+					<#list actList3  as cheRoom>
+					<tr class="table_td">
+						<td>${cheRoom.teacherName!}</td>
+						<td>${cheRoom.startTime!}</td>
+						<td>${cheRoom.title!}</td>
+						<td>${cheRoom.address!}</td>
+						<td>${cheRoom.takeTime!}</td>
+						<td>
+							<button  type="button" class="btn btn-primary btn-xs" 
+							onclick="pop_userinfo(event,'<@spring.url '/questCont/questSee.htm?loginName=${loginName!}&activesId=${cheRoom.id!}'/>')">学生答题</button>
+							
+							<button type="button" class="btn btn-primary btn-xs"  onclick="pop_userinfo(event,'<@spring.url '/file/filelist.htm?activesId=${cheRoom.id!}'/>')">查看资料</button>
+						</td>
+					</tr>
+					</#list>
+				<#else>
+		  			<tr class="table_td"><td colspan="3" align="center">没有符合条件的结果。</td></tr>
+				</#if>
+				
+			</table>
+		</div>
+		
+		<div id="tours_6"  style="display:none;">      
+			<table class="table table-bordered table-hover">
+				<tr>
+					<td width="7%">评价</td>
+					<td width="10%">回顾</td>
+				</tr>
+				<tr>
+					<#if actList9 ?? && actList9 ?size gt 0>
+					<#list actList9  as cheRoom>
+					<tr class="table_td">
+						<td width="7%">
+						<span>
+							<a href="#" onclick="pop_userinfo(event,'<@spring.url '/judgeController/show.htm?id=${cheRoom.id!}&loginName=${loginName!}'/>')">
+								<img src="${uri.imgsite}/xiugai.png" title="查看资料"/>老师评价</a>
+						</span> 
+						</td>
+						<td width="10%">
+							<span><a href="#" onclick="pop_userinfo(event,'<@spring.url '/selfSum/show.htm?id=${cheRoom.id!}&loginName=${loginName!}'/>')"><img src="${uri.imgsite}/xiugai.png" title="查看资料"/>自我评价</a></span> 
+						</td>
+						</tr>
+					</#list>
+				<#else>
+		  			<tr class="table_td"><td colspan="3" align="center">没有符合条件的结果。</td></tr>
+				</#if>
+				</tr>
+			</table>
+		</div>
+		<div id="tours_7"  style="display:none;">      
+			<table class="table table-bordered table-hover">
+				<tr>
+					<td width="3%">序号</td>
+					<td width="4%">病案号</td>
+					<td width="7%">入出院日期</td>
+					<td width="7%">诊断</td>
+					<td width="8%">临床技能操作名称</td>
+					<td width="8%">操作日期</td>
+					<td width="8%">病情</td>
+					<td width="5%">担任角色</td>
+				</tr>
+				<tr>
+					<#if cyleNoteList ?? && cyleNoteList ?size gt 0>
+					<#list cyleNoteList  as cyleNote>
+					<tr class="table_td">
+						<td>${cyleNote.id!}</td>
+						<td>${cyleNote.sicknum!}</td>
+						<td>${cyleNote.indate?string('yyyy-MM-dd HH:mm:ss')}</td>
+						<td>${cyleNote.sickdes!}</td>
+						<td>${cyleNote.skillname!}</td>
+						<td>${cyleNote.starttime?string('yyyy-MM-dd HH:mm:ss')}</td>
+						<td>${cyleNote.sickdetail!}</td>
+						<td>${cyleNote.actrole!}</td>
+					</tr>
+					</#list>
+				<#else>
+		  			<tr class="table_td"><td colspan="12" align="center">没有符合条件的结果。</td></tr>
+				</#if>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<br/><br/>
+</div>
+</body>
+</html>

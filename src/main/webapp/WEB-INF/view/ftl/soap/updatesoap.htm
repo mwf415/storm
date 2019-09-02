@@ -1,0 +1,412 @@
+<#import "../decorators/spring.ftl" as spring />
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html >
+<head><#include "../decorators/headtitle.ftl" >
+</head>
+<body>
+<!--right-->
+<#include "../decorators/left1.ftl" ><div class="main_right" id="right">
+	<div class="m_step">
+    	<a class="on">${cex.ksName!} 的SOAP评价表</a>
+    </div>
+	<div class="rig_tab">
+		<div class="rig_tab2">
+			<form id="addform" name="form1">
+				<table class="tab_infor" >
+					<tr style="display: none;">
+						<td><input type="text" name="id" value="${cex.id!}" /></td>
+					</tr>
+					<tr>
+						<td>考官姓名:&nbsp;&nbsp;<input type="text" name="kgName" id="kgName" value="${cex.kgName!}" />&nbsp;&nbsp;&nbsp;&nbsp;工号:&nbsp;&nbsp;<input type="text" name="kgNum" value="${cex.kgNum!}"  id="kgNum"/>&nbsp;</td>
+					</tr>
+					<tr>
+						<td>日&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;期:&nbsp;&nbsp;<input type="text" name="gradeDate" id="gradeDate" value="${(cex.gradeDate?string("yyyy-MM-dd"))!}" readonly/><img onclick="WdatePicker({el:'gradeDate',dateFmt:'yyyy-MM-dd',maxDate:'%y-%M-%d'})" 
+						src="${uri.jssite}/My97DatePicker/skin/datePicker.gif" width="16" height="22" align="absmiddle">&nbsp;&nbsp;&nbsp;&nbsp;
+						时间段:&nbsp;&nbsp;
+										
+											<input name="gradeTime" type="radio" value="1" <#if cex.gradeTime == "1">checked="checked"</#if>  />上午  &nbsp;&nbsp;
+						    				<input name="gradeTime" type="radio" value="2" <#if cex.gradeTime == "2">checked="checked"</#if> />下午 &nbsp;&nbsp;
+						    				<input name="gradeTime" type="radio" value="3" <#if cex.gradeTime == "3">checked="checked"</#if> />晚上 &nbsp;&nbsp;																								
+						</td>
+					</tr>
+					<tr>
+						<td>考生姓名:&nbsp;&nbsp;<input type="text" name="ksName" id="ksName" value="${cex.ksName}" />&nbsp;&nbsp;&nbsp;&nbsp;学号/工号:&nbsp;&nbsp;<input type="text" name="ksNum" id="ksNum" value="${cex.ksNum}" />&nbsp;</td>
+					</tr>
+					<tr>
+						<td>考生身份:&nbsp;&nbsp;<input name="ksIdentity" type="radio" value="1" <#if cex.ksIdentity == "1">checked="checked"</#if>   />见习&nbsp;&nbsp;
+							     <input name="ksIdentity" type="radio" value="2" <#if cex.ksIdentity == "2">checked="checked"</#if>   />实习&nbsp;&nbsp;
+							     <input name="ksIdentity" type="radio" value="3" <#if cex.ksIdentity == "3">checked="checked"</#if>   />第一年住院医 &nbsp;&nbsp;
+							     <input name="ksIdentity" type="radio" value="4" <#if cex.ksIdentity == "4">checked="checked"</#if>   />第二年住院医&nbsp;&nbsp;
+							     <input name="ksIdentity" type="radio" value="5" <#if cex.ksIdentity == "5">checked="checked"</#if>   />住院总&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>考核地点:&nbsp;&nbsp;<input name="khaddress" type="radio" value="1" <#if cex.khaddress == "1">checked="checked"</#if>   />门诊&nbsp;&nbsp;
+							     <input name="khaddress" type="radio" value="2" <#if cex.khaddress == "2">checked="checked"</#if>   />急诊&nbsp;&nbsp;
+							     <input name="khaddress" type="radio" value="3" <#if cex.khaddress == "3">checked="checked"</#if>   />住院 &nbsp;&nbsp;
+							     <input name="khaddress" type="radio" value="4" <#if cex.khaddress == "4">checked="checked"</#if>   />其他&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>考核目的:&nbsp;&nbsp;<input name="khmudi" type="radio" value="1" <#if cex.khmudi == "1">checked="checked"</#if>   />资料收集&nbsp;&nbsp;
+							     <input name="khmudi" type="radio" value="2" <#if cex.khmudi == "2">checked="checked"</#if>   />诊断&nbsp;&nbsp;
+							     <input name="khmudi" type="radio" value="3" <#if cex.khmudi == "3">checked="checked"</#if>   />治疗&nbsp;&nbsp;
+							     <input name="khmudi" type="radio" value="4" <#if cex.khmudi == "4">checked="checked"</#if>   />病情资讯建议&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td><hr/></td>
+					</tr>
+					<tr>
+						<td>病历号:&nbsp;&nbsp;<input type="text" name="blh" id="blh"  style="width:100px;" value="${cex.blh!}" />&nbsp;&nbsp;
+							年龄:&nbsp;&nbsp;<input type="text" name="bage" id="bage" style="width:100px;" value="${cex.bage!}"  />&nbsp;&nbsp;
+							性别:&nbsp;&nbsp;<input type="text" name="bsex" id="bsex" style="width:100px;" value="${cex.bsex!}"  />&nbsp;&nbsp;
+							病房:&nbsp;&nbsp;<input type="text" name="bfh" id="bfh" style="width:100px;" value="${cex.bfh!}"  />&nbsp;&nbsp;
+							床号:&nbsp;&nbsp;<input type="text" name="bch" id="bch" style="width:100px;" value="${cex.bch!}"  />&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>病例复杂程度:&nbsp;&nbsp;<input name="complexDegree" type="radio" value="1" <#if cex.complexDegree == "1">checked="checked"</#if>   />低&nbsp;&nbsp;
+							     <input name="complexDegree" type="radio" value="2" <#if cex.complexDegree == "2">checked="checked"</#if>   />中&nbsp;&nbsp;
+							     <input name="complexDegree" type="radio" value="3" <#if cex.complexDegree == "3">checked="checked"</#if>   />高&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td><hr/></td>
+					</tr>
+					<tr><td>评分标准：&nbsp;&nbsp;&nbsp;&nbsp;缺项(1分)&nbsp;&nbsp;&nbsp;&nbsp;遗漏重要内容(2分) &nbsp;&nbsp;&nbsp;&nbsp;未遗漏重要内容(3分)&nbsp;&nbsp;&nbsp;&nbsp; 内容完整但条理性稍差(4分)&nbsp;&nbsp;&nbsp;&nbsp; 内容完整且有条理(5分)</td></tr>
+					<tr>
+						<td>Subjective</td>
+					</tr>
+					<tr>
+						<td>1、主要症状和体征描述:&nbsp;&nbsp;
+								<input name="mtjq" type="radio" value="1" <#if cex.mtjq == "1">checked="checked"</#if>   />1&nbsp;&nbsp;
+								<input name="mtjq" type="radio" value="2" <#if cex.mtjq == "2">checked="checked"</#if>   />2&nbsp;&nbsp;
+								<input name="mtjq" type="radio" value="3" <#if cex.mtjq == "3">checked="checked"</#if>   />3&nbsp;&nbsp;
+								<input name="mtjq" type="radio" value="4" <#if cex.mtjq == "4">checked="checked"</#if>   />4&nbsp;&nbsp;
+								<input name="mtjq" type="radio" value="5" <#if cex.mtjq == "5">checked="checked"</#if>   />5&nbsp;&nbsp;								
+						</td>
+					</tr>
+					<tr>
+						<td>2、损伤过程描述:&nbsp;&nbsp;
+								<input name="tgjc" type="radio" value="1" <#if cex.tgjc == "1">checked="checked"</#if>   />1&nbsp;&nbsp;
+								<input name="tgjc" type="radio" value="2" <#if cex.tgjc == "2">checked="checked"</#if>   />2&nbsp;&nbsp;
+								<input name="tgjc" type="radio" value="3" <#if cex.tgjc == "3">checked="checked"</#if>   />3&nbsp;&nbsp;
+								<input name="tgjc" type="radio" value="4" <#if cex.tgjc == "4">checked="checked"</#if>   />4&nbsp;&nbsp;
+								<input name="tgjc" type="radio" value="5" <#if cex.tgjc == "5">checked="checked"</#if>   />5&nbsp;&nbsp;								
+						</td>
+					</tr>
+					<tr>
+						<td>3、既往史及药物治疗情况:&nbsp;&nbsp;
+								<input name="zysy" type="radio" value="1" <#if cex.zysy == "1">checked="checked"</#if>   />1&nbsp;&nbsp;
+								<input name="zysy" type="radio" value="2" <#if cex.zysy == "2">checked="checked"</#if>   />2&nbsp;&nbsp;
+								<input name="zysy" type="radio" value="3" <#if cex.zysy == "3">checked="checked"</#if>   />3&nbsp;&nbsp;
+								<input name="zysy" type="radio" value="4" <#if cex.zysy == "4">checked="checked"</#if>   />4&nbsp;&nbsp;
+								<input name="zysy" type="radio" value="5" <#if cex.zysy == "5">checked="checked"</#if>   />5&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>4、其他可能相关病史:&nbsp;&nbsp;
+								<input name="lcpd" type="radio" value="1" <#if cex.lcpd == "1">checked="checked"</#if>   />1&nbsp;&nbsp;
+								<input name="lcpd" type="radio" value="2" <#if cex.lcpd == "2">checked="checked"</#if>   />2&nbsp;&nbsp;
+								<input name="lcpd" type="radio" value="3" <#if cex.lcpd == "3">checked="checked"</#if>   />3&nbsp;&nbsp;
+								<input name="lcpd" type="radio" value="4" <#if cex.lcpd == "4">checked="checked"</#if>   />4&nbsp;&nbsp;
+								<input name="lcpd" type="radio" value="5" <#if cex.lcpd == "5">checked="checked"</#if>   />5&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>Objective</td>
+					</tr>
+					<tr>
+						<td>1、生命征:&nbsp;&nbsp;
+								<input name="zxjy" type="radio" value="1" <#if cex.zxjy == "1">checked="checked"</#if>   />1&nbsp;&nbsp;
+								<input name="zxjy" type="radio" value="2" <#if cex.zxjy == "2">checked="checked"</#if>   />2&nbsp;&nbsp;
+								<input name="zxjy" type="radio" value="3" <#if cex.zxjy == "3">checked="checked"</#if>   />3&nbsp;&nbsp;
+								<input name="zxjy" type="radio" value="4" <#if cex.zxjy == "4">checked="checked"</#if>   />4&nbsp;&nbsp;
+								<input name="zxjy" type="radio" value="5" <#if cex.zxjy == "5">checked="checked"</#if>   />5&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>2、心肺查体:&nbsp;&nbsp;
+								<input name="zznl" type="radio" value="1" <#if cex.zznl == "1">checked="checked"</#if>   />1&nbsp;&nbsp;
+								<input name="zznl" type="radio" value="2" <#if cex.zznl == "2">checked="checked"</#if>   />2&nbsp;&nbsp;
+								<input name="zznl" type="radio" value="3" <#if cex.zznl == "3">checked="checked"</#if>   />3&nbsp;&nbsp;
+								<input name="zznl" type="radio" value="4" <#if cex.zznl == "4">checked="checked"</#if>   />4&nbsp;&nbsp;
+								<input name="zznl" type="radio" value="5" <#if cex.zznl == "5">checked="checked"</#if>   />5&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>3、受累系统重点查体:&nbsp;&nbsp;
+								<input name="ztlc" type="radio" value="1" <#if cex.ztlc == "1">checked="checked"</#if>   />1&nbsp;&nbsp;
+								<input name="ztlc" type="radio" value="2" <#if cex.ztlc == "2">checked="checked"</#if>   />2&nbsp;&nbsp;
+								<input name="ztlc" type="radio" value="3" <#if cex.ztlc == "3">checked="checked"</#if>   />3&nbsp;&nbsp;
+								<input name="ztlc" type="radio" value="4" <#if cex.ztlc == "4">checked="checked"</#if>   />4&nbsp;&nbsp;
+								<input name="ztlc" type="radio" value="5" <#if cex.ztlc == "5">checked="checked"</#if>   />5&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>a,阳性体征:&nbsp;&nbsp;
+								<input name="aztlc" type="radio" value="1" <#if cex.aztlc == "1">checked="checked"</#if>   />1&nbsp;&nbsp;
+								<input name="aztlc" type="radio" value="2" <#if cex.aztlc == "2">checked="checked"</#if>   />2&nbsp;&nbsp;
+								<input name="aztlc" type="radio" value="3" <#if cex.aztlc == "3">checked="checked"</#if>   />3&nbsp;&nbsp;
+								<input name="aztlc" type="radio" value="4" <#if cex.aztlc == "4">checked="checked"</#if>   />4&nbsp;&nbsp;
+								<input name="aztlc" type="radio" value="5" <#if cex.aztlc == "5">checked="checked"</#if>   />5&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>b,相关阴性体征:&nbsp;&nbsp;
+								<input name="bztlc" type="radio" value="1" <#if cex.bztlc == "1">checked="checked"</#if>   />1&nbsp;&nbsp;
+								<input name="bztlc" type="radio" value="2" <#if cex.bztlc == "2">checked="checked"</#if>   />2&nbsp;&nbsp;
+								<input name="bztlc" type="radio" value="3" <#if cex.bztlc == "3">checked="checked"</#if>   />3&nbsp;&nbsp;
+								<input name="bztlc" type="radio" value="4" <#if cex.bztlc == "4">checked="checked"</#if>   />4&nbsp;&nbsp;
+								<input name="bztlc" type="radio" value="5" <#if cex.bztlc == "5">checked="checked"</#if>   />5&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>Analysis</td>
+					</tr>
+					<tr>
+						<td>1、简单总结资料:&nbsp;&nbsp;
+								<input name="zjzl" type="radio" value="1" <#if cex.zjzl == "1">checked="checked"</#if>   />1&nbsp;&nbsp;
+								<input name="zjzl" type="radio" value="2" <#if cex.zjzl == "2">checked="checked"</#if>   />2&nbsp;&nbsp;
+								<input name="zjzl" type="radio" value="3" <#if cex.zjzl == "3">checked="checked"</#if>   />3&nbsp;&nbsp;
+								<input name="zjzl" type="radio" value="4" <#if cex.zjzl == "4">checked="checked"</#if>   />4&nbsp;&nbsp;
+								<input name="zjzl" type="radio" value="5" <#if cex.zjzl == "5">checked="checked"</#if>   />5&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>2、列举问题:&nbsp;&nbsp;
+								<input name="ljwt" type="radio" value="1" <#if cex.ljwt == "1">checked="checked"</#if>   />1&nbsp;&nbsp;
+								<input name="ljwt" type="radio" value="2" <#if cex.ljwt == "2">checked="checked"</#if>   />2&nbsp;&nbsp;
+								<input name="ljwt" type="radio" value="3" <#if cex.ljwt == "3">checked="checked"</#if>   />3&nbsp;&nbsp;
+								<input name="ljwt" type="radio" value="4" <#if cex.ljwt == "4">checked="checked"</#if>   />4&nbsp;&nbsp;
+								<input name="ljwt" type="radio" value="5" <#if cex.ljwt == "5">checked="checked"</#if>   />5&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>3、按照问题所指定的计划:&nbsp;&nbsp;
+								<input name="wtjh" type="radio" value="1" <#if cex.wtjh == "1">checked="checked"</#if>   />1&nbsp;&nbsp;
+								<input name="wtjh" type="radio" value="2" <#if cex.wtjh == "2">checked="checked"</#if>   />2&nbsp;&nbsp;
+								<input name="wtjh" type="radio" value="3" <#if cex.wtjh == "3">checked="checked"</#if>   />3&nbsp;&nbsp;
+								<input name="wtjh" type="radio" value="4" <#if cex.wtjh == "4">checked="checked"</#if>   />4&nbsp;&nbsp;
+								<input name="wtjh" type="radio" value="5" <#if cex.wtjh == "5">checked="checked"</#if>   />5&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>4、结果和随访:&nbsp;&nbsp;
+								<input name="jgsf" type="radio" value="1" <#if cex.jgsf == "1">checked="checked"</#if>   />1&nbsp;&nbsp;
+								<input name="jgsf" type="radio" value="2" <#if cex.jgsf == "2">checked="checked"</#if>   />2&nbsp;&nbsp;
+								<input name="jgsf" type="radio" value="3" <#if cex.jgsf == "3">checked="checked"</#if>   />3&nbsp;&nbsp;
+								<input name="jgsf" type="radio" value="4" <#if cex.jgsf == "4">checked="checked"</#if>   />4&nbsp;&nbsp;
+								<input name="jgsf" type="radio" value="5" <#if cex.jgsf == "5">checked="checked"</#if>   />5&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>Plan</td>
+					</tr>
+					<tr>
+						<td>1、安排检查(辅助检查、影像学):&nbsp;&nbsp;
+								<input name="apjc" type="radio" value="1" <#if cex.apjc == "1">checked="checked"</#if>   />1&nbsp;&nbsp;
+								<input name="apjc" type="radio" value="2" <#if cex.apjc == "2">checked="checked"</#if>   />2&nbsp;&nbsp;
+								<input name="apjc" type="radio" value="3" <#if cex.apjc == "3">checked="checked"</#if>   />3&nbsp;&nbsp;
+								<input name="apjc" type="radio" value="4" <#if cex.apjc == "4">checked="checked"</#if>   />4&nbsp;&nbsp;
+								<input name="apjc" type="radio" value="5" <#if cex.apjc == "5">checked="checked"</#if>   />5&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>2、指导:&nbsp;&nbsp;
+								<input name="zd" type="radio" value="1" <#if cex.zd == "1">checked="checked"</#if>   />1&nbsp;&nbsp;
+								<input name="zd" type="radio" value="2" <#if cex.zd == "2">checked="checked"</#if>   />2&nbsp;&nbsp;
+								<input name="zd" type="radio" value="3" <#if cex.zd == "3">checked="checked"</#if>   />3&nbsp;&nbsp;
+								<input name="zd" type="radio" value="4" <#if cex.zd == "4">checked="checked"</#if>   />4&nbsp;&nbsp;
+								<input name="zd" type="radio" value="5" <#if cex.zd == "5">checked="checked"</#if>   />5&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>3、操作:&nbsp;&nbsp;
+								<input name="cz" type="radio" value="1" <#if cex.cz == "1">checked="checked"</#if>   />1&nbsp;&nbsp;
+								<input name="cz" type="radio" value="2" <#if cex.cz == "2">checked="checked"</#if>   />2&nbsp;&nbsp;
+								<input name="cz" type="radio" value="3" <#if cex.cz == "3">checked="checked"</#if>   />3&nbsp;&nbsp;
+								<input name="cz" type="radio" value="4" <#if cex.cz == "4">checked="checked"</#if>   />4&nbsp;&nbsp;
+								<input name="cz" type="radio" value="5" <#if cex.cz == "5">checked="checked"</#if>   />5&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>4、药物治疗:&nbsp;&nbsp;
+								<input name="ywzl" type="radio" value="1" <#if cex.ywzl == "1">checked="checked"</#if>   />1&nbsp;&nbsp;
+								<input name="ywzl" type="radio" value="2" <#if cex.ywzl == "2">checked="checked"</#if>   />2&nbsp;&nbsp;
+								<input name="ywzl" type="radio" value="3" <#if cex.ywzl == "3">checked="checked"</#if>   />3&nbsp;&nbsp;
+								<input name="ywzl" type="radio" value="4" <#if cex.ywzl == "4">checked="checked"</#if>   />4&nbsp;&nbsp;
+								<input name="ywzl" type="radio" value="5" <#if cex.ywzl == "5">checked="checked"</#if>   />5&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>5、健康教育:&nbsp;&nbsp;
+								<input name="jkjy" type="radio" value="1" <#if cex.jkjy == "1">checked="checked"</#if>   />1&nbsp;&nbsp;
+								<input name="jkjy" type="radio" value="2" <#if cex.jkjy == "2">checked="checked"</#if>   />2&nbsp;&nbsp;
+								<input name="jkjy" type="radio" value="3" <#if cex.jkjy == "3">checked="checked"</#if>   />3&nbsp;&nbsp;
+								<input name="jkjy" type="radio" value="4" <#if cex.jkjy == "4">checked="checked"</#if>   />4&nbsp;&nbsp;
+								<input name="jkjy" type="radio" value="5" <#if cex.jkjy == "5">checked="checked"</#if>   />5&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>6、下一次见面或随访时间:&nbsp;&nbsp;
+								<input name="jmsf" type="radio" value="1" <#if cex.jmsf == "1">checked="checked"</#if>   />1&nbsp;&nbsp;
+								<input name="jmsf" type="radio" value="2" <#if cex.jmsf == "2">checked="checked"</#if>   />2&nbsp;&nbsp;
+								<input name="jmsf" type="radio" value="3" <#if cex.jmsf == "3">checked="checked"</#if>   />3&nbsp;&nbsp;
+								<input name="jmsf" type="radio" value="4" <#if cex.jmsf == "4">checked="checked"</#if>   />4&nbsp;&nbsp;
+								<input name="jmsf" type="radio" value="5" <#if cex.jmsf == "5">checked="checked"</#if>   />5&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td><hr/></td>
+					</tr>
+					<tr>
+						<td>观察时间:&nbsp;&nbsp;<input type="text" name="gcTime" id="gcTime" style="width:50px;" value="${cex.gcTime!}" />分钟&nbsp;&nbsp;&nbsp;&nbsp;回馈时间:&nbsp;&nbsp;<input type="text" name="hkTime" style="width:50px;" id="hkTime" value="${cex.hkTime!}" />分钟&nbsp;</td>
+					</tr>
+					<tr>
+						<td>考官满意度:&nbsp;&nbsp;
+								<input name="kgmy" type="radio" value="1" <#if cex.kgmy == "1">checked="checked"</#if>   />1&nbsp;&nbsp;
+								<input name="kgmy" type="radio" value="2" <#if cex.kgmy == "2">checked="checked"</#if>   />2&nbsp;&nbsp;
+								<input name="kgmy" type="radio" value="3" <#if cex.kgmy == "3">checked="checked"</#if>   />3&nbsp;&nbsp;
+								<input name="kgmy" type="radio" value="4" <#if cex.kgmy == "4">checked="checked"</#if>   />4&nbsp;&nbsp;
+								<input name="kgmy" type="radio" value="5" <#if cex.kgmy == "5">checked="checked"</#if>   />5&nbsp;&nbsp;
+								<input name="kgmy" type="radio" value="6" <#if cex.kgmy == "6">checked="checked"</#if>   />6&nbsp;&nbsp;
+								<input name="kgmy" type="radio" value="7" <#if cex.kgmy == "7">checked="checked"</#if>   />7&nbsp;&nbsp;
+								<input name="kgmy" type="radio" value="8" <#if cex.kgmy == "8">checked="checked"</#if>   />8&nbsp;&nbsp;
+								<input name="kgmy" type="radio" value="9" <#if cex.kgmy == "9">checked="checked"</#if>   />9&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>考官满意度:&nbsp;&nbsp;
+								<input name="k1" type="radio" value="1" <#if cex.k1 == "1">checked="checked"</#if>   />不满意&nbsp;&nbsp;
+								<input name="k1" type="radio" value="2" <#if cex.k1 == "2">checked="checked"</#if>   />满意&nbsp;&nbsp;
+								<input name="k1" type="radio" value="3" <#if cex.k1 == "3">checked="checked"</#if>   />非常出色&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>考生满意度:&nbsp;&nbsp;
+								<input name="ksmy" type="radio" value="1" <#if cex.ksmy == "1">checked="checked"</#if>   />1&nbsp;&nbsp;
+								<input name="ksmy" type="radio" value="2" <#if cex.ksmy == "2">checked="checked"</#if>   />2&nbsp;&nbsp;
+								<input name="ksmy" type="radio" value="3" <#if cex.ksmy == "3">checked="checked"</#if>   />3&nbsp;&nbsp;
+								<input name="ksmy" type="radio" value="4" <#if cex.ksmy == "4">checked="checked"</#if>   />4&nbsp;&nbsp;
+								<input name="ksmy" type="radio" value="5" <#if cex.ksmy == "5">checked="checked"</#if>   />5&nbsp;&nbsp;
+								<input name="ksmy" type="radio" value="6" <#if cex.ksmy == "6">checked="checked"</#if>   />6&nbsp;&nbsp;
+								<input name="ksmy" type="radio" value="7" <#if cex.ksmy == "7">checked="checked"</#if>   />7&nbsp;&nbsp;
+								<input name="ksmy" type="radio" value="8" <#if cex.ksmy == "8">checked="checked"</#if>   />8&nbsp;&nbsp;
+								<input name="ksmy" type="radio" value="9" <#if cex.ksmy == "9">checked="checked"</#if>   />9&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>考生满意度:&nbsp;&nbsp;
+								<input name="k2" type="radio" value="1" <#if cex.k2 == "1">checked="checked"</#if>   />不满意&nbsp;&nbsp;
+								<input name="k2" type="radio" value="2" <#if cex.k2 == "2">checked="checked"</#if>   />满意&nbsp;&nbsp;
+								<input name="k2" type="radio" value="3" <#if cex.k2 == "3">checked="checked"</#if>   />非常出色&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr><td><hr/><td></td></tr>
+					<tr><td>考官对于考生的主要反馈要点:</td>	</tr>
+					<tr><td>完成较好部分:</td></tr>
+					<tr>												
+						<td align="left"><textarea name="wcjh" cols="50" rows="5" >${cex.wcjh!}</textarea></td>
+					</tr>
+					<tr><td>可以改进部分:</td></tr>
+					<tr>												
+						<td align="left"><textarea name="fkyd" cols="50" rows="5" >${cex.fkyd!}</textarea></td>
+					</tr>
+					<tr>
+	               	 	<td>
+		               	 <input  type="submit" value="更新" class="main_button"/>&nbsp;&nbsp;
+	               	 	 <input type="button" class="main_button" value="返 回" onclick="window.location=('<@spring.url '/soapController/list.htm?li=li913&div=div_9&menuOrder=0'/>')"/>
+	               	 	</td>
+					</tr> 
+				</table>
+			</form>
+		</div>
+	</div>
+
+</div>
+
+<div style="display: none;">
+        	<a id="addSuccessed" href="#" onclick="showMessageDialog(event,'更新考评成功','<@spring.url '/soapController/list.htm?li=li913&div=div_9&menuOrder=0'/>','closeWindow();');" ></a>
+        	<a id="addFailed" href="#" onclick="showMessageDialog(event,'更新考评失败','','');" ></a>
+ </div>
+
+<script>
+	function addRole(){
+		var param = null;
+		var postmethod = "POST";
+		var url ="<@spring.url '/soapController/updateSoap.htm'/>";
+		var param = $("#addform").serialize();
+		$.ajax({
+			   type: postmethod,
+			   cache: false,
+			   url: url,
+			   data : param,
+			   success: function(data){
+			    if(!validateFieldMs(data)){
+					return;
+				}
+				if(data == 'true'){
+					tip(1,true);
+					return;
+				}else if(data == 'false'){
+					tip(1,false);
+					return;
+				}
+				showMessageDialog(null,data,'','');
+			   },
+			   error:function(xhr,err){
+				   window.location.href=url; 
+			}
+		});
+	}
+
+	function tip(type,bool){
+		if(type == 1){
+			if(bool){
+				document.getElementById("addSuccessed").click();
+				return;
+			}
+			document.getElementById("addFailed").click();
+		}
+	}
+
+   jQuery(document).ready(function(){
+          jQuery("#addform").validationEngine('attach', {
+        	  isOverflown: true,
+  	        overflownDIV: "#right",
+            onValidationComplete: function(form, status){
+                //如果表单通过验证，将调用该js进入后台
+                if(myCheck())
+            		addRole();
+            }  
+          })
+    });
+   
+   function myCheck()
+   {
+      for(var i=0;i<document.form1.elements.length-1;i++)
+      {
+       if(document.form1.elements[i].value=="")
+	       {
+	        alert("当前表单不能有空项");
+	        document.form1.elements[i].focus();
+	        return false;
+	       }
+      }
+      var a = $(':input:radio:checked').length;
+      if(a != 28){
+    	  alert("存在未勾选的单选框,请检查");
+    	  return false;
+      }
+      return true;
+     
+   }
+
+</script>
+</body>
+</html>

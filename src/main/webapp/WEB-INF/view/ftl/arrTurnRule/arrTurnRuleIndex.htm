@@ -1,0 +1,237 @@
+<#import "../decorators/uri.ftl" as uri /> <#import "../decorators/util.ftl" as
+util /> <#import "../decorators/spring.ftl" as spring />
+<!DOCTYPE html>
+<html >
+<head>
+<#include "../decorators/headtitle.ftl" >
+
+</head>
+<body>
+	<#include "../decorators/left1.ftl" >
+	<div class="main_right" id="right">
+		<div class="right_con">
+			
+			<form id="addform" action="<@spring.url '/arrTurnController/arrturnRule_Index.htm'/>" role="form">
+				<input type="text" value="${li!}" name="li" style="display: none"/>
+				<input type="text" value="${div}" name="div" style="display: none"/>
+				<input type="text" value="${type}" name="type" style="display: none"/>
+				<div class="container">
+				   <div class="row" >
+				      <div class="col-xs-4" >
+							<select name="baseName" class="form-control" data-toggle="selectpicker"> 
+							<#if baseValues?? && baseValues?size gt 0>					
+								<option value="">请选择基地</option> 
+								<#list baseValues as baseValue>
+										<option value="${baseValue.value}"  >${baseValue.value!}</option>
+								</#list> 
+							</#if>
+							</select>
+						</div>
+						<div class="col-xs-8" >	
+							<button type="submit" class="btn btn-danger" >提交</button>
+						</div>
+					</div>
+				</div>
+				
+			</form>
+			<hr />
+			<div class="panel panel-default">
+				<div class="panel-heading">					
+						<#if type?? && type=="3" && baseName?? > 
+							${baseName!}:本科生(专科生)轮转规则
+						<#elseif type?? && type=="2" && baseName?? > 
+							${baseName!}:研究生轮转规则
+						<#else>
+							<h5 style="color:#0000ff">
+							 没有选择基地，禁止添加轮转规则
+							</h5>
+						</#if>
+				</div>
+				<div class="panel-body">			
+					<form id="addform1" class="bs-example bs-example-form" >
+						<input type="text" value="${baseName!}" name="baseName" style="display: none"/>
+						<input type="text" value="${li!}" name="li" style="display: none"/>
+						<input type="text" value="${div!}" name="div" style="display: none"/>
+						<input type="text" value="${type!}" name="type" style="display: none"/>
+						<div class="container" >
+						   <div class="row" >	
+						   		<div class="col-xs-3" style="background-color:#EEEEFF ">
+										<h4>新增关联科室</h4>
+								</div>
+						      <div class="col-xs-3" >							
+								<select id="roomName" name="roomName" class="form-control" 	data-toggle="selectpicker"> 
+									<#list roomValues as roomValue> 
+										<option value="${roomValue.value!}">${roomValue.value!}</option>
+									</#list>
+								</select>
+								</div>
+								<div class="col-xs-2" >
+										<input  type="text" name="period"  class="form-control" placeholder="请输入轮转周期（单位：月）"/>
+								</div>
+									<div class="col-xs-2" ><input type="text" name="roomSort"  class="form-control" id="roomSort" placeholder="排序"/>  
+								</div>
+								<div class="col-xs-2" >
+									<button type="button" onclick="doSubRule()" class="btn btn-danger" >提交</button>
+								</div>
+							</div>
+						</div>
+					</form>				
+					<hr/>
+					<div id="dataDiv">
+						<form id="addform6">
+							<input type="text" value="${baseName!}" name="baseName" style="display: none"/>
+								<input type="text" value="${li!}" name="li" style="display: none"/>
+								<input type="text" value="${div!}" name="div" style="display: none"/>
+								<input type="text" value="${type!}" name="type" style="display: none"/>
+								<input type="text" value="${grade!}" name="grade" style="display: none"/>
+								<table class="table table-bordered table-hover">	
+									<tr class="table_title">
+										<td width="8%">基地名称</td>
+										<td width="8%">科室名称</td>
+										<td width="6%">排列顺序</td>
+										<td width="8%">轮转长度(月)</td>
+										<td width="6%">操作</td>
+										<td width="6%">对应学生</td>
+									</tr>
+									<#if atrList?? && atrList?size gt 0>
+									<#list atrList as atr>
+									<tr class="table_td">
+										<td>${atr.baseName!}</td>
+										<td>${atr.roomName!}</td>
+										<td><input style="width: 60px;" type="text" value="${atr.roomSort!}" name="${atr.id!}"/></td>
+										<td><input style="width: 60px;" type="text" value="${atr.period!}" name="${atr.id!}p"/></td>
+										<td>
+								 			<a href="#"  onclick="toDel('${atr.id!}')" style="cursor: pointer;" >删除</a>&nbsp;&nbsp;&nbsp;&nbsp;
+								 			<!-- <a href="#"  onclick="edit('${atr.id!}')" style="cursor: pointer;" >修改</a>&nbsp;&nbsp;&nbsp;&nbsp; -->
+										</td>
+										<td>
+											<#if type?? && type=="3">本科生(专科生)
+											<#elseif type?? && type=="2">研究生</#if>
+										</td>
+									</tr>
+									</#list>
+									<#else>
+							  			<tr class="table_td"><td colspan="12" align="center">没有符合条件的结果。</td></tr>
+									</#if>
+								</table>
+								<br />
+								<hr />
+								<div >
+									<button type="button" style="margin-left: 600px;" class="btn btn-info" onclick="changeSort()" >重新排序</button>
+								</div>
+						</form>
+					</div>
+				</div>			
+			</div>
+		</div>
+		</div>
+
+	<div style="display: none;">
+		<a id="delSuccessed" href="#" onclick="showMessageDialog(event,'成功','<@spring.url '/arrTurnController/arrturnRule_Index.htm?baseName=${baseName!}&roomName=${roomName!}&li=${li!}&div=${div}&menuOrder=0&type=${type!}'/>','closeWindow();');" ></a>
+	 	<a id="delFailed" href="#" onclick="showMessageDialog(event,'失败！','','');" ></a>
+	 </div>
+	<script type="text/javascript">
+	function doSubRule(){
+		var param = null;
+		var postmethod = "POST";
+		var param = $("#addform1").serialize();
+		var url = "<@spring.url '/arrTurnOneController/arrturnRuleInsertone.htm'/>";
+		$.ajax({
+			   type: postmethod,
+			   cache: false,
+			   url: url,
+			   data : param,
+			   success: function(data){
+			    if(!validateFieldMs(data)){
+					return;
+				}
+				if(data == 'true'){
+					tip(1,true);
+					return;
+				}else if(data == 'false'){
+					tip(1,false);
+					return;
+				}
+				showMessageDialog(null,data,'','');
+			   },
+			   error:function(xhr,err){
+				   window.location.href=url; 
+			}
+		});
+	}
+	//修改 reSort
+	
+	function edit(id){
+		var url ="<@spring.url '/arrTurnRuleOneController/editone.htm?id=" +id+"'/>";
+		ajaxFormRequest("{url:'"+url+"',id:'dataDiv',form:'addform2'}");
+	}	
+	
+	//删除
+	function toDel(tId){
+			var param = null;
+			var postmethod = "get";
+			var url ="<@spring.url '/arrTurnOneController/arrturndel.htm?id="+tId+"'/>";
+			$.ajax({
+				   type: postmethod,
+				   cache: false,
+				   url: url,
+				   data : param,
+				   success: function(data){
+					if(data == 'true'){
+						tip(1,true);
+						return;
+					}
+					if(data == 'false'){
+						tip(1,false);
+						return;
+					}
+					showMessageDialog(null,data,'','');
+				   },
+				   error:function(xhr,err){ 
+				}
+			});
+		}
+		
+		
+		function tip(type,bool){
+			if(type == 1){
+				if(bool){
+					document.getElementById("delSuccessed").click();
+					return;
+				}
+				document.getElementById("delFailed").click();
+			}
+		}
+		
+		function changeSort(){
+			var param = null;
+			var postmethod = "POST";
+			var param = $("#addform6").serialize();
+			var url = "<@spring.url '/arrTurnRuleController/sortChange.htm'/>";
+			$.ajax({
+				   type: postmethod,
+				   cache: false,
+				   url: url,
+				   data : param,
+				   success: function(data){
+				    if(!validateFieldMs(data)){
+						return;
+					}
+					if(data == 'true'){
+						tip(1,true);
+						return;
+					}else if(data == 'false'){
+						tip(1,false);
+						return;
+					}
+					showMessageDialog(null,data,'','');
+				   },
+				   error:function(xhr,err){
+					   window.location.href=url; 
+				}
+			});
+		}
+	</script>
+	
+</body>
+</html>

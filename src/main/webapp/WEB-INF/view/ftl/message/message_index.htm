@@ -1,0 +1,166 @@
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<#import "../decorators/spring.ftl" as spring />
+<!DOCTYPE html>
+<html >
+<head>
+<#include "../decorators/headtitle.ftl" >
+
+<script type="text/javascript" src="/storm/multiSelect/industry_func.js"></script>
+<script type="text/javascript" src="/storm/multiSelect/jquery.js"></script>
+<script type="text/javascript" src="/storm/multiSelect/drag.js"></script>
+
+<script type="text/javascript">
+//专业基地
+var ind_a=[];
+//临床科室
+var ind_b=[];
+$.ajax({
+	url:"<@spring.url '/roomController/queryRoom.htm'/>",
+	type:"GET",
+	success:function(msg){
+		var jsonMsg = eval("("+msg+")");
+		for(var i=0;i<jsonMsg.length;i++){
+			var roomNum = jsonMsg[i].roomNum;
+			var roomName = jsonMsg[i].roomName;
+			var num = parseInt(roomNum);
+			ind_b[num]=roomName;
+		}
+	}
+});
+
+$.ajax({
+	url:"<@spring.url '/baseController/queryBase.htm'/>",
+	type:"GET",
+	success:function(msg){
+		var jsonMsg = eval("("+msg+")");
+		for(var i=0;i<jsonMsg.length;i++){
+			var baseNum = jsonMsg[i].baseNum;
+			var baseName = jsonMsg[i].baseName;
+			var num = parseInt(baseNum);
+			ind_a[num]=baseName;
+		}
+	}
+});
+//是否在数组内
+function in_array(needle, haystack) {
+	if(typeof needle == 'string' || typeof needle == 'number') {
+		for(var i in haystack) {
+			if(haystack[i] == needle) {
+					return true;
+			}
+		}
+	}
+	return false;
+}
+function insertMsg(){
+	var msgTitle = $("#msgTitle").val();
+	var receiver = $("#btn_IndustryID").val();
+	var loginName = $("#loginName").val();
+	var msgContent = $("#msgContent").val();
+	if(msgTitle == "" || msgTitle == null){
+		alert("标题不能为空！");
+		return;
+	}else if(receiver == "请选择留言对象" && loginName == "请输入人员编号"
+			|| receiver == "请选择留言对象" && loginName == ""){
+		alert("收信人不能为空！");
+		return;
+	}else if(msgContent == null || msgContent == ""){
+		alert("留言内容不能为空！");
+		return;
+	}
+	if(receiver != "请选择留言对象" && loginName != "请输入人员编号" && loginName != ""){
+		alert("收信人群发，单发任选其一！");
+		return;
+	}
+	if(receiver == "请选择留言对象"){
+		receiver = "";
+	}
+	if(loginName == "请输入人员编号"){
+		loginName = "";
+	}
+	var data = {"title":msgTitle,"receiver":receiver,"loginName":loginName,"content":msgContent};
+	$.ajax({
+		url:"<@spring.url '/messageController/message_addsubmit.htm'/>",
+		type:"POST",
+		data:data,
+		success:function(msg){
+			if(msg>=1){
+				alert("留言已提交！");
+			}else{
+				alert("留言失败，稍后再试！");
+			}
+		}
+	});
+}
+
+function checkInputUser(){
+	var loginName = $("#loginName").val();
+	if(loginName == "请输入人员编号" || loginName == ""){
+		alert("请输入人员编号");
+		return;
+	}
+	$.ajax({
+		url:"<@spring.url '/cheUserCont/cheAllUser.htm'/>",
+		type:"GET",
+		data:"loginName="+loginName,
+		success:function(msg){
+			var userName = msg;
+			$("#warnMsg").html(userName);
+		}
+	});
+}
+function doFocus(obj){
+	var loginName = $(obj).val();
+	if(loginName == "请输入人员编号"){
+		$(obj).val("");
+	}
+}
+</script>
+</head>
+<body>
+<!--right-->
+<#include "../decorators/left1.ftl" ><div class="main_right" id="right">
+
+	<div class="right_con">
+		<div class="msg_main_search">
+			<form id="searchform">
+				<table style="border-collapse: separate; border-spacing: 5px">
+					<tr>
+					<td>公告标题：</td>
+					<td><input type="text" id="msgTitle"/></td>
+					</tr>
+					<tr>
+					<td>收信人：</td>
+					<td><input id="btn_IndustryID" type="button" value="请选择留言对象" onclick="IndustrySelect()" /></td>
+					</tr>
+					<tr>
+					<td>(任选其一)</td>
+					<td>
+					<input id="loginName" type="text" value="请输入人员编号" onfocus="doFocus(this)"/>&nbsp;<input type="button" value="校验" onclick="checkInputUser()"/>
+					<span style="color: red" id="warnMsg"></span>
+					</td>
+					</tr>
+					<tr>
+					<td>内容：</td>
+					<td>
+					<textarea rows="15" cols="50" name="editor01" id="msgContent"></textarea>
+					<!-- <script type="text/javascript">CKEDITOR.replace('editor01');</script> -->
+					</td>
+					</tr>
+					<tr>
+					<td></td>
+					<td>
+					<input type="button" value="提交" onclick="insertMsg()"/>
+					<input type="reset" value="取消"/>
+					</td>
+					</tr>
+				</table>
+
+			</form>
+		</div>
+	</div>
+</div>
+
+</body>
+</html>

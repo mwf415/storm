@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youyicn.dao.cycle.ActivesUserMapper">  
+    <!-- resultMap中的type表示返回什么类型的对象 -->
+    <resultMap type="com.youyicn.entity.cycle.ActivesUser" id="ResultMapAssoc">
+        <id column="id" property="id" jdbcType="INTEGER"/>  
+        <result column="name" property="name" jdbcType="VARCHAR"/>  
+        <result column="loginName" property="loginName" jdbcType="VARCHAR"/>  
+        <result column="activesId" property="activesId" jdbcType="VARCHAR"/> 
+        <result column="isIn" property="isIN" jdbcType="VARCHAR"/> 
+	    <association property="actives" column="activesId"  select="com.youyicn.dao.cycle.ActivesMapper.getByIdHasAsso"></association>
+    </resultMap>
+    
+   <!--根据id查找相关信息-->
+   <select id="getUserByactivesIdRelate" parameterType="java.lang.Integer" resultType="com.youyicn.entity.cycle.ActivesUser">
+        select *
+        from cycle_actives_user where 1=1
+			and activesId = #{activesId} 
+        order by id ;
+    </select>    
+    
+     <!--根据id查找相关信息-->
+   <select id="getUserByactivesId" parameterType="java.lang.Integer" resultType="com.youyicn.entity.cycle.ActivesUser">
+        select * 
+        from cycle_actives_user where 1=1
+        <if test="activesId !=null and activesId !=''">
+			and activesId = #{activesId} 
+		</if> 
+		<if test="identityId !=null and identityId !=''">
+			and identityId = #{identityId} 
+		</if> 
+        order by id desc;
+    </select>    
+    
+    <select id="getByUserLoginName"  parameterType="Map" resultMap="ResultMapAssoc">
+		select * from cycle_actives_user where 
+			loginName= #{loginName}  and status= #{status}
+		order by id desc 
+	</select>
+    
+	<select id="getByUserIn" parameterType="java.util.HashMap"  resultType="com.youyicn.entity.cycle.ActivesUser">
+		select * from cycle_actives_user where loginName = #{loginName} and activesId =#{activesId}
+		order by id desc
+	</select>
+	
+	<select id="getCountByActivesId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+		select count(id) userNum from cycle_actives_user where 1=1 
+		<if test="activesId !=null and activesId !=''">
+			and activesId = #{activesId} 
+		</if> 
+		order by id desc 
+	</select>
+	
+	
+	<insert id="add" parameterType="com.youyicn.entity.cycle.ActivesUser" useGeneratedKeys="true">
+		insert into cycle_actives_user (name,loginName,activesId,identityId,status) 
+			values	
+		(#{name},#{loginName},#{activesId},#{identityId},#{status})
+	</insert>
+	
+	<delete id="delById" parameterType="com.youyicn.entity.cycle.ActivesUser" >
+		delete  from cycle_actives_user where activesId = #{activesId}
+	</delete>
+	<delete id="delByactivesId" parameterType="Integer" >
+		delete  from cycle_actives_user where activesId = #{activesId}
+	</delete>
+	<update id="update" parameterType="com.youyicn.entity.cycle.ActivesUser">
+		update cycle_actives_user set isIn =#{isIn} where id =#{id}
+	</update>
+	
+</mapper>

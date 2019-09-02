@@ -1,0 +1,44 @@
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<#import "../decorators/spring.ftl" as spring />
+
+<div class="main_right" id="right">
+	
+ <div class="right_em_con">
+	<table class="table table-bordered table-hover">
+		<tr style="background-color: #0FF">
+			<td width="5%">学生姓名</td>
+			<#if status ?? && (status ==4 || status==5 )>
+				<td width="10%">状态</td>
+			</#if >
+			<td width="10%">操作</td>
+		</tr>
+		<#if page.list?? && page.list?size gt 0>
+		<#list page.list as inPlan>
+		<tr>
+			<td>${inPlan.name!}</td>
+				<#if status ?? && (status ==4 || status==5 )>
+			<td>
+					<#if inPlan.isIn??  && inPlan.isIn == 1 >
+						完成
+					<#else>
+						未完成
+					</#if>
+			</td>
+				</#if>
+			<td><!-- 如果是教学查房和教学讲座，那么可以查看学生回答的老师的问题 -->
+				<#if status ?? && (status ==6 || status ==7 ||status ==8 || status ==9 || status ==3)>
+					<button  type="button" class="btn btn-primary btn-xs" onclick="pop_userinfo(event,'<@spring.url '/questCont/questSee.htm?loginName=${inPlan.loginName!}&activesId=${inPlan.activesId!}'/>')">学生答题</button>
+				<#else>
+					
+				</#if>
+			</td>
+			
+		</tr>
+		</#list>
+		<#else>
+  			<tr class="table_td"><td colspan="12" align="center">没有符合条件的结果。</td></tr>
+		</#if>
+	</table>
+</div>
+</div>

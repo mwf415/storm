@@ -1,0 +1,310 @@
+<#import "../decorators/uri.ftl" as uri /> <#import "../decorators/util.ftl" as
+util /> <#import "../decorators/spring.ftl" as spring />
+<!DOCTYPE html>
+<html >
+<head>
+<link href="${uri.csssite}/paper.css" rel="stylesheet" type="text/css"/>
+<script src="${uri.jssite}/jquery.js" type="text/javascript"  ></script>
+<title>${examResult.solution.name!}</title>
+</head>
+<body>
+	<div class="main">
+		<h1 >${examResult.solution.name!}</h1>
+		<h2 style="background:#ddd; padding:5px 0; font-size:14px; font-weight:bold;text-align:center">
+			试卷信息
+		</h2>
+		<#if examResult.solution.startTime?? && examResult.solution.endTime??>
+        <p class="notice2">
+			<b>时间设定</b> :
+			${examResult.solution.startTime?string("yyyy-MM-dd HH:mm:ss")!} --
+			${examResult.solution.endTime?string("yyyy-MM-dd HH:mm:ss")!}
+			&nbsp;&nbsp;
+			<b>考试时长</b> : ${examResult.solution.examDuration!} 分钟
+		</p>
+		</#if>
+		<#if examResult.solutionScore??>
+		<p class="notice2">
+			<b>卷面总分</b> : ${examResult.solution.examTotal!}
+			&nbsp;&nbsp;
+			<b>及格分数</b> : ${examResult.solution.examPass!}
+		</h2>
+		<h2 style="background:#ddd; padding:5px 0; font-size:14px; font-weight:bold;text-align:center;">
+			考生信息
+		</h2>
+		<p class="notice2">
+			<b>考生</b> : ${examResult.user.realName!}
+
+			&nbsp;&nbsp;
+			<b>考生编号</b> : ${examResult.user.userNum!}
+		</p>
+		<p class="notice2">
+		<#if examResult.startTime??>
+			<b>开考时间</b> :
+			${examResult.startTime?string("yyyy-MM-dd HH:mm:ss")!}
+			&nbsp;&nbsp;
+		</#if>
+		<#if examResult.endTime??>
+			<b>交卷时间</b> :
+			${examResult.endTime?string("yyyy-MM-dd HH:mm:ss")!}
+			&nbsp;&nbsp;
+		</#if>
+			<b>得分</b> : ${examResult.solutionScore!}
+		</p>
+		</#if>
+	</div>
+		<#assign opno=['A','B','C','D','E','F']/>
+		<#assign qno=['一','二','三','四','五','六','七','八','九','十','十一']/>
+		<#if solutionComposes?? && solutionComposes?size gt 0>
+			<#list solutionComposes as sc>
+			<div style="margin-top:20px;">
+				<div class="title1">
+					${qno[sc_index]}、${sc.questionType.name}(${sc.questionType.description},共${sc.questions?size}道题，每题${sc.averageScore}分,
+					共${sc.questions?size*sc.averageScore}分)
+				</div>
+				<#list sc.questions as question>
+				 <dl class="question_detail">
+					<input type='hidden' class='averageScore' value='${sc.averageScore}'/>
+					<input type='hidden' class='questionId' value='${question.id}'/>
+					<input type='hidden' class='questionType' value='${question.type}' />
+					<span class="score">得分：<input class="input_score"
+					<#if question.type!=29 && question.type!=30 && question.type!=31 && question.type!=34>readonly="true"</#if>
+					onkeyup="this.value=this.value.replace(/\D/g,'');" /></span>
+					<!-- 配伍题 -->
+				 	<#if sc.questionType.id==26>
+				 		<dt>
+				 			${question_index+1}.
+							<#list question.content?split("@@") as option>
+									${opno[option_index]}.${option}&nbsp;&nbsp;
+							</#list>
+						</dt>
+					<!-- 填空题 -->
+					<#elseif sc.questionType.id==28>
+						<dt class="tiankong q">${question_index+1}.${question.content}</dt>
+					<#else>
+				 		<dt>${question_index+1}.${question.content! }</dt>
+				 	</#if>
+
+					<#if question.image?? >
+					<div>
+						<img src="/storm/examimage/${question.image!}" width="128"
+							height="128">
+					</div>
+					</#if>
+
+					<!-- 配伍题 -->
+					<#if sc.questionType.id==26>
+						<#if question.questionSubs?? && question.questionSubs?size gt 0 >
+							<#list question.questionSubs as qs>
+								<dd class="q">${qs_index+1}.${qs.content}<input name="${qs.id}" id="${qs.id}" class="user_sub_answer input_text" type="text"/>。</dd>
+							</#list>
+						</#if>
+					<!-- 病例题 -->
+					<#elseif sc.questionType.id==25>
+						<#if question.questionSubs?? && question.questionSubs?size gt 0 >
+							<#list question.questionSubs as qs>
+							<div class="q">
+								<dt class="dt2">${qs_index+1}.${qs.content }</dt>
+								<#list qs.examOptions?split("@@") as option>
+									<dd>${opno[option_index]}.<input type='radio' name="${qs.id}" class='user_sub_answer' value='${opno[option_index]}' />${option!} </dd>
+								</#list>
+							</div>
+							</#list>
+						</#if>
+					<!-- 其他 -->
+					<#else>
+						<#list question.examOptions?split("@@") as option>
+							<!-- 单选 -->
+							<#if sc.questionType.id==15 || sc.questionType.id==33 || sc.questionType.id==27>
+								<dd class="q">${opno[option_index]}.<input type='radio' name="${question.id}" class="user_answer" value='${opno[option_index]}' />${option!} </dd>
+							<!-- 多选 -->
+							<#elseif sc.questionType.id==18>
+								<dd class="q">${opno[option_index]}.<input type="checkbox" name="${question.id}" class="user_answer" value='${opno[option_index]}'/>${option!}</dd>
+							<!-- 主观 -->
+							<#elseif sc.questionType.id==29 || sc.questionType.id==30 || sc.questionType.id==31 || sc.questionType.id==34>
+								<dd><textarea name="${question.id}" class="user_answer" ></textarea></dd>
+							</#if>
+						</#list>
+					</#if>
+				</dl>
+				</#list>
+			</div>
+		</#list>
+		</#if>
+
+	<#if examResult.solutionScore??>
+	<#else>
+		<table cellpadding="0" cellspacing="0" border="0" width="100%" class="tableBtn">
+	        <tr>
+	            <td width="35%" align="middle"><a href="javascript:void(0);" class="submit_btn btn">计算总分</a></td>
+	        </tr>
+	    </table>
+    </#if>
+	</div>
+<script>
+
+	//初始化主观题分 25病例题，26配伍题
+	function init_obje_score(){
+		$('.question_detail').each(function(){
+			var qId = $(this).find('.averageScore').val();
+			var averageScore = $(this).find('.averageScore').val();
+			var questionType = $(this).find('.questionType').val();
+			if(questionType==29 || questionType==30 || questionType==31 || questionType==34){
+				return true;
+			}
+			if(questionType==25 || questionType==26){
+				var sumq = $(this).find('.q').length;
+				var right = 0;
+				$(this).find('.q').each(function(){
+					var ua;
+					var answer;
+					if(questionType==25){
+						ua = $(this).find(':checked').val();
+						answer = $(this).find('.answer').text().trim();
+					}else{
+						ua = $(this).find('input').val();
+						answer = $(this).next().find('.answer').text().trim();
+					}
+					if(ua==answer) right++;
+				});
+				var score = (averageScore*right/sumq).toFixed(2);
+				$(this).find('.input_score').val(score);
+			}else if(questionType==18){
+				var sumq = $(this).find('.q').length;
+				var right = 0;
+				var answer = $(this).find('.answer').text().trim().split('@@');
+				$(this).find('.q').find('input').each(function(i){
+					if($(this).val()==answer[i]) right++;
+				});
+				var score = (averageScore*right/sumq).toFixed(2);
+				$(this).find('.input_score').val(score);
+			}else{
+				var ua = $(this).find('.q').find('input:checked').val();
+				var answer = $(this).find('.answer').text().trim();
+				if(ua==answer){
+					$(this).find('.input_score').val(averageScore);
+				}else{
+					$(this).find('.input_score').val(0);
+				}
+			}
+		});
+	}
+
+	function caculate_sum_score(){
+		$('.submit_btn').attr('disabled',true);
+		var sum_score = 0;
+		$('.question_detail').each(function(){
+			var s = $(this).find('.input_score').val();
+			if(s!=undefined && s!=='') sum_score += parseFloat(s);
+		});
+		var url = "<@spring.url '/manageExamResult/submit.htm'/>";
+		$.ajax({
+            type: "post",
+            url: url,
+            data: {id:${examResult.id}, solutionScore:sum_score},
+            dataType: "json",
+            success: function(result){
+            	if(result.success==1){
+            		alert('批阅试卷成功！');
+//             		location.href='/cycle/manageExamResult/submit?id='+${examResult.id}+'&solutionScore='+sum_score;
+            	}else{
+            		alert('批阅试卷失败！');
+            	}
+            },
+            error:function(){
+            	alert('失败！');
+            }
+        });
+		location.href='/storm/manageExamResult/submit?id='+${examResult.id}+'&solutionScore='+sum_score;
+	}
+	//收藏功能
+	function collection(parm) {
+		var param = null;
+		var postmethod = "get";
+		var url = "/exam/collectionExam/add.htm?parm=" + parm;
+		$.ajax({
+			type : postmethod,
+			cache : false,
+			url : url,
+			data : param,
+			success : function(data) {
+				if (data == '1') {
+					alert("收藏成功");
+				}
+				if (data == '0') {
+					alert("收藏失败");
+				}
+			},
+		});
+
+	}
+
+	$(function(){
+		$('.tiankong').each(function(){
+			var questionId = $(this).siblings('input[class=questionId]').val();
+			var content = $(this).text().replace(/_+/g,'<input name="'+questionId+'" type="text" class="user_sub_answer input_text"/>');
+			$(this).html(content);
+		})
+
+		<#if examResult.userAnswer?? && examResult.userAnswer!=''>
+			//初始化用户答案
+			var user_answer = ${examResult.userAnswer!};
+			for(var i in user_answer){
+				var type = user_answer[i].type;
+				var answerMap = user_answer[i].answerMap;
+				for(var key in answerMap){
+					if(type==26 || type==28){
+						$('input[name='+key+']').val(answerMap[key]);
+					}else if(type==29 || type==30 || type==31 || type==34){
+						$('textarea[name='+key+']').val(answerMap[key]);
+					}else if(type==18){
+						$('input[name='+key+']').each(function(){
+							var as = answerMap[key].split("");
+							for(var j in as){
+								if($(this).val()==as[j]){
+									$(this).attr('checked','checked');
+								}
+							}
+						});
+					}else{
+						$('input[name='+key+']').each(function(){
+							if($(this).val()==answerMap[key]){
+								$(this).attr('checked','checked');
+							}
+						});
+					}
+				}
+			}
+		</#if>
+
+		//试卷答案
+		<#if examResult.solution.solutionAnswer?? && examResult.solution.solutionAnswer!=''>
+			var solution_answer = ${examResult.solution.solutionAnswer};
+			for(var i in solution_answer){
+				var type = solution_answer[i].type;
+				var answerMap = solution_answer[i].answerMap;
+				for(var key in answerMap){
+					if(type==26 || type==25){
+						$('input[name='+key+']:last').parent().after('<dd>答案：<span class="answer">'+answerMap[key].replace(/@@/g,"")+'</span></dd>');
+					}else if(type==29 || type==30 || type==31 || type==34){
+						$('textarea[name='+key+']:last').parents('.question_detail').append('<dd>答案：<span class="answer">'+answerMap[key].replace(/@@/g,"")+'</span></dd>');
+					}else{
+						if(type==28){
+							$('input[name='+key+']:last').parents('.question_detail').append('<dd>答案：<span class="answer">'+answerMap[key].replace(/@@/g,",")+'</span></dd>');
+						}else{
+							$('input[name='+key+']:last').parents('.question_detail').append('<dd>答案：<span class="answer">'+answerMap[key].replace(/@@/g,"")+'</span></dd>');
+						}
+					}
+				}
+			}
+		</#if>
+
+		init_obje_score();
+
+		$('.submit_btn').click(function(){
+			caculate_sum_score();
+		});
+
+	});
+</script>
+</body>
+</html>

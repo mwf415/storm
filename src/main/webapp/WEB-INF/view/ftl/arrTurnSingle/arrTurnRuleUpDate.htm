@@ -1,0 +1,38 @@
+<#import "../decorators/uri.ftl" as uri /> <#import "../decorators/util.ftl" as
+util /> <#import "../decorators/spring.ftl" as spring />
+<div style="margin: 30px;">
+		<h4>修改轮转科室：</h4>
+			<div >
+				<form id="addform3" >
+				<input type="text" value="${loginName!}" name="loginName" style="display: none"/>
+				<input type="text" value="${li!}" name="li" style="display: none"/>
+				<input type="text" value="${div!}" name="div" style="display: none"/>
+				<input type="text" value="${type!}" name="type" style="display: none"/>
+				<input type="text" value="${baseName!}" name="baseName" style="display: none"/>
+				<input type="text" value="${arrTurn.arrTurnId!}" name="ida" style="display: none"/>
+		
+				<table class="table table-bordered table-hover">
+					<tr>
+						<td >学生：${arrTurn.userName!}</td>
+						<td></td>
+					</tr>
+					<tr >
+						<td >原有科室科室 ：${arrTurn.roomName!}</td>
+						<td > 修改为科室：			
+							<select id="roomNamea" name="roomNamea">
+							<#list baseRoomList as baseRoom>
+								<option value="${baseRoom.roomName}">${baseRoom.roomName}</option>
+							</#list>
+							</select>
+						</td>
+					</tr>
+					<tr >
+	                	<td>&nbsp;</td>
+	               	 	<td>
+						<input type="button" value="提交" onclick="editArrTurn()" class="main_button" >
+	               	 	</td>
+					</tr>   
+			</table>
+			</form>
+			</div>
+		</div>

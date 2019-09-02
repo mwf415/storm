@@ -1,0 +1,133 @@
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<#import "../decorators/spring.ftl" as spring />
+<!DOCTYPE html>
+<html >
+<head><#include "../decorators/headtitle.ftl" >
+<script type="text/javascript" language="javascript">  
+/**ztree的参数配置，setting主要是设置一些tree的属性，是本地数据源，还是远程，动画效果，是否含有复选框等等**/    
+var setting = {
+			check: {
+	            enable: true,
+	            checkable: true,
+	            showIcon : true,
+	            chkboxType: { "Y": "ps", "N": "ps" }
+	    	},
+	    	data: {
+				simpleData: {
+					enable: true
+				}
+			},
+	    	 async: { //异步加载
+	             type: "post",
+	             enable: true,
+	             url: "<@spring.url '/teacherController/listPrivilege.htm?userId=${userId}'/>"
+	        },
+	        callback:{
+                onCheck:onCheck
+            }
+		};  
+ 		
+ 		$(document).ready(function(){
+ 			$.fn.zTree.init($("#treeDemo"), setting);
+ 		});
+ 		
+ 		function onCheck(e,treeId,treeNode){
+            var treeObj=$.fn.zTree.getZTreeObj("treeDemo"),
+            nodes=treeObj.getCheckedNodes(true),
+            v="";
+            for(var i=0;i<nodes.length;i++){
+	            v+=nodes[i].name + ",";
+	            //alert(nodes[i].id); //获取选中节点的值
+         	}
+            //alert(arr.length);
+ 		}
+ 		
+</script>    
+</head>
+<body>
+<!--right-->
+<#include "../decorators/left0.ftl" ><div class="main_right" id="right">
+	<div class="rig_tab">
+    	<div class="rig_tab2">
+      		<div style="margin: 20px;"> 
+	     		<h1>教师<a>${teacherName!}</a>权限设置</h1>
+            </div>
+      		<div class="role_fp_con">
+        		<div style="width:150px;">
+         			<div class="zTreeDemoBackground left">
+						<ul id="treeDemo" class="ztree"></ul>
+					</div>
+        		</div>
+      		</div>
+		      <div class="rig_bot">
+		        <input name="input2" type="button" value="确 认" class="main_button" onclick="assign()"/>
+		      </div>
+    	</div>
+  </div>
+</div>
+
+
+ <div style="display: none;">
+        	<a id="assignSuccessed" href="#" onclick="showMessageDialog(event,'角色设置成功','','');" ></a>
+        	<a id="assigndateFailed" href="#" onclick="showMessageDialog(event,'角色设置失败','','');" ></a>
+ </div>
+
+<script>
+
+	function reset(){
+		//getPrivilegeTree($("#syskey").val(),$("#sysid").val());
+	}
+
+	function cleanClassForOn(){
+		$("#manage").removeClass("on");
+	}
+
+	function assign(){
+		var treeObj=$.fn.zTree.getZTreeObj("treeDemo");
+        var nodes=treeObj.getCheckedNodes(true);
+        var param = "";
+        for(var i=0;i<nodes.length;i++){
+            //v+=nodes[i].name + ",";
+            //alert(nodes[i].id); //获取选中节点的值
+            param += nodes[i].id+",";
+     	}
+        //alert(param);
+		var url ="<@spring.url '/userRoleController/assignprivilegetorole.htm?userId=${userId}&param="+param+"'/>";
+		
+		$.ajax({
+			   type: "get",
+			   cache: false,
+			   url: url,
+			   success: function(data){
+				if(data == 'true'){
+					tip(1,true);
+					//reset();
+					return;
+				}
+				tip(1,false);
+				//reset();
+			   },
+			   error:function(xhr,err){
+				   window.location.href=url; 
+			}
+		});
+	}
+
+
+	function tip(type,bool){
+		if(type == 1){
+			if(bool){
+				document.getElementById("assignSuccessed").click();
+				return;
+			}
+			document.getElementById("assigndateFailed").click();
+		}
+	}
+
+	
+	//document.getElementById("manage").click();
+</script>
+
+</body>
+</html>

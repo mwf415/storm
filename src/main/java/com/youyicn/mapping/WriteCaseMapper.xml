@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youyicn.dao.cycle.WriteCaseMapper">
+
+	<insert id="insertWriteCase" parameterType="com.youyicn.entity.cycle.WriteCase"	useGeneratedKeys="true" keyProperty="id">
+	    insert into cycle_writecase 
+	    (loginName,userName, illName  , illSex   ,  illAge   ,illRoom ,    illBedNum  , illNum, 
+	    shortAdvice    ,  longAdvice  ,  caseText, createTime ,baseName )   values 
+	    (#{loginName},#{userName},#{illName},#{illSex},#{illAge},#{illRoom},#{illBedNum},#{illNum},
+	    #{shortAdvice},#{longAdvice},#{caseText},#{createTime},#{baseName})
+	</insert>
+	
+	<select id="getWriteCaseByCon" resultType="com.youyicn.entity.cycle.WriteCase" parameterType="com.youyicn.entity.cycle.WriteCase" >
+		select * from cycle_writecase 
+	</select>
+	
+	<select id="getWriteCaseByUserNum" parameterType="com.youyicn.entity.cycle.WriteCase" resultType="com.youyicn.entity.cycle.WriteCase">
+		select * from cycle_writecase where  loginName=#{loginName} 
+	</select>
+	<delete id="delWriteCase" parameterType="com.youyicn.entity.cycle.WriteCase"  >
+		delete from cycle_writecase	where id=#{id} 
+	</delete>
+	
+</mapper>

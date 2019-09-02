@@ -1,0 +1,72 @@
+rt "../decorators/uri.ftl" as uri /> <#import "../decorators/util.ftl" as
+util /> <#import "../decorators/spring.ftl" as spring />
+<!D<!DOCTYPE html>html xml<head><#include "../decorators/headtitle.ftl" >
+
+<script type="text/javascript">	
+	function queryUser() {
+		var url ="<@spring.url '/JarrTurnCont/arrturnUser.htm'/>";
+		ajaxFormRequest("{url:'"+url+"',id:'dataDiv',form:'searchform'}");
+	}
+	function sumArrTurn() {
+		var url ="<@spring.url '/JarrTurnCont/arrturn_index.htm'/>";
+		ajaxFormRequest("{url:'"+url+"',id:'dataDiv',form:'searchform'}");
+	}
+	
+	
+</script>
+﻿
+</head>
+<body>
+	<form id="addform">
+		<table class="table table-hover  table-bordered" >
+			<tr>
+				<td width="15%" class="td_right"><em>*</em>学生</td>
+				<td width="35%">
+					<select name="loginName"> 
+						<#if userList?? && userList?size gt 0>
+							<option value="">请选择</option> 
+							<#list userList as	user>
+							<option value="${user.loginName}:${user.realName!}">${user.realName}</option>
+							</#list> 
+						</#if>
+					</select>
+					</td>
+					</tr>
+					<tr>
+						<td width="15%" class="td_right"><em>*</em> 科室</td>
+						<td width="35%">
+							<select name="roomName"> 
+								<#if roomValues?? && roomValues?size gt 0>
+									<option value="">请选择</option> 
+									<#list roomValues as baseRoom>
+											<option value="${baseRoom.roomName!}">${baseRoom.roomName!}</option>
+									</#list> 
+								</#if>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td width="15%" class="td_right"><em>*</em> 轮转开始时间</td>
+						<td width="35%"><input readonly name="startTime" id="startTime" type="text" class="validate[required,maxSize[50]] text-input"/>
+						<img onclick="WdatePicker({el:'startTime',dateFmt:'yyyy-MM-dd HH:mm',maxDate:'%y-%M-%d'})" 
+						src="${uri.jssite}/My97DatePicker/skin/datePicker.gif" width="16" height="22" align="absmiddle"></td>
+						<td width="15%" class="td_right"><em>*</em> 轮转结束时间</td>
+						<td width="35%"><input readonly name="endTime" id="endTime" type="text" class="validate[required,maxSize[50]] text-input"/>
+						<img onclick="WdatePicker({el:'endTime',dateFmt:'yyyy-MM-dd HH:mm',maxDate:'%y-%M-%d'})" 
+						src="${uri.jssite}/My97DatePicker/skin/datePicker.gif" width="16" height="22" align="absmiddle"></td>
+					</tr>
+					
+	                
+	            	<tr class="button_tr">
+	                	<td>&nbsp;</td>
+	               	 	<td>
+			               	<input  type="button" value="新 建" onclick="sumArrTurn()" class="main_button"/>&nbsp;&nbsp;
+	               	 	</td>
+					</tr>   
+				</table>
+			</form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

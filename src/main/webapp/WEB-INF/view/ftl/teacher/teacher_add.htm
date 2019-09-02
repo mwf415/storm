@@ -1,0 +1,74 @@
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<#import "../decorators/spring.ftl" as spring />
+<!DOCTYPE html>
+<html >
+<head>
+<style>
+.table_td td {
+	padding-left: 3px;
+}
+</style>
+</head>
+<body>
+	<div>
+		<form id="planAdd" name="planAdd">
+			医院编号：<input type="text" name="hospitalId" value="" />&nbsp;&nbsp;&nbsp;&nbsp;
+			姓名：<input type="text" name=userName value="" /><br><br>
+			密码：<input type="text" name="userPass" value="" />&nbsp;&nbsp;&nbsp;&nbsp;
+			性别：<input type="text" name="sex" value="" /><br><br>
+			住址：<input type="text" name="address" value="" />&nbsp;&nbsp;&nbsp;&nbsp;
+			毕业院校：<input type="text" name="gradSchool" value="" /><br><br>
+			专业：<input type="text" name="major" value="" />&nbsp;&nbsp;&nbsp;&nbsp;
+			身份证号：<input type="text" name="cardId" value="" /><br><br>
+			电话号码：<input type="text" name="telPhone" value="" />&nbsp;&nbsp;&nbsp;&nbsp;
+			手机号码：<input type="text" name="cellPhone" value="" /><br></br>
+			专业基地：<select name="baseName" > 
+				<#if baseValues?? && baseValues?size gt 0>
+					<option value="">请选择</option> 
+					<#list baseValues as	baseValue>
+							<option value="${baseValue.value}">${baseValue.value}</option>
+					</#list> 
+				</#if>
+				</select>&nbsp;&nbsp;&nbsp;&nbsp;
+			科室：<select name="roomName"> 
+				<#if roomValues?? && roomValues?size gt 0>
+					<option value="">请选择</option> 
+					<#list roomValues as	roomValue>
+							<option value="${roomValue.value}">${roomValue.value}</option>
+					</#list> 
+				</#if>
+				</select>
+				<br></br>
+			学位：<input type="text" name="xuewei" value="" />&nbsp;&nbsp;&nbsp;&nbsp;
+			学历：<input type="text" name="degree" value="" /><br></br>
+			微信：<input type="text" name="wechat" value="" />&nbsp;&nbsp;&nbsp;&nbsp;
+			QQ：<input type="text" name="qq" value="" /><br></br>
+			email：<input type="text" name="email" value="" />&nbsp;&nbsp;&nbsp;&nbsp;
+			执照Id:<input type="text" name="licenId" value="" /><br></br>
+			职称：<input type="text" name="staff" value="" />&nbsp;&nbsp;&nbsp;&nbsp;
+			获取职称时间：<input id="staffTime" type="text" name="staffTime" />
+				<img onclick="WdatePicker({el:'staffTime',dateFmt:'yyyy-MM-dd HH:mm:ss'})" 
+						src="${uri.jssite}/My97DatePicker/skin/datePicker.gif" width="16" height="22" align="absmiddle">	
+	         <br>
+			<br></br>
+			<input type="button" value="提交" onclick="addTeacher()">&nbsp;&nbsp;&nbsp;&nbsp;
+			<input type="button" value="返回" onclick="toblack()">
+	</form>
+	</div>
+
+</body>
+
+<script type="text/javascript">
+	function addTeacher() {
+		var result = confirm('是否添加！');
+		if (result) {
+			var url = "<@spring.url '/teacherContrller/teacher_submit.htm?targetID=dataDiv&formID=searchform'/>";
+			ajaxFormRequest("{url:'" + url + "',id:'dataDiv',form:'planAdd'}");
+		} else {
+			alert('不添加');
+		}
+	}
+</script>
+
+</html>

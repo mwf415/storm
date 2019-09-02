@@ -1,0 +1,78 @@
+<#import "../decorators/uri.ftl" as uri /> <#import "../decorators/util.ftl" as
+util /> <#import "../decorators/spring.ftl" as spring />
+<!DOCTYPE html>
+<html >
+<head>
+<#include "../decorators/headtitle.ftl" >
+</head>
+<body>
+	<!--right-->
+	<#include "../decorators/left0.ftl" >
+	
+	<div class="main_right" id="right">
+		<div class="right_con">
+			<p>导入用户表，注意：格式为xls，如果缺少数据，写入会为‘空’，数字型得的写0，如果导入失败，仅仅复制数据到新的excel中，再进行导入</p>
+			<table class="table table-bordered table-hover">
+				<tr class="table_title">
+					<td width="50%">下载模板</td>
+					<td width="50%">上传文件</td>
+				</tr>
+				<tr>
+					<td width="50%">
+						<button type="button" onclick="chefileDown('moban:user_moban.xls')" class="btn btn-danger" >下载用户模板  </button>
+					</td>
+					<td width="50%">
+						<form class="form-inline"  method="post" enctype="multipart/form-data" action="<@spring.url '/userContrller/insertAllStudents.htm'/>">
+							<div class="form-group">
+								<label class="sr-only" for="inputfile">文件输入</label>
+								<input type="file" id="importuser" name="file">
+							</div>
+							<button type="submit" class="btn btn-info" >导入用户</button>
+						</form>
+					</td>
+				</tr>
+				<tr class="table_td">
+					<td>
+						<button type="button" onclick="chefileDown('moban:arrTurn_moban.xls')" class="btn btn-danger" >下载轮转模板  </button>
+					</td>
+					<td width="50%">
+						<form class="form-inline"  id="searchform" role="form" method="post" enctype="multipart/form-data" action="<@spring.url '/userContrller/insertarrTurn.htm'/>">
+							<div class="form-group">
+								<label class="sr-only" for="inputfile">文件输入</label>
+								<input type="file" id="inputfile" name="file">
+							</div>
+							<button type="submit" class="btn btn-info" >导入轮转</button>
+						</form>
+					</td>
+				</tr>
+		</table>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+	/**	
+	function uploadfile(id){
+		$.ajaxFileUpload({
+	        url: "<@spring.url '/userContrller/insertAllStudents.htm'/>", //用于文件上传的服务器端请求地址
+	        secureuri: false,           //一般设置为false
+	        fileElementId: id, //文件上传控件的id属性  <input type="file" id="file" name="file" /> 注意，这里一定要有name值   
+	        dataType: 'json',//返回值类型 一般设置为json
+	        complete: function () {//只要完成即执行，最后执行
+	        },
+	        success: function (result, status) { 
+	        },
+	        error: function (data, status, e)//服务器响应失败处理函数
+	    });
+			
+	}
+	*/
+	</script>
+	<script type="text/javascript">
+	function chefileDown(name){
+		var url ="<@spring.url '/file/mobanfiledown.htm?fileParm=" + name + "'/>";
+		window.location.href = url;
+	}
+	</script>
+
+</body>
+</html>

@@ -1,0 +1,98 @@
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<#import "../decorators/spring.ftl" as spring />
+<!DOCTYPE html>
+<html >
+<head>
+<style>
+.table_td td {
+	padding-left: 3px;
+}
+</style>
+</head>
+<body>
+<form id="addform3" name="addform3" >
+	<input type="text" value="${li!}" name="li" style="display: none"/>
+	<input type="text" value="${div!}" name="div" style="display: none"/>
+	<input type="text" value="${type!}" name="type" style="display: none"/>
+	<input type="text" value="${arrTurnRule.baseName!}" name="baseName" style="display: none"/>
+		<table class="tab_infor" id="tab_infor">
+			<tr>
+				<td> <h3>修改轮转规则：</h3></td>
+			</tr>
+				<tr>
+					<td width="21%" class="td_right">专业基地：</td>
+					<td> ${arrTurnRule.baseName!}</td>
+					<td class="td_r">科室：</td>
+					<td>${arrTurnRule.roomName!}</td>
+				</tr>
+				<tr>
+					<td width="21%" class="td_right">针对学生：</td>
+					<td>本科生和专科生</td>
+				</tr>
+				<tr>
+					<td width="21%" class="td_right">轮转长度：</td>
+					<td><input type="text" value="${arrTurnRule.period!}" id="periodU" name="periodU"/> </td>
+					
+					<td class="td_r">排序：</td>
+					<td><input type="text" value="${arrTurnRule.roomSort!}" id="periodU" name="roomSortU"/></td>
+				</tr>
+				
+	            	<tr class="button_tr">
+	                	<td>&nbsp;</td>
+	               	 	<td>
+						<input type="button" value="提交" onclick="editRule()" class="main_button" >
+	               	 	<input type="text" value="${arrTurnRule.id!}" name ="idU" style="display: none;"></input>
+	               	 	</td>
+					</tr>   
+				</table>
+	</form>
+	
+	 <div style="display: none;">
+		<a id="delSuccessed" href="#" onclick="showMessageDialog(event,'成功','<@spring.url '/arrTurnController/ruleadd.htm?baseName=${baseName!}&li=${li!}&div=${div!}&menuOrder=0&type=${type!}'/>','closeWindow();');" ></a>
+	 	<a id="delFailed" href="#" onclick="showMessageDialog(event,'失败！','','');" ></a>
+	 </div>
+</body>
+
+<script type="text/javascript">
+function editRule(){
+	var param = null;
+	var postmethod = "POST";
+	var param = $("#addform3").serialize();
+	var url = "<@spring.url '/arrTurnRuleController/arrturnRuleupdate.htm'/>";
+	$.ajax({
+		   type: postmethod,
+		   cache: false,
+		   url: url,
+		   data : param,
+		   success: function(data){
+		    if(!validateFieldMs(data)){
+				return;
+			}
+			if(data == 'true'){
+				tip(1,true);
+				return;
+			}else if(data == 'false'){
+				tip(1,false);
+				return;
+			}
+			showMessageDialog(null,data,'','');
+		   },
+		   error:function(xhr,err){
+			   window.location.href=url; 
+		}
+	});
+}
+
+
+function tip(type,bool){
+	if(type == 1){
+		if(bool){
+			document.getElementById("delSuccessed").click();
+			return;
+		}
+		document.getElementById("delFailed").click();
+	}
+}
+</script>
+</html>

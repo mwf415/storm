@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youyicn.dao.cycle.ArrTurnRuleMapper">
+	<select id="queryRuleByEducation" parameterType="java.lang.String"	resultType="com.youyicn.entity.cycle.ArrturnRule">
+		select * from cycle_arrturn_rule where 1=1 and baseName=#{baseName} and roomName=#{room} and type=#{trainTime}
+	</select>
+	
+	<select id="getArrTurnRuleByBaseName" parameterType="java.lang.String"	resultType="com.youyicn.entity.cycle.ArrturnRule">
+		select * from cycle_arrturn_rule where 1=1 and baseName=#{baseName}  and type = '3'
+	</select>
+	
+	<select id="getRuleByBaseName" parameterType="com.youyicn.entity.cycle.ArrturnRule"	resultType="com.youyicn.entity.cycle.ArrturnRule">
+		select * from cycle_arrturn_rule where  baseName=#{baseName}  and type = #{type}
+	</select>
+	
+	<insert id="insertRule" parameterType="com.youyicn.entity.cycle.ArrturnRule">
+		insert into cycle_arrturn_rule
+						(id,education,roomName,baseName,period,type,roomSort) 
+				values (#{id},#{education},#{roomName},#{baseName},#{period},#{type},#{roomSort})
+	</insert>
+		
+	<select id="getArrTurnByCon" parameterType="com.youyicn.entity.cycle.ArrturnRule"	resultType="com.youyicn.entity.cycle.ArrturnRule">
+		select * from cycle_arrturn_rule where 1=1 
+		<if test="baseName!=null">
+			and baseName=#{baseName} 
+		</if>
+		<if test="type!=null">
+			and type=#{type} 
+		</if>
+			order by roomSort 
+	</select>
+	
+	<select id="getArrTurnRuleById" parameterType="com.youyicn.entity.cycle.ArrturnRule"	resultType="com.youyicn.entity.cycle.ArrturnRule">
+		select * from cycle_arrturn_rule where 1=1 and id=#{id} 
+	</select>
+	
+	<delete id="delArrTurnRule" parameterType="com.youyicn.entity.cycle.ArrturnRule">
+		delete from cycle_arrturn_rule where id=#{id}
+		
+	</delete>
+	<update id="upDateArrTurnRule" parameterType="com.youyicn.entity.cycle.ArrturnRule">
+	    update cycle_arrturn_rule set period = #{period} , roomSort = #{roomSort}  where id =#{id}
+	</update>
+</mapper>

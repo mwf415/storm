@@ -1,0 +1,82 @@
+﻿﻿<!DOCTYPE html>
+<html lang="en" class="no-js">
+    <head>
+        <meta charset="utf-8">
+        <title>住院医师综合管理后台</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="renderer" content="webkit">
+		<script src="/cycle/monitor/js/jquery.js" type="text/javascript"  ></script>
+        <!-- CSS -->
+        <link rel="stylesheet" href="/cycle/monitor/css/reset.css">
+        <link rel="stylesheet" href="/cycle/monitor/css/supersized.css">
+        <link rel="stylesheet" href="/cycle/monitor/css/stylemy.css">
+		<script src="/cycle/monitor/bootstrap/js/respond.js" type="text/javascript"  ></script>
+        <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+        <!--[if lt IE 9]>
+            <script src="assets/js/html5.js"></script>
+        <![endif]-->
+        <script type="text/javascript">
+        
+        $(function() {  
+        	$("#login").click(function() {  
+        		var system ={}; 
+    			var p = navigator.platform;      
+    			system.win = p.indexOf("Win") == 0; 
+    			system.mac = p.indexOf("Mac") == 0; 
+    			system.x11 = (p == "X11") || (p.indexOf("Linux") == 0);    
+    			if(system.win||system.mac||system.xll){
+    			    var urlPath ="adminLogin.htm"; 
+    			}else{  //如果是手机,跳转到谷歌
+    			    var urlPath ="wap/adminLogin.htm"; 
+    			}
+        	  	$('#form1').attr('action',urlPath).submit();
+        	})
+        })
+        if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
+ 			 var msViewportStyle = document.createElement('style')
+ 			 msViewportStyle.appendChild(
+    		document.createTextNode(
+      			'@-ms-viewport{width:auto!important}'
+    		)
+ 		 )
+  		document.querySelector('head').appendChild(msViewportStyle)
+		}
+    	
+		</script>
+		<style>
+			@-ms-viewport  { width: device-width; }
+			@-ms-viewport  { width: device-width; }
+			@-o-viewport   { width: device-width; }
+			@viewport      { width: device-width; }
+			body{
+				background-image:url(/cycle/monitor/imgs/bcg.jpg);
+				width:100%;
+				height:100%;
+			}
+		</style>
+    </head>
+
+    <body>
+
+        <div class="page-container">
+            <h1>登录(Login)</h1>
+           <form name="form1" id="form1" method="post">
+                <input type="text" name="loginName" id="loginName" class="loginName" placeholder="请输入您的用户名！">
+                <input type="password" name="userPass" id="userPass" class="password" placeholder="请输入您的用户密码！">
+                <button type="submit" id="login" class="submit_button">登录</button>
+                <div class="error"><span>+</span></div>
+            </form>
+         
+        </div>
+		
+        <!-- Javascript -->
+       
+
+    </body>
+<div style="text-align:center;">
+</div>
+</html>
+

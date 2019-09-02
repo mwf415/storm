@@ -1,0 +1,217 @@
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<#import "../decorators/spring.ftl" as spring />
+<!DOCTYPE html>
+<html >
+<head>
+<#include "../decorators/headtitle.ftl" >
+</head>
+<body>
+<#include "../decorators/left1.ftl" >
+<div class="main_right" id="right">
+	<div class="right_con">
+		<div class="main_search">
+			<form id="searchform">
+			<input type="hidden" name ="div" value="${div!}" />
+			<input type="hidden" name ="li" value="${li!}" />
+			<input type="hidden" name ="type" value="${type!}" />
+				<#if type ?? && (type =="h" || type=="b")>
+					科室：<select name="roomName"  > 
+					<#if roomValues?? && roomValues?size gt 0>
+						<option value="">请选择</option> 
+						<#list roomValues as roomValue>
+								<option value="${roomValue.value}" <#if roomValue.value==roomName!>selected="selected"</#if> >${roomValue.value}</option>
+						</#list> 
+					</#if>
+					</select>
+					|
+				</#if>
+				
+				<#if type ?? && (type == "b" || type =="r" )>  
+					责任教师:<select name="teacherNum" > 
+					<#if teacherList?? && teacherList ? size gt 0>
+						<option value="">请选择</option> 
+						<#list teacherList as teacher>
+							<option value="${teacher.loginName!}" <#if teacher.loginName==teachernum!>selected="selected"</#if> >${teacher.realName!}</option>
+						</#list> 
+					</#if>
+					</select>
+					| 
+				</#if>
+					开始时间：
+						<input id="searchStart" type="text" name="searchStart" style="width: 100px;"/>
+							<img onclick="WdatePicker({el:'searchStart',dateFmt:'yyyy-MM-dd'})" 
+									src="${uri.jssite}/My97DatePicker/skin/datePicker.gif" width="16" height="22" align="absmiddle">	
+									
+					|	
+					结束时间：
+						<input id="searchEnd" type="text" name="searchEnd" style="width: 100px;"/>
+							<img onclick="WdatePicker({el:'searchEnd',dateFmt:'yyyy-MM-dd'})" 
+									src="${uri.jssite}/My97DatePicker/skin/datePicker.gif" width="16" height="22" align="absmiddle">	
+					
+						<input type="hidden" name="li" value="${li!}"/>
+						<input type="hidden" name="div" value="${div!}"/>
+						<input type="hidden" name="type" value="${type!}"/>
+						<input type="hidden" name="pageIndex" value="${pageIndex!'1'}"/>
+						<button type="button" class="btn btn-danger btn-sm" onclick="queryList()" >搜 索</button>
+				</div>
+			</form>
+		</div>
+	
+		<!-- 显示数据的div -->
+		<div id="dataDiv">
+			<div class="main_right" id="right">
+	<div style="overflow: auto;">
+	<table class="table table-bordered table-hover" style="width:1800px;">
+		<tr class="table_title">
+			<td >id</td>
+			<td >学生姓名</td>
+			<td>指导老师</td>
+			<td>科室</td>
+			<#if type ?? && type=="r">
+				<td>操作</td>
+			</#if>
+			<td>理论分数</td>
+			<td >创建时间</td>
+			<td >缺席天数</td>
+			<td >值班次数</td>
+			<td >病种病历数</td>
+			<td >病人数量</td>
+			<td >病历书写质量</td>
+			<td >操作技能种数</td>
+			<td>临床思维</td>
+			<td >医德</td>
+			<td >教学能力</td>
+			<td >参加学习次数</td>
+			<td >科研情况</td>
+			<td >医疗差错</td>
+			<td >mini考试</td>
+			<td >理论考试</td>
+			<td>临床能力考试</td>
+			<td >soap分数</td>
+			<td >护士评价</td>
+			<td >病人评价</td>
+			<td >创建人</td>
+		</tr>
+		<#if page.list?? && page.list?size gt 0>
+		<#list page.list as sumScore>
+		<tr >
+			<td>${sumScore.activesId!}</td>
+			<td>${sumScore.userName!}</td>
+			<td>${sumScore.teacherName!}</td>
+			<td>${sumScore.roomName!}</td>
+			<#if type ?? && type=="r"> 
+				<td>
+					<#if sumScore.isOver ?? && sumScore.isOver==1 >
+						<button type="button" class="btn btn-primary btn-xs"  onclick="pop_userinfo(event,'<@spring.url '/outRoomCont/outroomXq.htm?id=${sumScore.id}'/>')">查看详情</button>
+					<#else>
+							<a href="<@spring.url "/outRoomSum/update.htm?li=li32&div=div_3&menuOrder=${menuOrder!}&id=${sumScore.id!}&type=${type!}"/>">
+								<button type="button" class="btn btn-danger btn-xs"> 添加打分</button>
+								</a>       
+					</#if>
+				</td>
+			</#if>
+			<td>${sumScore.theoryscore!}</td>
+			<td>${sumScore.createTime!}</td>
+			<td>${sumScore.absenceMount!}</td>
+			<td>${sumScore.onDetyMount!}</td>
+			<td>${sumScore.sickMount!}</td>
+			<td>${sumScore.mngMount!}</td>
+			<td>${sumScore.writeQuality!}</td>
+			<td>${sumScore.operateMount!}</td>
+			<td>${sumScore.thinking!}</td>
+			<td>${sumScore.virtues!}</td>
+			<td>${sumScore.teachAbility!}</td>
+			<td>${sumScore.learnAmount!}</td>
+			<td>${sumScore.science!}</td>
+			<td>${sumScore.mistake!}</td>
+			<td>${sumScore.mini_cex!}</td>
+			<td>${sumScore.theoryExam!}</td>
+			<td>${sumScore.practiceExam!}</td>
+			<td>${sumScore.soap!}</td>
+			<td>${sumScore.nurseDes!}</td>
+			<td>${sumScore.sickDes!}</td>
+			<td>${sumScore.createName!}</td>
+		</tr>
+		</#list>
+		<#else>
+  			<tr class="table_td"><td colspan="12" align="center">没有符合条件的结果。</td></tr>
+		</#if>
+	</table>
+	</div>
+	<#include "../decorators/page.htm" />
+</div>
+<div style="display: none;">
+	 	<a id="delSuccessed" href="#" onclick="showMessageDialog(event,'删除成功！','<@spring.url '/routRoomCont/outroomindex.htm?li=li36&div=div_3&menuOrder=0'/>','closeWindow();');" ></a>
+	 	<a id="delFailed" href="#" onclick="showMessageDialog(event,'删除失败！','','');" ></a>
+	 </div>
+
+		</div>
+	</div>
+</div>
+<!--right end-->
+ 
+<script type="text/javascript">
+function targetPage(pageIndex){
+	window.location = '<@spring.url "/outRoomCont/outroomindex.htm?li=${li!}&type=${type!}&div=${div!}&menuOrder=${menuOrder!}&searchEnd=${searchEnd!}&searchStart=${searchStart!}&teachernum=${teachernum!}&pageIndex='+pageIndex+'"/>';
+}
+
+
+function sumSocre(){
+	var url ="<@spring.url '/outRoomCont/outroomindex.htm'/>";
+	ajaxFormRequest("{url:'"+url+"',id:'dataDiv',form:'searchform'}");
+}
+function addSumSocre(){
+	var url ="<@spring.url '/rsumScoreCont/sumScoreadd.htm'/>";
+	window.location =url;
+}
+
+
+// 这个是点击进入查询，有具体的查询条件 
+function queryList(){
+	var url ="<@spring.url '/outRoomCont/outroomindex.htm'/>";
+	$("#searchform").attr("action",url).submit();
+}
+	
+function delSumScore(tId){
+	var param = null;
+	var postmethod = "get";
+	var url ="<@spring.url '/rsumScoreCont/sumScoredel.htm?id="+tId+"'/>";
+	$.ajax({
+		   type: postmethod,
+		   cache: false,
+		   url: url,
+		   data : param,
+		   success: function(data){
+			if(data == 'true'){
+				tip(1,true);
+				return;
+			}
+			if(data == 'false'){
+				tip(1,false);
+				return;
+			}
+			showMessageDialog(null,data,'','');
+		   },
+		   error:function(xhr,err){ 
+		}
+	});
+}
+
+function tip(type,bool){
+	if(type == 1){
+		if(bool){
+			document.getElementById("delSuccessed").click();
+			return;
+		}
+		document.getElementById("delFailed").click();
+	}
+}
+
+
+
+</script>
+
+
+</body>
+</html>

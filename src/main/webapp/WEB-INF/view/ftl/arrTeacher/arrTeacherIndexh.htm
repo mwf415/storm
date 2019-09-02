@@ -1,0 +1,201 @@
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<#import "../decorators/spring.ftl" as spring />
+<style>
+.table_td td{
+	padding-left:3px;
+}
+<!--为方便已经安排轮转的学生指派老师，一个管理员设置就够了-->
+</style>
+<#include "../decorators/left1.ftl" ><div class="main_right" id="right">
+	<div class="right_con">
+		<div class="main_search">
+			<form id="searchform" >
+				<div style="border: 0px solid silver;height: 30px;padding-top: 3px;">
+					科室：<select name="roomName" id="roomName" style="width: 120px;" >
+					<#if roomValues?? && roomValues?size gt 0>
+						<option value="">请选择</option>
+						<#list roomValues as roomValue>
+								<option value="${roomValue.value}" <#if roomValue.value==roomName!>selected="selected"</#if> >${roomValue.value}</option>
+						</#list>
+					</#if>
+					</select>
+					&nbsp;&nbsp;
+					年级：
+
+			2015<input type="radio" value="2015" name="grade" />&nbsp;&nbsp;
+			2016<input type="radio" value="2016" name="grade" />&nbsp;&nbsp;
+			2017 <input type="radio" value="2017" name="grade"/>&nbsp;&nbsp;
+			2018<input type="radio" value="2018" name="grade"/>&nbsp;&nbsp;
+			2019<input type="radio" value="2019" name="grade"/>&nbsp;&nbsp;
+			2020<input type="radio" value="2020" name="grade"/>&nbsp;&nbsp;
+			2021<input type="radio" value="2021" name="grade"/>&nbsp;&nbsp;
+					开始时间：
+						<input id="searchStart" type="text" name="searchStart" id="searchStart" />
+							<img onclick="WdatePicker({el:'searchStart',dateFmt:'yyyy-MM-dd'})"
+									src="${uri.jssite}/My97DatePicker/skin/datePicker.gif" width="16" height="22" align="absmiddle">
+					&nbsp;&nbsp;
+					结束时间：
+						<input id="searchEnd" type="text" name="searchEnd" id="searchEnd" />
+							<img onclick="WdatePicker({el:'searchEnd',dateFmt:'yyyy-MM-dd'})"
+									src="${uri.jssite}/My97DatePicker/skin/datePicker.gif" width="16" height="22" align="absmiddle">
+					&nbsp;&nbsp;
+						<input type="hidden" name="li" value="${li!}"/>
+						<input type="hidden" name="div" value="${div!}"/>
+						<input type="hidden" name="pageIndex" value="${pageIndex!'1'}"/>
+						<button type="button" class="btn btn-danger btn-sm" onclick="queryList()" >搜 索</button>
+
+
+
+				</div>
+			</form>
+		</div>
+		<!-- 显示数据的div -->
+		<div id="dataDiv">
+		<form id="addForm1" >
+			<input type="hidden" name="li" value="${li!}"/>
+			<input type="hidden" name="div" value="${div!}"/>
+			<input type="hidden" name="type" value="${type!}"/>
+			<input type="hidden" name="roomName" value="${roomName!}"/>
+			<input type="hidden" name="grade" value="${grade!}"/>
+			<input type="hidden" name="searchStart" value="${searchStart!}"/>
+			<input type="hidden" name="searchEnd" value="${searchEnd!}"/>
+
+			<table class="table table-bordered table-hover">
+			<tr class="table_title">
+				<td width="8%">学员编号</td>
+				<td width="8%">学员姓名</td>
+				<td width="8%">所在基地</td>
+				<td width="8%">学生年级</td>
+				<td width="8%">轮转科室</td>
+				<td width="6%">开始时间</td>
+				<td width="8%">结束时间</td>
+				<td width="8%">已有老师1</td>
+				<td width="10%">已有老师2</td>
+
+				<td width="8%">指派老师1</td>
+				<td width="10%">指派老师2</td>
+				<td width="14%">操作</td>
+
+			</tr>
+				<#if page.list?? && page.list?size gt 0>
+				<#list page.list as arrTurn>
+				<tr class="table_td">
+					<td>${arrTurn.loginName}</td>
+					<td>${arrTurn.userName!}</td>
+					<td>${arrTurn.basename!}</td>
+					<td>${arrTurn.grade!}</td>
+					<td>${arrTurn.roomName!}</td>
+					<td>${arrTurn.startTime[0..10]!}</td>
+					<td>${arrTurn.endTime[0..10]!}</td>
+					<td>${arrTurn.teacherName1!}</td>
+					<td>${arrTurn.teacherName2!}</td>
+
+
+					<td>
+						<select name="${arrTurn.arrTurnId}t1" >
+							<#if teacherList?? && teacherList ? size gt 0>
+								<option value="">请选择</option>
+								<#list teacherList as teacher>
+									<option value="${teacher.loginName!}:${teacher.realName!}">${teacher.realName!}</option>
+
+								</#list>
+							</#if>
+						</select>
+					</td>
+					<td>
+						<select name="${arrTurn.arrTurnId}t2" >
+							<#if teacherList?? && teacherList ? size gt 0>
+								<option value="">请选择</option>
+								<#list teacherList as teacher>
+									<option value="${teacher.loginName!}:${teacher.realName!}">${teacher.realName!}</option>
+								</#list>
+							</#if>
+						</select>&nbsp;&nbsp;&nbsp;&nbsp;
+					</td>
+					<td>
+						<a href="#" onclick="arrTeacher(${arrTurn.arrTurnId!})">指派老师</a>
+					</td>
+
+				</tr>
+				</#list>
+			<#else>
+	  			<tr class="table_td"><td colspan="12" align="center">没有符合条件的结果。</td></tr>
+			</#if>
+		</table>
+		<#include "../decorators/page.htm" />
+		</form>
+		</div>
+	</div>
+</div>
+
+ <div style="display: none;">
+		<a id="delSuccessed" href="#" onclick="showMessageDialog(event,'成功','<@spring.url '/arrTeacherCont/arrTeacherindex.htm?roomName=${roomName!}&li=${li!}&div=${div}&menuOrder=0&type=${type!}&grade=${grade!}&searchStart=${searchStart!}&searchEnd=${searchEnd!}'/>','closeWindow();');" ></a>
+	 	<a id="delFailed" href="#" onclick="showMessageDialog(event,'失败！','','');" ></a>
+	 </div>
+
+<script type="text/javascript">
+function arrTeacher(id){
+	var param = null;
+	var postmethod = "POST";
+	var param = $("#addForm1").serialize();
+	var url = "<@spring.url '/arrTeacherCont/arrTeachersum.htm?arrTurnId="+id+"'/>";
+	$.ajax({
+		   type: postmethod,
+		   cache: false,
+		   url: url,
+		   data : param,
+		   success: function(data){
+		    if(!validateFieldMs(data)){
+				return;
+			}
+			if(data == 'true'){
+				tip(1,true);
+				return;
+			}else if(data == 'false'){
+				tip(1,false);
+				return;
+			}
+			showMessageDialog(null,data,'','');
+		   },
+		   error:function(xhr,err){
+			   window.location.href=url;
+		}
+	});
+}
+
+
+
+function queryList(){
+	var grade ;
+	var radionum = document.getElementById("searchform").grade;
+	for(var i=0;i<radionum.length;i++){
+		 if(radionum[i].checked){
+		 	grade = radionum[i].value
+		 }
+	}
+	var roomName =  $('#roomName').val();
+	var searchStart = $('#searchStart').val();
+	var searchEnd = $('#searchEnd').val();
+	if (searchStart == "") {
+		alert("请至少选择开始时间！");
+		return;
+	}
+	window.location = '<@spring.url "/arrTeacherCont/arrTeacherindex.htm?li=${li!}&div=${div!}&type=${type!}&grade='+grade+'&roomName='+roomName+'&searchStart='+searchStart+'&searchEnd='+searchEnd+'"/>';
+}
+
+function targetPage(pageIndex){
+	window.location = '<@spring.url "/arrTeacherCont/arrTeacherindex.htm?li=li11&div=div_1&menuOrder=0&pageIndex='+pageIndex+'"/>';
+}
+
+function tip(type,bool){
+	if(type == 1){
+		if(bool){
+			document.getElementById("delSuccessed").click();
+			return;
+		}
+		document.getElementById("delFailed").click();
+	}
+}
+</script>
+<!--right end-->

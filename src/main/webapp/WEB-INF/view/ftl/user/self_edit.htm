@@ -1,0 +1,91 @@
+<#import "../decorators/uri.ftl" as uri />
+<#import "../decorators/util.ftl" as util />
+<#import "../decorators/spring.ftl" as spring />
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html>
+<head>
+<#include "../decorators/headtitle.ftl" >
+</head>
+<body>
+	<!--right-->
+	<#include "../decorators/left0.ftl" >
+	
+	<div class="main_right" id="right"  style="margin:0 50px; width: 600px;">
+		
+			<form role="form"  id="edifform" method="post">
+				<div class="row clearfix" style="margin: 30px">
+					<div class="input-group">
+						<span class="input-group-addon">登录名<a id="errWornning"></a></span>
+						<input type="text" class="form-control"  value="${user.loginName!}" disabled="disabled"   />
+						<input type="hidden" class="form-control" name="loginName" value="${user.loginName!}"  />
+					</div>
+					</br>
+					<div class="input-group">
+						<span class="input-group-addon">密码&#12288;&#12288;</span> 
+						<input type="password" class="form-control" name="userPwd" 	id="userPwd" />
+					</div>
+					</br>
+					<div class="input-group">
+						<span class="input-group-addon">真实姓名</span> <input type="text"
+							class="form-control" name="realName" id="realName" value="${user.realName!}" disabled="disabled" />
+					</div>
+					</br>
+					<div class="input-group">
+						<span class="input-group-addon">医院编号</span> <input type="text" class="form-control" name="hospitalId" value="${user.hospitalId!}"  disabled="disabled" />
+					</div>
+					</br>
+					<div class="input-group">
+						<span class="input-group-addon">专业基地</span> 										
+						<select name="baseName"  id="baseName"> 
+							<#if baseValues?? && baseValues?size gt 0>
+								<#if user.baseName??>
+										<option value="${user.baseName!}" selected="selected">${user.baseName!}</option>
+								</#if>
+								<option value="">请选择</option> 
+								<#list baseValues as baseValue>
+										<option value="${baseValue.value!}" >${baseValue.value}</option>
+								</#list> 
+							</#if>
+						</select>										
+					</div>
+					</br>
+					<div class="input-group">
+						<span class="input-group-addon">科室&#12288;&#12288;</span>
+							<select name="roomName"  id="roomName"> 
+							<#if roomValues?? && roomValues?size gt 0>
+								<#if user.roomName??>
+										<option value="${user.roomName!}" selected="selected">${user.roomName!}</option>
+								</#if>
+								<option value="">请选择</option> 
+								<#list roomValues as roomValue>
+										<option value="${roomValue.value!}" >${roomValue.value}</option>
+								</#list> 
+							</#if>
+							</select>
+					</div>				
+					</br>
+				</div>
+				<div class="row clearfix" style="margin: 30px">
+					<button type="submit" class="btn btn-primary" 	onclick="subUser()">添加</button>
+				</div>
+			</form>
+		</div>
+	</div>
+				
+<script>
+//注册提交
+	function subUser(){
+		var userPwd = document.getElementById("userPwd").value;
+		if(userPwd == '') {
+			  alert("密码不能为空");
+			  return;
+		}
+		var param = null;
+		var postmethod = "POST";
+		var url ="<@spring.url '/userController/self_update.htm'/>";
+		$("#edifform").attr("action",url).submit();		
+	}  
+</script>
+</body>
+</html>

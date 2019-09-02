@@ -1,0 +1,15 @@
+<#import "/decorators/uri.ftl" as uri />
+ <#import "/decorators/util.ftl" as util /> 
+<div>
+ <h2 align="center">
+ 	<#if zl ?? >
+ 	
+ 	${zl.roomName}--科室</h2>
+<div clsss="plotMain">
+	${zl.content}
+	<#else>
+		没有数据
+ 	</#if>
+		
+</div>
+</div>

@@ -1,0 +1,258 @@
+<#import "../decorators/uri.ftl" as uri /> <#import "../decorators/util.ftl" as
+util /> <#import "../decorators/spring.ftl" as spring />
+<!DOCTYPE html>
+<html >
+<head><#include "../decorators/headtitle.ftl" >
+</head>
+<body>
+<#include "../decorators/left1.ftl" >
+	<div class="main_right" id="right">
+		<div class="right_con">
+			<div class="main_search">
+				<h4>${baseName!}:
+					<#if type?? && type=="3">本科生(专科生)
+					<#elseif type?? && type=="2">研究生</#if>
+					轮转规则</h4>
+				<form id="addform1">
+					请选择科室：
+					<select id="roomName" name="roomName">
+						<#list baseRoomList as baseRoom>
+							<option value="${baseRoom.roomName}">${baseRoom.roomName}</option>
+						</#list>
+					</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					请选择轮转周期（单位：月）：<input  type="text" name="period" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<input type="text" value="${baseName!}" name="baseName" style="display: none"/>
+					<input type="text" value="${li!}" name="li" style="display: none"/>
+					<input type="text" value="${div!}" name="div" style="display: none"/>
+					<input type="text" value="${type!}" name="type" style="display: none"/>
+					<input type="text" value="${grade!}" name="grade" style="display: none"/>
+					排序：<input type="text" name="roomSort" id="roomSort"/>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<input type="button" onclick="doSubRule()" value="提交" style="width: 50px"/>
+				</form>
+			</div>
+			<br></br>
+			<div id="dataDiv">
+				<form id="addform6">
+					<input type="text" value="${baseName!}" name="baseName" style="display: none"/>
+					<input type="text" value="${li!}" name="li" style="display: none"/>
+					<input type="text" value="${div!}" name="div" style="display: none"/>
+					<input type="text" value="${type!}" name="type" style="display: none"/>
+					<input type="text" value="${grade!}" name="grade" style="display: none"/>
+					<table class="table table-bordered table-hover">
+						<tr class="table_title">
+							<td width="8%">基地名称</td>
+							<td width="8%">科室名称</td>
+							<td width="6%">排列顺序</td>
+							<td width="8%">轮转长度(月)</td>
+							<td width="6%">操作</td>
+							<td width="6%">对应学生</td>
+						</tr>
+						<#if atrList?? && atrList?size gt 0>
+						<#list atrList as atr>
+						<tr class="table_td">
+							<td>${atr.baseName!}</td>
+							<td>${atr.roomName!}</td>
+							<td><input style="width: 60px;" type="text" value="${atr.roomSort!}" name="${atr.id!}"/></td>
+							<td><input style="width: 60px;" type="text" value="${atr.period!}" name="${atr.id!}p"/></td>
+							<td>
+					 			<a href="#"  onclick="toDel('${atr.id!}')" style="cursor: pointer;" >删除</a>&nbsp;&nbsp;&nbsp;&nbsp;
+					 			<!-- <a href="#"  onclick="edit('${atr.id!}')" style="cursor: pointer;" >修改</a>&nbsp;&nbsp;&nbsp;&nbsp; -->
+							</td>
+							<td>
+								<#if type?? && type=="3">本科生(专科生)
+								<#elseif type?? && type=="2">研究生</#if>
+							</td>
+						</tr>
+						</#list>
+						<#else>
+				  			<tr class="table_td"><td colspan="12" align="center">没有符合条件的结果。</td></tr>
+						</#if>
+					</table>
+					<br />
+					<div >
+						<input type="button" style="margin-left: 600px;" class="main_button1" value="重新排序(必须提交)" onclick="changeSort()" />
+					</div>
+				</form>
+		<br/>
+		<br></br>
+		<p style="color: red;">修改顺序后，一定要提交，才能安排一下的学员</p>
+		<br></br>
+		<div style="margin-top: 15px;"><!-- 这份form 主要是为了添加学生轮转的，特殊情况的特殊处理 -->
+			<form id="addform7" style="border: 1px solid #000;">
+				<input type="text" value="${baseName!}" name="baseName" style="display: none"/>
+				<input type="text" value="${li!}" name="li" style="display: none"/>
+				<input type="text" value="${div!}" name="div" style="display: none"/>
+				<input type="text" value="${type!}" name="type" style="display: none"/>
+				<input type="text" value="${grade!}" name="grade" style="display: none"/>
+				<table class="table table-hover  table-bordered" >
+					<tr>
+						<td width="15%" class="td_right"><em>*</em> 学员名单</td>
+						<td width="35%">
+							<select name="userParm" id="userParm" style="width: 130px;" > 
+							<#if userList?? && userList?size gt 0>
+								<option value="">请选择</option> 
+								<#list userList as user>
+										<option value="${user.loginName!}:${user.realName!}" >${user.realName!}</option>
+								</#list> 
+							</#if>
+							</select>
+						</td>
+						<td width="21%" class="td_right">开始时间：</td>
+						<td>
+							<input id="startTime" type="text" name="startTime" /> 
+							<img onclick="WdatePicker({el:'startTime',dateFmt:'yyyy-MM-dd'})"	
+								src="${uri.jssite}/My97DatePicker/skin/datePicker.gif" width="16"	height="22" align="absmiddle">
+						</td>
+					</tr>
+				 
+	            	<tr class="button_tr">
+	                	<td>&nbsp;</td>
+	               	 	<td>
+		               	<input  type="button" onclick="sumArrTurn()" value="创建" class="main_button"/>&nbsp;&nbsp;
+	               	 	</td>
+					</tr>   
+				</table>
+			</form>
+			
+		</div>
+		</div>
+		</div>
+	</div>
+	 <div style="display: none;">
+		<a id="delSuccessed" href="#" onclick="showMessageDialog(event,'成功','<@spring.url '/arrTurnOneController/add.htm?baseName=${baseName!}&li=${li!}&div=${div}&menuOrder=0&type=${type!}&grade=${grade!}'/>','closeWindow();');" ></a>
+	 	<a id="delFailed" href="#" onclick="showMessageDialog(event,'失败！','','');" ></a>
+	 </div>
+	<script type="text/javascript">
+	function sumArrTurn(){
+		var param = null;
+		var postmethod = "POST";
+		var param = $("#addform7").serialize();
+		var url = "<@spring.url '/arrTurnOneController/ArrTurnSum.htm'/>";
+		$.ajax({
+			   type: postmethod,
+			   cache: false,
+			   url: url,
+			   data : param,
+			   success: function(data){
+			    if(!validateFieldMs(data)){
+					return;
+				}
+				if(data == 'true'){
+					tip(1,true);
+					return;
+				}else if(data == 'false'){
+					tip(1,false);
+					return;
+				}
+				showMessageDialog(null,data,'','');
+			   },
+			   error:function(xhr,err){
+				   window.location.href=url; 
+			}
+		});
+	}
+	function changeSort(){
+		var param = null;
+		var postmethod = "POST";
+		var param = $("#addform6").serialize();
+		var url = "<@spring.url '/arrTurnOneController/sortChange.htm'/>";
+		$.ajax({
+			   type: postmethod,
+			   cache: false,
+			   url: url,
+			   data : param,
+			   success: function(data){
+			    if(!validateFieldMs(data)){
+					return;
+				}
+				if(data == 'true'){
+					tip(1,true);
+					return;
+				}else if(data == 'false'){
+					tip(1,false);
+					return;
+				}
+				showMessageDialog(null,data,'','');
+			   },
+			   error:function(xhr,err){
+				   window.location.href=url; 
+			}
+		});
+	}
+	
+	
+	
+	
+	function doSubRule(){
+		var param = null;
+		var postmethod = "POST";
+		var param = $("#addform1").serialize();
+		var url = "<@spring.url '/arrTurnOneController/insert.htm'/>";
+		$.ajax({
+			   type: postmethod,
+			   cache: false,
+			   url: url,
+			   data : param,
+			   success: function(data){
+			    if(!validateFieldMs(data)){
+					return;
+				}
+				if(data == 'true'){
+					tip(1,true);
+					return;
+				}else if(data == 'false'){
+					tip(1,false);
+					return;
+				}
+				showMessageDialog(null,data,'','');
+			   },
+			   error:function(xhr,err){
+				   window.location.href=url; 
+			}
+		});
+	}
+	
+	
+	function edit(id){
+		var url ="<@spring.url '/arrTurnOneController/edit.htm?id=" +id+"'/>";
+		ajaxFormRequest("{url:'"+url+"',id:'dataDiv',form:'addform6'}");
+	}	
+	
+	//删除
+	function toDel(tId){
+			var param = null;
+			var postmethod = "get";
+			var url ="<@spring.url '/arrTurnOneController/arrturndel.htm?id="+tId+"'/>";
+			$.ajax({
+				   type: postmethod,
+				   cache: false,
+				   url: url,
+				   data : param,
+				   success: function(data){
+					if(data == 'true'){
+						tip(1,true);
+						return;
+					}
+					if(data == 'false'){
+						tip(1,false);
+						return;
+					}
+					showMessageDialog(null,data,'','');
+				   },
+				   error:function(xhr,err){ 
+				}
+			});
+		}
+		
+		function tip(type,bool){
+			if(type == 1){
+				if(bool){
+					document.getElementById("delSuccessed").click();
+					return;
+				}
+				document.getElementById("delFailed").click();
+			}
+		}
+	</script>
+</body>
+</html>
