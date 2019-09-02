@@ -16,7 +16,15 @@ public class MD5Utils {
 	 * @return
 	 */
 	public static String md5(String msg){
-		return new SimpleHash(algorithmName, msg).toHex();
+		try
+		{
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			byte[] output = md.digest(msg.getBytes());
+			return Base64.encodeBase64String(output);
+		}
+		catch (NoSuchAlgorithmException e) {}
+		return null;
+
 	}
 
 	@Deprecated
@@ -33,9 +41,9 @@ public class MD5Utils {
 
 	public static void main(String[] args) {
 
-		System.out.println(md5("123"));
+		String s = MD5Utils.md5("cyle123");
 
-		System.out.println(md5("123"));
+		System.out.println(s);
 	}
 
 }
