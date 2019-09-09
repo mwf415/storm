@@ -8,46 +8,46 @@ util /> <#import "../decorators/spring.ftl" as spring />
 					<tr>
 						<td  >设置 <em>${userName!}</em>单个轮转</td>
 						<td >科室
-							<select name="roomName"> 
+							<select name="roomName">
 								<#if roomValues?? && roomValues?size gt 0>
-									<option value="">请选择</option> 
+									<option value="">请选择</option>
 									<#list roomValues as baseRoom>
 										<option value="${baseRoom.roomName!}">${baseRoom.roomName!}</option>
-									</#list> 
+									</#list>
 								</#if>
 							</select>
 						</td>
 					</tr>
 					<tr>
 						<td ><em>*</em> 轮转开始时间
-						<input id="startTime" type="text" name="startTime" /> 
-						<img onclick="WdatePicker({el:'startTime',dateFmt:'yyyy-MM-dd'})"	
+						<input id="startTime" type="text" name="startTime" />
+						<img onclick="WdatePicker({el:'startTime',dateFmt:'yyyy-MM-dd'})"
 							src="${uri.jssite}/My97DatePicker/skin/datePicker.gif" width="16"	height="22" align="absmiddle">
-							
+
 						<td  ><em>*</em> 轮转结束时间
-						<input id="endTime" type="text" name="endTime" /> 
-						<img onclick="WdatePicker({el:'endTime',dateFmt:'yyyy-MM-dd'})"	
+						<input id="endTime" type="text" name="endTime" />
+						<img onclick="WdatePicker({el:'endTime',dateFmt:'yyyy-MM-dd'})"
 							src="${uri.jssite}/My97DatePicker/skin/datePicker.gif" width="16"	height="22" align="absmiddle">
 					</tr>
 		           	<tr >
 		              	 	<td colspan="2">
 		              			<button type="button" class="btn btn-danger btn-xs"  onclick="doSubArrTurn()">新建</button>
 		              	 	</td>
-					</tr>   
+					</tr>
 				</table>
 			</form>
 			</#if>
-			
+
 			<form id="addform9">
 				<input type="text" value="${baseName!}" name="baseName" style="display: none"/>
 				<input type="text" value="${li!}" name="li" style="display: none"/>
 				<input type="text" value="${div!}" name="div" style="display: none"/>
 				<input type="text" value="${type!}" name="type" style="display: none"/>
 				<input type="text" value="${loginName!}" name="loginName" id="loginName" style="display: none"/>
-				<input type="hidden" id="sizeLen" name="sizeLen" value="${sizeLen!}"/> 
+				<input type="hidden" id="sizeLen" name="sizeLen" value="${sizeLen!}"/>
 				<table class="table table-bordered table-hover">
 				<tr style="background-color: #0FF">
-					
+
 					<td width="7%">学生姓名</td>
 					<td width="7%">学生编号</td>
 					<td width="4%">年级</td>
@@ -103,12 +103,12 @@ util /> <#import "../decorators/spring.ftl" as spring />
 				</table>
 			</form>
 
-	
+
 	 <div style="display: none;">
 		<a id="delSuccessed" href="#" onclick="showMessageDialog(event,'成功','<@spring.url '/singleArrTurnCont/detail.htm?baseName=${baseName!}&li=${li!}&div=${div}&menuOrder=0&type=${type!}&loginName=${loginName!}'/>','closeWindow();');" ></a>
 	 	<a id="delFailed" href="#" onclick="showMessageDialog(event,'失败！','','');" ></a>
 	 </div>
-	
+
 	<script type="text/javascript">
 	function delayTime(index){
 		var len=$("#sizeLen").val();
@@ -125,53 +125,6 @@ util /> <#import "../decorators/spring.ftl" as spring />
 		});
 	}
 
-	function toDel(tId){
-		var param = null;
-		var postmethod = "get";
-		var baseName= ${baseName!}
-		var baseName= ${baseName!}
 
-		var url ="<@spring.url '/singleArrTurnCont/del.htm?id="+tId+"'/>";
-		window.location = url;
-		
-	}
-	
-	function doSubArrTurn(){
-		var param = null;
-		var postmethod = "POST";
-		var param = $("#addform3").serialize();
-		var url = "<@spring.url '/singleArrTurnCont/Insert.htm'/>";
-		$.ajax({
-			   type: postmethod,
-			   cache: false,
-			   url: url,
-			   data : param,
-			   success: function(data){
-			    if(!validateFieldMs(data)){
-					return;
-				}
-				if(data == 'true'){
-					tip(1,true);
-					return;
-				}else if(data == 'false'){
-					tip(1,false);
-					return;
-				}
-				showMessageDialog(null,data,'','');
-			   },
-			   error:function(xhr,err){
-				   window.location.href=url; 
-			}
-		});
-	}
 
-	function tip(type,bool){
-		if(type == 1){
-			if(bool){
-				document.getElementById("delSuccessed").click();
-				return;
-			}
-			document.getElementById("delFailed").click();
-		}
-	}
 	</script>

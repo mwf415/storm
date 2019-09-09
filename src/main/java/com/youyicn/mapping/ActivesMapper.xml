@@ -105,7 +105,7 @@
 						</if>
 					      GROUP BY a.id 
 					)tt 
-			LEFT JOIN  (select cau2.activesId tid, cau2.name name from cycle_actives_user cau2 where identityId =2 ) ttt on tt.id =ttt.tid
+			LEFT JOIN  (select cau2.activesId tid, cau2.name name from cycle_actives_user cau2 where identityId =1 ) ttt on tt.id =ttt.tid
 		order by 
 			<if test="baseName != null and baseName !=''">
 				tt.baseName ,

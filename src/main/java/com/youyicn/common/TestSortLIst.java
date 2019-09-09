@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.lucene.analysis.ar.ArabicAnalyzer;
-
-import com.mysql.fabric.xmlrpc.base.Array;
 
 public class TestSortLIst {
 	public static void main(String[] args) {

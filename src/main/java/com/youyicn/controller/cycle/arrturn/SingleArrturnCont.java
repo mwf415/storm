@@ -386,7 +386,7 @@ public class SingleArrturnCont {
 			} catch (Exception e) {
 			}
 		}
-		return "redirect:/singleArrTurnCont/index.htm";
+		return "redirect:/singleArrTurnCont/index.htm?li=li1611&div=div_16&menuOrder=1&type=h";
 	}
 
 	

@@ -69,9 +69,9 @@ public class CycleRequestFilter implements Filter {
 							}, response);
 						}
 					}
-					resp.sendRedirect("/cycle/login.html");
+					resp.sendRedirect("/storm/login.html");
 				}else{
-					resp.sendRedirect("/cycle/login.html");
+					resp.sendRedirect("/storm/login.html");
 				}
 			}
 		}

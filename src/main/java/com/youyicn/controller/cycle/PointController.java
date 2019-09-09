@@ -3,7 +3,6 @@ package com.youyicn.controller.cycle;
 import java.io.IOException;
 import java.util.List;
 
-import javax.jms.Session;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -12,10 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.spatial4j.core.shape.Point;
-import com.youyicn.entity.User;
 import com.youyicn.entity.cycle.CyclePoint;
-import com.youyicn.entity.cycle.CyclePointRule;
 import com.youyicn.entity.vo.PointVo;
 import com.youyicn.service.cycle.CyclePointRuleService;
 import com.youyicn.service.cycle.CyclePointService;

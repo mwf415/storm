@@ -9,9 +9,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import jxl.Cell;
-import jxl.Sheet;
-import jxl.Workbook;
+//import jxl.Cell;
+//import jxl.Sheet;
+//import jxl.Workbook;
 
 import org.apache.poi.hssf.usermodel.DVConstraint;
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -46,77 +46,77 @@ public class ExcelUtils<T> {
 
 	public List<T> importExcel(String sheetName, InputStream input) {
 		List<T> list = new ArrayList<T>();
-		try {
-			Workbook book = Workbook.getWorkbook(input);
-			Sheet sheet = null;
-			if (!sheetName.trim().equals("")) {
-				sheet = book.getSheet(sheetName);// 如果指定sheet名,则取指定sheet中的内容.
-			}
-			if (sheet == null) {
-				sheet = book.getSheet(0);// 如果传入的sheet名不存在则默认指向第1个sheet.
-			}
-			int rows = sheet.getRows();// 得到数据的行数
-			if (rows > 0) {// 有数据时才处理
-				Field[] allFields = clazz.getDeclaredFields();// 得到类的所有field.
-				Map<Integer, Field> fieldsMap = new HashMap<Integer, Field>();// 定义一个map用于存放列的序号和field.
-				for (Field field : allFields) {
-					// 将有注解的field存放到map中.
-					if (field.isAnnotationPresent(ExcelVOAttribute.class)) {
-						ExcelVOAttribute attr = field
-								.getAnnotation(ExcelVOAttribute.class);
-						int col = getExcelCol(attr.column());// 获得列号
-						// System.out.println(col + "====" + field.getName());
-						field.setAccessible(true);// 设置类的私有字段属性可访问.
-						fieldsMap.put(col, field);
-					}
-				}
-				for (int i = 1; i < rows; i++) {// 从第2行开始取数据,默认第一行是表头.
-					Cell[] cells = sheet.getRow(i);// 得到一行中的所有单元格对象.
-					T entity = null;
-					for (int j = 0; j < cells.length; j++) {
-						String c = cells[j].getContents();// 单元格中的内容.
-						if (c.equals("")) {
-							continue;
-						}
-						entity = (entity == null ? clazz.newInstance() : entity);// 如果不存在实例则新建.
-						// System.out.println(cells[j].getContents());
-						Field field = fieldsMap.get(j);// 从map中得到对应列的field.
-						// 取得类型,并根据对象类型设置值.
-						Class<?> fieldType = field.getType();
-						if ((Integer.TYPE == fieldType)
-								|| (Integer.class == fieldType)) {
-							field.set(entity, Integer.parseInt(c));
-						} else if (String.class == fieldType) {
-							field.set(entity, String.valueOf(c));
-						} else if ((Long.TYPE == fieldType)
-								|| (Long.class == fieldType)) {
-							field.set(entity, Long.valueOf(c));
-						} else if ((Float.TYPE == fieldType)
-								|| (Float.class == fieldType)) {
-							field.set(entity, Float.valueOf(c));
-						} else if ((Short.TYPE == fieldType)
-								|| (Short.class == fieldType)) {
-							field.set(entity, Short.valueOf(c));
-						} else if ((Double.TYPE == fieldType)
-								|| (Double.class == fieldType)) {
-							field.set(entity, Double.valueOf(c));
-						} else if (Character.TYPE == fieldType) {
-							if ((c != null) && (c.length() > 0)) {
-								field.set(entity, Character
-										.valueOf(c.charAt(0)));
-							}
-						}
-
-					}
-					if (entity != null) {
-						list.add(entity);
-					}
-				}
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+//		try {
+//			Workbook book = Workbook.getWorkbook(input);
+//			Sheet sheet = null;
+//			if (!sheetName.trim().equals("")) {
+//				sheet = book.getSheet(sheetName);// 如果指定sheet名,则取指定sheet中的内容.
+//			}
+//			if (sheet == null) {
+//				sheet = book.getSheet(0);// 如果传入的sheet名不存在则默认指向第1个sheet.
+//			}
+//			int rows = sheet.getRows();// 得到数据的行数
+//			if (rows > 0) {// 有数据时才处理
+//				Field[] allFields = clazz.getDeclaredFields();// 得到类的所有field.
+//				Map<Integer, Field> fieldsMap = new HashMap<Integer, Field>();// 定义一个map用于存放列的序号和field.
+//				for (Field field : allFields) {
+//					// 将有注解的field存放到map中.
+//					if (field.isAnnotationPresent(ExcelVOAttribute.class)) {
+//						ExcelVOAttribute attr = field
+//								.getAnnotation(ExcelVOAttribute.class);
+//						int col = getExcelCol(attr.column());// 获得列号
+//						// System.out.println(col + "====" + field.getName());
+//						field.setAccessible(true);// 设置类的私有字段属性可访问.
+//						fieldsMap.put(col, field);
+//					}
+//				}
+//				for (int i = 1; i < rows; i++) {// 从第2行开始取数据,默认第一行是表头.
+//					Cell[] cells = sheet.getRow(i);// 得到一行中的所有单元格对象.
+//					T entity = null;
+//					for (int j = 0; j < cells.length; j++) {
+//						String c = cells[j].getContents();// 单元格中的内容.
+//						if (c.equals("")) {
+//							continue;
+//						}
+//						entity = (entity == null ? clazz.newInstance() : entity);// 如果不存在实例则新建.
+//						// System.out.println(cells[j].getContents());
+//						Field field = fieldsMap.get(j);// 从map中得到对应列的field.
+//						// 取得类型,并根据对象类型设置值.
+//						Class<?> fieldType = field.getType();
+//						if ((Integer.TYPE == fieldType)
+//								|| (Integer.class == fieldType)) {
+//							field.set(entity, Integer.parseInt(c));
+//						} else if (String.class == fieldType) {
+//							field.set(entity, String.valueOf(c));
+//						} else if ((Long.TYPE == fieldType)
+//								|| (Long.class == fieldType)) {
+//							field.set(entity, Long.valueOf(c));
+//						} else if ((Float.TYPE == fieldType)
+//								|| (Float.class == fieldType)) {
+//							field.set(entity, Float.valueOf(c));
+//						} else if ((Short.TYPE == fieldType)
+//								|| (Short.class == fieldType)) {
+//							field.set(entity, Short.valueOf(c));
+//						} else if ((Double.TYPE == fieldType)
+//								|| (Double.class == fieldType)) {
+//							field.set(entity, Double.valueOf(c));
+//						} else if (Character.TYPE == fieldType) {
+//							if ((c != null) && (c.length() > 0)) {
+//								field.set(entity, Character
+//										.valueOf(c.charAt(0)));
+//							}
+//						}
+//
+//					}
+//					if (entity != null) {
+//						list.add(entity);
+//					}
+//				}
+//			}
+//
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 		return list;
 	}
 

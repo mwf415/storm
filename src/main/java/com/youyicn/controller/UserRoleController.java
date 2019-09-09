@@ -8,8 +8,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.json.JSONArray;
 
+import com.alibaba.fastjson.JSON;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -233,8 +233,9 @@ public class UserRoleController {
 			vos.add(vo);
 		}
 		//{ id:2, pId:0, name:"随意勾选 2", checked:true, open:true},
-		String json = JSONArray.fromObject(vos).toString();
-		
+//		String json = JSONArray.fromObject(vos).toString();
+		String json = JSON.toJSONString(vos);
+
 		try {
 			response.getWriter().print(json);
 			response.getWriter().close();
@@ -284,7 +285,8 @@ public class UserRoleController {
 			perVO.add(vo);
 		}
 		//{ id:2, pId:0, name:"随意勾选 2", checked:true, open:true},
-		String json = JSONArray.fromObject(perVO).toString();
+//		String json = JSONArray.fromObject(perVO).toString();
+		String json = JSON.toJSONString(perVO);
 		try {
 			response.getWriter().print(json);
 			response.getWriter().close();

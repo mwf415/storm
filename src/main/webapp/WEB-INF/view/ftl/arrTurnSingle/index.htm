@@ -113,6 +113,14 @@ function queryUser(){
 	$("#searchform5").attr("action",url).submit();
 }
 
+
+function toDel(tId){
+	var url ="<@spring.url '/singleArrTurnCont/del.htm?id="+tId+"'/>";
+	window.location = url;
+
+}
+
+
 function showArrTurn(id){
 	var url ='<@spring.url "/singleArrTurnCont/detail.htm?li=${li!}&div=${div!}&baseName=${baseNamed!}&realName=${userNamed!}&grade=${grade!}&type=${type!}&menuOrder=${menuOrder!}&loginName='+id+'"/>';
 	showView(id,url);
@@ -145,6 +153,41 @@ function editArrTurn(){
         }
     });
 }
+
+
+function doSubArrTurn(){
+	var param = null;
+	var postmethod = "POST";
+	var param = $("#addform4").serialize();
+	var url = "<@spring.url '/singleArrTurnCont/Insert.htm'/>";
+	$.ajax({
+		type: postmethod,
+		cache: false,
+		url: url,
+		data : param,
+		success: function(data){
+			if(!validateFieldMs(data)){
+				return;
+			}
+			showMessageDialog(null,data,'','');
+		},
+		error:function(xhr,err){
+			window.location.href=url;
+		}
+	});
+}
+
+
+function tip(type,bool){
+	if(type == 1){
+		if(bool){
+			document.getElementById("delSuccessed").click();
+			return;
+		}
+		document.getElementById("delFailed").click();
+	}
+}
+
 </script>
 </body>
 </html>
