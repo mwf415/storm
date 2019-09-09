@@ -48,8 +48,8 @@ public class UserController {
 
 	@Autowired
 	public UserRoleService userRoleService;
-	
-	
+
+
 	@Autowired
 	public RoomService roomService;
 	@Autowired
@@ -74,14 +74,14 @@ public class UserController {
 		String baseName = request.getParameter("baseName");
 		String grade1 = request.getParameter("grade");
 		String roomName = request.getParameter("roomName");
-	
+
 		int grade =0 ;
 		if(null!= grade1 && ""!= grade1){
 			grade = Integer.parseInt(grade1);
-		}	
+		}
 		model.put("userName", userName);
 		int pageIndex = 1;
-		
+
 		if(null!=pageNum && !"".equals(pageNum) ){
 			pageIndex = Integer.valueOf(pageNum);
 		}
@@ -91,30 +91,30 @@ public class UserController {
 			user.setBaseName(baseName);
 			model.put("baseNamed", baseName);
 		}
-		
+
 		if(null != roomName && !"".equals(roomName)){
 			user.setRoomName(roomName);
 			model.put("roomNamed", roomName);
 		}
-		
+
 		if(null != userName && !"".equals(userName)){
 			user.setRealName("%"+ userName+"%");
 		}
-		
+
 		if(0!= grade ){
 			user.setGrade(grade);
 			model.put("grade", grade);
 		}
 		user.setIdentityId(type);
 		model.put("type", type);
-		List<User> userList=userService.getByCondition(user); 
+		List<User> userList=userService.getByCondition(user);
 		PageInfo<User> page = new PageInfo<User>(userList);
 		model.put("page", page);
 		List<Base> baseValues = baseService.queryAllBase();
 		List<Room> roomValues = roomService.queryAllRoom();
 		model.put("baseValues", baseValues);
 		model.put("roomValues", roomValues);
-		
+
 		return "/user/user_index";
 	}
 	/**
@@ -129,23 +129,23 @@ public class UserController {
 		session.setAttribute("menuOrder", menuOrder);
 		session.setAttribute("li", li);
 		session.setAttribute("div", div);
-		
-		
+
+
 		List<User> userList = userService.getUnCheUser(status);
 		model.put("userList", userList);
-		
+
 		return "/user/userChe";
-		
+
 	}
-	
-	
+
+
 	@RequestMapping("/userController/userpass.htm")
 	public String passUser(HttpServletRequest request,HttpServletResponse response,ModelMap model,Integer userId){
-		
+
 		User user = userService.getbyId(userId);
 		user.setStatus(1);
-		userService.updateUserStatus(user);	
-		
+		userService.updateUserStatus(user);
+
 		return "redirect:/user/cheRegist.htm?status=0";
 	}
 
@@ -159,9 +159,9 @@ public class UserController {
 //		model.put("roomValues", roomValues);
 //		model.put("baseValues", baseValues);
 //		return "/user/user_add";
-//		
+//
 //	}
-	
+
 	/**
 	 * 添加用户提交
 	 */
@@ -188,9 +188,9 @@ public class UserController {
 			return 0;
 		}
 	}
-	
+
 	/**
-	 * 用户详情 
+	 * 用户详情
 	 */
 	@RequestMapping("/userController/showDetail.htm")
 	public String userDetail(HttpServletRequest request,HttpServletResponse response,ModelMap model){
@@ -203,32 +203,32 @@ public class UserController {
 		}
 		return "/user/userdetail";
 	}
-	
+
 	/**
-	 * 展示用户详情并可以修改 
+	 * 展示用户详情并可以修改
 	 */
 	@RequestMapping("/userController/user_edit.htm")
 	public String userEdit(HttpServletRequest request,
 			HttpServletResponse response, ModelMap model) {
 		String userId1=request.getParameter("userId");
-		
+
 		List<Base> baseValues = baseService.queryAllBase();
 		List<Room> roomValues = roomService.queryAllRoom();
 		model.put("baseValues", baseValues);
 		model.put("roomValues", roomValues);
-		
+
 		User user= new User();
 		if(userId1!=null&& userId1 !=null){
 			Integer  userId= Integer.parseInt(userId1);
 			user.setId(userId);
 			user=userService.getbyId(userId);
 			model.put("user", user);
-		}	
+		}
 		return "/user/user_edit";
 	}
-	
+
 	/**
-	 * 展示用户详情并可以修改 
+	 * 展示用户详情并可以修改
 	 */
 	@RequestMapping("/userController/self_edit.htm")
 	public String userEditSelf(HttpServletRequest request,
@@ -237,44 +237,44 @@ public class UserController {
 		model.put("div", div);
 		HttpSession session = request.getSession(true);
 		String loginName= (String) session.getAttribute("loginName");
-		
+
 		List<Base> baseValues = baseService.queryAllBase();
 		List<Room> roomValues = roomService.queryAllRoom();
 		model.put("baseValues", baseValues);
 		model.put("roomValues", roomValues);
-		
+
 		User user= userService.getByNum(loginName);
 		model.put("user", user);
 		return "/user/self_edit";
 	}
-	
-	
-	
+
+
+
 	@RequestMapping("/userController/self_update.htm")
 	public String selfUpdate(HttpServletRequest request,HttpServletResponse response, ModelMap model) {
-	
+
 		String loginName= request.getParameter("loginName");
 		String userPwd= request.getParameter("userPwd");
 		userPwd = MD5Utils.md5(userPwd);
-		
+
 		String baseName = request.getParameter("baseName");
 		String roomName = request.getParameter("roomName");
-		
-		String email= request.getParameter("email");		
+
+		String email= request.getParameter("email");
 		User user= userService.getByNum(loginName);
-			
-		
+
+
 		user.setUserPwd(userPwd);
-		
+
 		user.setBaseName(baseName);
 		user.setRoomName(roomName);
-		userService.editUser(user);			
-		return "redirect:/userController/self_edit.htm?li=li03&div=div_0";			
+		userService.editUser(user);
+		return "redirect:/userController/self_edit.htm?li=li03&div=div_0";
 	}
-	
-	
+
+
 	/**
-	 * 修改上传 
+	 * 修改上传
 	 */
 	@RequestMapping("/userController/user_update.htm")
 	public String teacherUpdate(HttpServletRequest request,
@@ -302,8 +302,8 @@ public class UserController {
 		String qq= request.getParameter("qq");
 		String email= request.getParameter("email");
 		String identityId = request.getParameter("identityId");
-		
-		
+
+
 		User user= userService.getbyId(userId);
 		try {
 			user.setIdentityId(Integer.parseInt(identityId));
@@ -312,7 +312,7 @@ public class UserController {
 			user.setUserNum(loginName);
 			userPass= MD5Utils.md5(userPass);
 			user.setUserPwd(userPass);
-			
+
 			user.setAddress(address);
 			user.setGradSchool(gradSchool);
 			if(null!= grade && ""!= grade){
@@ -338,17 +338,17 @@ public class UserController {
 		} catch (Exception e) {
 			ControllerHelper.respOut(response, false);
 		}
-	
+
 		return null;
-		
+
 	}
 	/**
-	 *根据用户id删除用户 
+	 *根据用户id删除用户
 	 */
 	@RequestMapping("/userContrller/userdel.htm")
 	public String delUser(HttpServletRequest request,HttpServletResponse response, ModelMap model,
 			Integer menuOrder ,String li ,String div,Integer status){
-		
+
 		String id1= request.getParameter("userId");
 		Integer id =Integer.parseInt(id1);
 		try {
@@ -356,26 +356,26 @@ public class UserController {
 		} catch (Exception e) {
 			logger.info("删除用户失败"+e);
 		}
-		if("li10".equals(li)){			
-			return "redirect:/user/index.htm?li=li10&div=div_1&type=1";	
+		if("li10".equals(li)){
+			return "redirect:/user/index.htm?li=li10&div=div_1&type=1";
 		}else{
-			return "redirect:/user/cheRegist.htm?li=li14&div=div_1&status=0";	
+			return "redirect:/user/cheRegist.htm?li=li14&div=div_1&status=0";
 		}
 	}
-	
+
 	@RequestMapping("/userContrller/insertStu_index.htm")
 	public String insertStuIndex(HttpServletRequest request,String li ,String div,ModelMap model){
 		model.put("li", li);
 		model.put("div", div);
 		return "/user/insertStu_index";
 	}
-	
+
 	/**
 	 * excel 导入用户
 	 * @param request
 	 * @param file
 	 * @return
-	 */	 
+	 */
 	@RequestMapping("/userContrller/insertAllStudents.htm")
 	public String insertAllStudents(HttpServletRequest request, @RequestParam(value="file", required=false) MultipartFile file){
 		StudentExcelUtils excelUtil = StudentExcelUtils.getInstance();
@@ -397,7 +397,7 @@ public class UserController {
 		}
 		return "redirect:/userContrller/insertStu_index.htm?li=li16&div=div_1&menuOrder=1";
 	}
-	
+
 	@RequestMapping("/userContrller/insertarrTurn.htm")
 	public String insertarrTurn(HttpServletRequest request, @RequestParam(value="file", required=false) MultipartFile file){
 		ArrTurnExcelUtils excelUtil = ArrTurnExcelUtils.getInstance();
@@ -408,7 +408,14 @@ public class UserController {
 			String tmpPath = tmpFile.getAbsolutePath();
 			arrtList = excelUtil.readXls(tmpPath);
 			for (ArrTurn stu : arrtList) {
+				stu.setCheckStatus("1") ; // 默认审批通过
+				stu.setBatch("1");
 				arrTurnService.addArrTurn(stu);
+				User user = userService.getByNum(stu.getLoginName());
+				user.setIsAt(1);
+				userService.updateUserStatus(user);
+
+
 			}
 			tmpFile.delete();
 		} catch (IOException e) {
@@ -417,21 +424,21 @@ public class UserController {
 		}
 		return "redirect:/userContrller/insertStu_index.htm?li=li16&div=div_1&menuOrder=1";
 	}
-	
+
 	@RequestMapping("/userContrller/checkLoginName.htm")
 	@ResponseBody
 	public String checkLoginName(HttpServletRequest request,HttpServletResponse response,ModelMap model){
 		String loginName = request.getParameter("loginName");
 		User user = userService.getByNum(loginName);
-		
+
 		if(null!=user){
 			return "0";
 		}else {
 			return "1";
 		}
-		
+
 	}
 
-	
-	
+
+
 }
