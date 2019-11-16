@@ -79,7 +79,6 @@
 	                                    <div class="input-group">
 	                                        <span class="input-group-addon">身份&#12288;&#12288;</span>
 	                                        <select select class="input-md form-control" name="identityId"/>
-	                                        <option >请选择(必填)</option>
 	                                        <option value="1">老师</option>
 	                                        <option value="2">学生</option>
 	                                        </select>
@@ -108,8 +107,8 @@
 	                                    </br >
 	                                    <div class="input-group">
 	                                        <span class="input-group-addon">培训年限</span>
-	                                        <select class="input-md form-control" name="trainTime">
-	                                            <option >请选择(学生必填)</option>
+	                                        <select class="input-md form-control" name="trainTime" placeholder ="请选择(学生必填)">
+	                                            <option value="0" >请选择(学生必填)</option>
 	                                            <option value="2">2</option>
 	                                            <option value="3">3</option>
 	                                        </select>
@@ -118,12 +117,15 @@
 	                                    <div class="input-group">
 	                                        <span class="input-group-addon">年级&#12288;&#12288; </span>
 	                                        <select class="input-md form-control" name="grade">
-	                                            <option >请选择(学生必填)</option>
-	                                            <option value="2014">2014</option>
-	                                            <option value="2015">2015</option>
+	                                            <option value="0" >请选择(学生必填)</option>
 	                                            <option value="2016">2016</option>
-	                                            <option value="2016">2017</option>
-	                                            <option value="2016">2018</option>
+	                                            <option value="2017">2017</option>
+	                                            <option value="2018">2018</option>
+	                                            <option value="2019">2019</option>
+	                                            <option value="2020">2020</option>
+												<option value="2021">2021</option>
+												<option value="2022">2022</option>
+												<option value="2023">2023</option>
 	                                        </select>
 	                                    </div>
 	                                    </br >
@@ -841,12 +843,10 @@
 
      //注册提交
      function subUser(){
-       	var url ="/storm/userContrller/user_submit.htm";
        	$.ajax({
 			type: "POST",
 			data:$('#registerform').serialize(),
-			async: false,
-			url: url,
+			url: "/storm/userContrller/user_submit.htm",
 			success: function(data){
 				if(data == '1'){
 					alert("注册成功，请联系医院管理员审核");
