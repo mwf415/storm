@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.youyicn.util.CyclePropertiesUtil;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.RequestContext;
@@ -57,8 +58,7 @@ public class FileCenter {
 
 	@RequestMapping("file/downChrome.htm")
 	public void downBrows(HttpServletRequest request ,HttpServletResponse response){
-		String savePath = request.getSession().getServletContext().getRealPath("/");
-		String filePath = savePath	+ "file\\";
+		String filePath = CyclePropertiesUtil.getFilePath();
 		try {
 			fileDown(response,filePath,"chrome.exe");
 		} catch (UnsupportedEncodingException e) {
@@ -88,17 +88,16 @@ public class FileCenter {
 		Integer menuOrder = (Integer) session.getAttribute("menuOrder");
 		String li = (String) session.getAttribute("li");
 		String div = (String) session.getAttribute("div");
-		response.sendRedirect("/cycle/activesCont/index.htm?li="+li+"&div="+div+"&type=t&menuOrder="+menuOrder);
+		response.sendRedirect("/storm/activesCont/index.htm?li="+li+"&div="+div+"&type=t&menuOrder="+menuOrder);
 	}
 	//教学查房下载列表
 	@RequestMapping("/file/filelist.htm")
 	public String cheRoomDownList(HttpServletRequest request,HttpServletResponse response, ModelMap model,Integer activesId)
 			throws IOException{
 		//前台获取是乱码，那就根据用户登陆信息查询
-		String savePath = request.getSession().getServletContext().getRealPath("/WEB-INF/");
+		String savePath = CyclePropertiesUtil.getFilePath();
 
-
-		savePath =savePath+"\\file\\"+activesId+"\\";
+		savePath =savePath+activesId+"\\";
 		//用来存储下载列表的
 		if(!"".equals(savePath) && null!= savePath  ){
 			List<String> downList = downList(savePath);
@@ -118,9 +117,8 @@ public class FileCenter {
 		String file [] = fileParm.split(":");
 		String fileName=file[1];
 		String activesId =file[0];
-		String savePath = request.getSession().getServletContext().getRealPath("/");
-		String filePath = savePath	+ "WEB-INF\\file\\";
-		fileDown(response,filePath + activesId ,fileName);
+		String savePath = CyclePropertiesUtil.getFilePath();
+		fileDown(response,savePath + activesId ,fileName);
 	}
 
 	//模板下载
@@ -162,8 +160,8 @@ public class FileCenter {
 	private void  fileUp(HttpServletRequest request,Integer activesId)
 			throws IOException, FileNotFoundException {
 		RequestContext requestContext = new ServletRequestContext(request);
-		String savePath = request.getSession().getServletContext().getRealPath("/WEB-INF/");
-		savePath =savePath+"\\file\\"+activesId+"\\";
+		String savePath = CyclePropertiesUtil.getFilePath();
+		savePath =savePath+activesId+"\\";
 		if (ServletFileUpload.isMultipartContent(requestContext)) {
 			// 得到上传文件的保存目录，将上传的文件存放于WEB-INF目录下，不允许外界直接访问，保证上传文件的安全
 			File file = new File(savePath);

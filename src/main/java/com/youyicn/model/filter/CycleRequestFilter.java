@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.youyicn.util.JedisUtils;
 import com.youyicn.util.StringUtils;
 /**
- * 
+ *
  * 此处全局的一些处理，保存值以及需要删除缓存的公共处理
  */
 public class CycleRequestFilter implements Filter {
@@ -38,7 +38,10 @@ public class CycleRequestFilter implements Filter {
 				}
 			}, response);
 		} else {
-			if (urls.contains("/adminLogin")||urls.contains("subjectztree") || urls.contains("base/list") || urls.contains("room/list")|| urls.contains("userContrller/user_submit") || urls.contains("/checkLoginName")) {
+			if (urls.contains("/adminLogin")||urls.contains("subjectztree") || urls.contains("base/list") || urls.contains("room/list")||
+					urls.contains("userContrller/user_submit") || urls.contains("/checkLoginName")
+					|| urls.contains("downChrome")
+			) {
 				// 登录页面,通过
 				chain.doFilter(new HttpServletRequestWrapper((HttpServletRequest) request) {
 					@Override
@@ -46,20 +49,20 @@ public class CycleRequestFilter implements Filter {
 						return super.getRequestURI();
 					}
 				}, response);
-			} else {// session超时,重新登录				
+			} else {// session超时,重新登录
 				Cookie[] cookies = req.getCookies();
-				if(cookies.length>0){					
+				if(cookies.length>0){
 					String token ="";
 					for (Cookie cookie : cookies) {
 						if (cookie.getName().equals("TT_TOKEN")) {
 							token = cookie.getValue();
 						}
 					}
-					if(StringUtils.NotNull(token)){						
+					if(StringUtils.NotNull(token)){
 						JedisUtils jedisUtil =JedisUtils.getInstance();
-						JedisUtils.Strings strings=jedisUtil.new Strings();  
-						String loginName = strings.get("REDIS_SESSION_KEY:"+token);				
-					
+						JedisUtils.Strings strings=jedisUtil.new Strings();
+						String loginName = strings.get("REDIS_SESSION_KEY:"+token);
+
 						if(loginName!=null ){
 							chain.doFilter(new HttpServletRequestWrapper((HttpServletRequest) request) {
 								@Override

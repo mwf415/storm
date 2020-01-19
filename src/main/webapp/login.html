@@ -44,7 +44,9 @@
 							</div>
 						</div>
 					</div>
+
 					<a id="modal-208141" href="#modal-container-208141" role="button" class="btn" data-toggle="modal">注册</a>
+					<a  role="button" onclick="downChrome()" class="btn" >下载chrome浏览器</a>
 
 
 					<div class="modal fade" id="modal-container-208141" role="dialog" aria-labelledby="myModalLabel"   aria-hidden="true">
@@ -777,6 +779,13 @@
 	 	  	$('#form1').attr('action',urlPath).submit();
 
 	 }
+
+
+	function downChrome(){
+		var url ="/storm/file/downChrome.htm";
+		window.location.href= url;
+	}
+
 	  //校驗用戶是否已經有
 	function cheLogin(){
     	var loginName = $("#loginName").val();

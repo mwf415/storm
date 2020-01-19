@@ -2,7 +2,7 @@
 	function collection(parm) {
 		var param = null;
 		var postmethod = "get";
-		var url = "/cycle/collectionExam/add.htm?parm=" + parm;
+		var url = "/storm/collectionExam/add.htm?parm=" + parm;
 		$.ajax({
 			type : postmethod,
 			cache : false,
@@ -19,7 +19,6 @@
 		});
 
 	}
-	
 
 
-	
+

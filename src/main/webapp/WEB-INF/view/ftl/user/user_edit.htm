@@ -35,14 +35,14 @@
 					</tr>
 					<tr>
 						<td width="15%" class="td_r">医院编号：</td>
-						<td width="30%"><input type="text" name="userId" value="${user.hospitalId!}" readOnly="true"></input></td>
+						<td width="30%"><input type="text" name="userId" value="${user.id!}" readOnly="true"></input></td>
 						<td width="15%" class="td_r">编号：</td>
 						<td width="30%"><input type="text" name="loginName"
 							value="${user.loginName!}"></input></td>
 					</tr>
 					<tr>
 						<td class="td_r">所在基地 ：</td>
-						<td><select name="baseName"> 
+						<td><select name="baseName">
 						<#if user.baseName?? >
 								<option value="${user.baseName!}">${user.baseName!}</option>
 								<#list baseValues as baseValue>
@@ -129,9 +129,9 @@
 					<tr class="button_tr">
 	                	<td>&nbsp;</td>
 	               	 	<td>
-		               	 	<input  type="button" onclick="update()" value="修 改" class="main_button"/> 	 
+		               	 	<input  type="button" onclick="update()" value="修 改" class="main_button"/>
 	               	 	</td>
-					</tr> 
+					</tr>
 
 				</table>
 			</form>
@@ -140,7 +140,7 @@
 </div>
 
  <div style="display: none;">
-        	<a id="updateSuccessed" href="#" onclick="showMessageDialog(event,'学生修改成功','<@spring.url '/user/index.htm?li=li10&div=div_1&menuOrder=1&type=1'/>','closeWindow();');" ></a>
+        	<a id="updateSuccessed" href="#" onclick="showMessageDialog(event,'修改成功','<@spring.url '/user/index.htm?li=li10&div=div_1&menuOrder=1&type=1'/>','closeWindow();');" ></a>
         	<a id="updateFailed" href="#" onclick="showMessageDialog(event,'操作失败','','');" ></a>
  </div>
 
@@ -163,7 +163,7 @@
 				tip(1,false);
 			   },
 			   error:function(xhr,err){
-				   window.location.href=url; 
+				   window.location.href=url;
 			}
 		});
 	}

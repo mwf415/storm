@@ -20,6 +20,8 @@
 			<td width="7%">本月科室</td>
 			<td width="7%">带教老师</td>
 			<td width="6%">待入科室</td>
+			<td width="6%">待入开始时间</td>
+			<td width="6%">待入结束时间</td>
 		</tr>
 		<#if arrTurnList?? && arrTurnList?size gt 0>
 		<#list arrTurnList as arrTurn>
@@ -34,12 +36,14 @@
 			<td>${arrTurn.roomName!}</td>
 			<td>${arrTurn.teacherName1!}  &nbsp;&nbsp;  ${arrTurn.teacherName2!}</td>
 			<td>${arrTurn.nextRoomName!}</td>
+			<td>${arrTurn.nextStartTime[0..10]!}</td>
+			<td>${arrTurn.nextEndTime[0..10]!}</td>
 		</tr>
 		</#list>
 		<#else>
   			<tr class="table_td"><td colspan="12" align="center">没有符合条件的结果。</td></tr>
 		</#if>
-	
+
 	</table>
 </div>
 

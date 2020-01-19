@@ -33,7 +33,7 @@ p{margin-top:10px;}
 
 <body>
 <div class="er_top"><div class="er_main er_top_con"></div></div>
-<div class="er_main"><img src="/cycle/monitor/imgs/404_bg.png"/></div>
+<div class="er_main"><img src="/storm/monitor/imgs/404_bg.png"/></div>
 <div class="er_main er_03">
 	<ul class="er_text1">
     	<li></li>

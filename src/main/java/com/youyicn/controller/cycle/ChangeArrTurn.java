@@ -10,6 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.youyicn.entity.vo.ArrTurnVo;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
@@ -17,6 +18,7 @@ import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -53,11 +55,11 @@ public class ChangeArrTurn {
 
 		List<Room> roomValues = roomService.queryAllRoom();
 		model.put("roomValues", roomValues);
-		
+
 		return "/change/index";
 	}
-	
-	
+
+
 
 	// 页面显示
 	@RequestMapping("/changeArrTurn/detail.htm")
@@ -66,7 +68,6 @@ public class ChangeArrTurn {
 		String baseName = request.getParameter("baseName");
 		String roomName = request.getParameter("roomName");
 		String time = request.getParameter("searchStart");
-		model.put("type", type);
 		ArrTurn arrTurnCon = new ArrTurn();
 		if ("" != baseName && null != baseName) {
 			arrTurnCon.setBasename(baseName);
@@ -74,81 +75,90 @@ public class ChangeArrTurn {
 		if ("" != roomName && null != roomName) {
 			arrTurnCon.setRoomName(roomName);
 		}
-		
-		arrTurnCon.seteTime(time.substring(0, 7));
 		model.put("time", time.substring(0,7));
-		List<ArrTurn> arrTurnList = arrTurnService.getChange(arrTurnCon);//结束月份
-		ArrTurn arrTurnCon1 = new ArrTurn();
-		arrTurnCon1.setsTime((TimeUtils.addMonth(time, "1", "yyyy-MM-dd")).substring(0, 7));
-		List<ArrTurn> arrTurnList1 = arrTurnService.getChange(arrTurnCon1);//下一月
+
+		arrTurnCon.seteTime(time.substring(0, 7));
+
+		//获取所有出科学生的信息
+		List<ArrTurnVo> arrTurnList = this.getArrTurns(time ,arrTurnCon);
+
 		if("y".equals(type) || "y"== type){
-			for (ArrTurn arrTurn : arrTurnList) {
-				for (ArrTurn arrTurn1 : arrTurnList1) {
-					if ( (arrTurn.getLoginName()).equals(arrTurn1.getLoginName()) ) {
-						arrTurn.setsTime(time.substring(0, 7));
-						arrTurn.setNextRoomName(arrTurn1.getRoomName());
-					}
-				}
-			}
 			model.put("arrTurnList", arrTurnList);
 			return "/change/detail";
 		}
 		if("n".equals(type) || "n"==type){
-			for (ArrTurn arrTurn : arrTurnList) {
-				for (ArrTurn arrTurn1 : arrTurnList1) {
-					if (arrTurnCon.getLoginName().equals(arrTurn1.getLoginName())) {
-						arrTurn.setsTime(time.substring(0, 7));
-						arrTurn.setNextRoomName(arrTurn1.getRoomName());
-					}
-				}
-			}
 			//arrTrunList 是所有换科的人员
-			
-			List<ArrTurn> listTemp = arrTurnService.getChangeNo(arrTurnCon);//获取所有该月有轮转的学员
-			List<ArrTurn> arrTurnListNo = new ArrayList<ArrTurn>();
-			arrTurnListNo.addAll(listTemp);
-			for (ArrTurn changeNo : listTemp) {
-				for (ArrTurn change : arrTurnList) {
-					if(change.getLoginName()==changeNo.getLoginName()|| change.getLoginName().equals(changeNo.getLoginName())){
-						arrTurnListNo.remove(change);
-					}
-				}
-			}
+			List<ArrTurn> arrTurnListNo = getUnChangeArrTurns(arrTurnCon, arrTurnList);
 			model.put("smonth", time.substring(0, 7));
 			model.put("arrTurnListNo", arrTurnListNo);
 			return "/change/detailno";
 		}
 		return null;
 	}
-	
+
+	/**
+	 * 获取没有换科的学生
+	 * @param arrTurnCon
+	 * @param arrTurnList
+	 * @return
+	 */
+	private List<ArrTurn> getUnChangeArrTurns(ArrTurn arrTurnCon, List<ArrTurnVo> arrTurnList) {
+		List<ArrTurn> listTemp = arrTurnService.getChangeNo(arrTurnCon);//获取所有该月有轮转的学员
+		List<ArrTurn> arrTurnListNo = new ArrayList<ArrTurn>();
+		arrTurnListNo.addAll(listTemp);
+		for (ArrTurn changeNo : listTemp) {
+			for (ArrTurnVo change : arrTurnList) {
+				if (change.getLoginName() == changeNo.getLoginName() || change.getLoginName().equals(changeNo.getLoginName())) {
+					arrTurnListNo.remove(change);
+				}
+			}
+		}
+		return arrTurnListNo;
+	}
+
+	//获取所有换科 学生的信息
+	private List<ArrTurnVo> getArrTurns( String time  ,ArrTurn arrTurnCon) {
+		List<ArrTurnVo> result = new ArrayList<>();
+
+		List<ArrTurn> arrTurnList = arrTurnService.getChange(arrTurnCon);//结束月份
+		ArrTurn arrTurnCon1 = new ArrTurn();
+		arrTurnCon1.setsTime((TimeUtils.addMonth(time, "1", "yyyy-MM-dd")).substring(0, 7));
+		List<ArrTurn> arrTurnList1 = arrTurnService.getChange(arrTurnCon1);//下一月
+		for (ArrTurn arrTurn : arrTurnList) {
+			ArrTurnVo arrTurnVo = new ArrTurnVo();
+			BeanUtils.copyProperties(arrTurn,arrTurnVo);
+			for (ArrTurn arrTurn1 : arrTurnList1) {
+				if ( (arrTurn.getLoginName()).equals(arrTurn1.getLoginName()) ) {
+					arrTurnVo.setSTime(time.substring(0, 7));
+					arrTurnVo.setNextRoomName(arrTurn1.getRoomName());
+					arrTurnVo.setNextStartTime(arrTurn1.getStartTime());
+					arrTurnVo.setNextEndTime(arrTurn1.getEndTime());
+				}
+			}
+			result.add(arrTurnVo) ;
+		}
+		return result;
+	}
+
 	// 换科数据导出
 	@RequestMapping("/changeArrTurn/exportexcel.htm")
 	public void out(HttpServletRequest request, HttpServletResponse response,String type)	throws ServletException, IOException {
-		
+
 		String time = request.getParameter("searchStart");
 		String d= TimeUtils.addMonth(time, "1", "yyyy-MM-dd").substring(0, 7);//为了获取时间
 		if("y".equals(type) || "y"== type){
 			d =d+"月份换科";
 		}else{
 			d =d+"月份不换科";
-			
+
 		}
+		/**
+		 * 获取所有出科学生的信息
+		 */
 		ArrTurn arrTurnCon = new ArrTurn();
 		arrTurnCon.seteTime(time.substring(0, 7));
-		List<ArrTurn> arrTurnList = arrTurnService.getChange(arrTurnCon);
-		ArrTurn arrTurnCon1 = new ArrTurn();
-		arrTurnCon1.setsTime((TimeUtils.addMonth(time, "1", "yyyy-MM-dd")).substring(0, 7));
-		List<ArrTurn> arrTurnList1 = arrTurnService.getChange(arrTurnCon1);
-		for (ArrTurn arrTurn : arrTurnList) {
-			for (ArrTurn arrTurn1 : arrTurnList1) {
-				if (arrTurn.getLoginName().equals(arrTurn1.getLoginName())) {
-					arrTurn.setsTime(time.substring(0, 7));
-					arrTurn.setNextRoomName(arrTurn1.getRoomName());
-				}
-			}
-		}
-		
-		String fileName = "导出级" + d + "学员名单.xls"; 
+		List<ArrTurnVo> arrTurnList = this.getArrTurns( time ,arrTurnCon);
+		String fileName = "导出级" + d + "学员名单.xls";
 		fileName = new String(fileName.getBytes("GBK"), "iso8859-1");
 		response.reset();
 		response.setHeader("Content-Disposition", "attachment;filename="+ fileName);// 指定下载的文件名
@@ -188,12 +198,14 @@ public class ChangeArrTurn {
 		String loginName = "编号";
 		String userName = "姓名";
 		String grade = "年级";
-		
+
 		String  basename= "专业基地";
 		String roomName = "本月科室";
 		String teacher = "带教老师";
 		String hospitalId="工号";
-		String nextRoom = "下月科室";
+		String nextRoom = "待入科室";
+		String nextStartTime = "待入开始时间";
+		String nextEndTime = "待入结束科室";
 		HSSFSheet sheet = wb.createSheet();
 		ExportExcels exportExcel = new ExportExcels(wb, sheet);
 		// 创建报表头部
@@ -232,85 +244,92 @@ public class ChangeArrTurn {
 		cell1 = row1.createCell(6);
 		cell1.setCellStyle(cellStyleTitle);
 		cell1.setCellValue(new HSSFRichTextString(teacher));
-	
+
 		// 定义第二行
 		HSSFRow row = sheet.createRow(2);
 		HSSFCell cell = row.createCell(1);
-		ArrTurn arrTurn = new ArrTurn();
-		
-		
-		
+
 		if("y".equals(type) || "y"== type){  //换科
-			cell1 = row1.createCell(7);
-			cell1.setCellStyle(cellStyleTitle);
-			cell1.setCellValue(new HSSFRichTextString(nextRoom));
-			
-			cell1 = row1.createCell(8);
-			cell1.setCellStyle(cellStyleTitle);
-			cell1.setCellValue(new HSSFRichTextString("开始时间"));
-			
+			ArrTurnVo arrTurn = new ArrTurnVo();
 			cell1 = row1.createCell(9);
 			cell1.setCellStyle(cellStyleTitle);
+			cell1.setCellValue(new HSSFRichTextString(nextRoom));
+
+			cell1 = row1.createCell(7);
+			cell1.setCellStyle(cellStyleTitle);
+			cell1.setCellValue(new HSSFRichTextString("开始时间"));
+
+			cell1 = row1.createCell(8);
+			cell1.setCellStyle(cellStyleTitle);
 			cell1.setCellValue(new HSSFRichTextString("结束时间"));
-			
+
 			cell1 = row1.createCell(10);
 			cell1.setCellStyle(cellStyleTitle);
-			cell1.setCellValue(new HSSFRichTextString(hospitalId));
-			
-	
+			cell1.setCellValue(new HSSFRichTextString(nextStartTime));
+
+			cell1 = row1.createCell(11);
+			cell1.setCellStyle(cellStyleTitle);
+			cell1.setCellValue(new HSSFRichTextString(nextEndTime));
+
 			for (int i = 0; i < arrTurnList.size(); i++) {
 				arrTurn = arrTurnList.get(i);
 				row = sheet.createRow(i + 2);
-				
+
 				cell = row.createCell(0);
 				cell.setCellStyle(cellStyle);
-				cell.setCellValue(new HSSFRichTextString(arrTurn.getsTime() + ""));
-				
+				cell.setCellValue(new HSSFRichTextString(arrTurn.getSTime() + ""));
+
 				cell = row.createCell(1);
 				cell.setCellStyle(cellStyle);
 				cell.setCellValue(new HSSFRichTextString(arrTurn.getHospitalId()+ ""));
-				
+
 				cell = row.createCell(2);
 				cell.setCellStyle(cellStyle);
 				cell.setCellValue(new HSSFRichTextString(arrTurn.getRealName() + ""));
-				
+
 				cell = row.createCell(3);
 				cell.setCellStyle(cellStyle);
 				cell.setCellValue(new HSSFRichTextString(arrTurn.getGrade() + ""));
-				
+
 				cell = row.createCell(4);
 				cell.setCellStyle(cellStyle);
 				cell.setCellValue(new HSSFRichTextString(arrTurn.getBasename() + ""));
-				
+
 				cell = row.createCell(5);
 				cell.setCellStyle(cellStyle);
 				cell.setCellValue(new HSSFRichTextString(arrTurn.getRoomName() + ""));
-				
+
 				cell = row.createCell(6);
 				cell.setCellStyle(cellStyle);
 				cell.setCellValue(new HSSFRichTextString(arrTurn.getTeacherName1()+ "," + arrTurn.getTeacherName2()+""));
-				
-				cell = row.createCell(7);
+
+				cell = row.createCell(9);
 				cell.setCellStyle(cellStyle);
 				cell.setCellValue(new HSSFRichTextString(arrTurn.getNextRoomName() + ""));
-				
-				cell = row.createCell(8);
+
+				cell = row.createCell(7);
 				cell.setCellStyle(cellStyle);
 				String startTime = arrTurn.getStartTime()+"";
 				System.out.println(startTime.substring(0,10));
 				cell.setCellValue(new HSSFRichTextString(startTime.substring(0, 10)));
-				
-				cell = row.createCell(9);
+
+				cell = row.createCell(8);
 				cell.setCellStyle(cellStyle);
 				String endTime = arrTurn.getEndTime()+"";
 				System.out.println(endTime.substring(0, 10));
 				cell.setCellValue(new HSSFRichTextString(endTime.substring(0, 10)));
-				
-				cell = row.createCell(10);
-				cell.setCellStyle(cellStyle);
-				cell.setCellValue(new HSSFRichTextString(arrTurn.getHospitalId() + ""));
-				
-				
+
+				if(null!= arrTurn.getNextStartTime()){
+					cell = row.createCell(10);
+					cell.setCellStyle(cellStyle);
+					cell.setCellValue(new HSSFRichTextString(arrTurn.getNextStartTime().toString().substring(0,10) + ""));
+
+					cell = row.createCell(11);
+					cell.setCellStyle(cellStyle);
+					cell.setCellValue(new HSSFRichTextString(arrTurn.getNextEndTime().toString().substring(0,10) + ""));
+
+				}
+
 			}
 			try {
 				bufferedOutPut.flush();
@@ -323,21 +342,13 @@ public class ChangeArrTurn {
 				arrTurnList.clear();
 			}
 		}else{
-			List<ArrTurn> listTemp = arrTurnService.getChangeNo(arrTurnCon);//获取所有该月有轮转的学员
-			List<ArrTurn> arrTurnListNo = new ArrayList<ArrTurn>();
-			arrTurnListNo.addAll(listTemp);
-			for (ArrTurn changeNo : listTemp) {
-				for (ArrTurn change : arrTurnList) {
-					if(change.getLoginName()==changeNo.getLoginName()|| change.getLoginName().equals(changeNo.getLoginName())){
-						arrTurnListNo.remove(change);
-					}
-				}
-			}
-	
+
+			List<ArrTurn> arrTurnListNo = getUnChangeArrTurns(arrTurnCon, arrTurnList);
+
 			cell1 = row1.createCell(7);
 			cell1.setCellStyle(cellStyleTitle);
 			cell1.setCellValue(new HSSFRichTextString("开始时间"));
-			
+
 			cell1 = row1.createCell(8);
 			cell1.setCellStyle(cellStyleTitle);
 			cell1.setCellValue(new HSSFRichTextString("结束时间"));
@@ -346,7 +357,7 @@ public class ChangeArrTurn {
 			cell1.setCellStyle(cellStyleTitle);
 			cell1.setCellValue(new HSSFRichTextString(hospitalId));
 			for (int i = 0; i < arrTurnListNo.size(); i++) {
-				arrTurn = arrTurnListNo.get(i);
+				ArrTurn arrTurnNo = arrTurnListNo.get(i);
 				row = sheet.createRow(i + 2);
 
 				cell = row.createCell(0);
@@ -359,41 +370,41 @@ public class ChangeArrTurn {
 
 				cell = row.createCell(2);
 				cell.setCellStyle(cellStyle);
-				cell.setCellValue(new HSSFRichTextString(arrTurn.getRealName() + ""));
+				cell.setCellValue(new HSSFRichTextString(arrTurnNo.getRealName() + ""));
 
 				cell = row.createCell(3);
 				cell.setCellStyle(cellStyle);
-				cell.setCellValue(new HSSFRichTextString(arrTurn.getGrade() + ""));
+				cell.setCellValue(new HSSFRichTextString(arrTurnNo.getGrade() + ""));
 
 				cell = row.createCell(4);
 				cell.setCellStyle(cellStyle);
-				cell.setCellValue(new HSSFRichTextString(arrTurn.getBasename() + ""));
-				
+				cell.setCellValue(new HSSFRichTextString(arrTurnNo.getBasename() + ""));
+
 				cell = row.createCell(5);
 				cell.setCellStyle(cellStyle);
-				cell.setCellValue(new HSSFRichTextString(arrTurn.getRoomName() + ""));
-			
+				cell.setCellValue(new HSSFRichTextString(arrTurnNo.getRoomName() + ""));
+
 				cell = row.createCell(6);
 				cell.setCellStyle(cellStyle);
-				cell.setCellValue(new HSSFRichTextString(arrTurn.getTeacherName1()+ "," + arrTurn.getTeacherName2()+""));
-				
+				cell.setCellValue(new HSSFRichTextString(arrTurnNo.getTeacherName1()+ "," + arrTurnNo.getTeacherName2()+""));
+
 				cell = row.createCell(7);
 				cell.setCellStyle(cellStyle);
-				String startTime = arrTurn.getStartTime()+"";
+				String startTime = arrTurnNo.getStartTime()+"";
 				System.out.println(startTime.substring(0,10));
 				cell.setCellValue(new HSSFRichTextString(startTime.substring(0, 10)));
-				
+
 				cell = row.createCell(8);
 				cell.setCellStyle(cellStyle);
-				String endTime = arrTurn.getEndTime()+"";
+				String endTime = arrTurnNo.getEndTime()+"";
 				System.out.println(endTime.substring(0, 10));
 				cell.setCellValue(new HSSFRichTextString(endTime.substring(0, 10)));
-				
+
 
 				cell = row.createCell(9);
 				cell.setCellStyle(cellStyle);
-				cell.setCellValue(new HSSFRichTextString(arrTurn.getHospitalId() + ""));
-			
+				cell.setCellValue(new HSSFRichTextString(arrTurnNo.getHospitalId() + ""));
+
 			}
 			try {
 				bufferedOutPut.flush();
@@ -405,8 +416,8 @@ public class ChangeArrTurn {
 			} finally {
 				arrTurnList.clear();
 			}
-			
-			
+
+
 		}
 	}
 

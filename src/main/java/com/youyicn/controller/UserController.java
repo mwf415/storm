@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -167,7 +168,7 @@ public class UserController {
 	 */
 	@RequestMapping("/userContrller/user_submit.htm")
 	@ResponseBody
-	public int userSubmit(HttpServletRequest request,User user,HttpServletResponse response, ModelMap model){
+	public int userSubmit(HttpServletRequest request, User user, HttpServletResponse response, ModelMap model){
 		try {
 			String password = user.getUserPwd();
 			password = MD5Utils.md5(password);
@@ -318,7 +319,9 @@ public class UserController {
 			if(null!= grade && ""!= grade){
 				user.setGrade(Integer.parseInt(grade));
 			}
-			user.setStatus(Integer.parseInt(status));
+			if(null!= status && ""!= status){
+				user.setStatus(Integer.parseInt(status));
+			}
 			user.setTeacher1(teacher1);
 			user.setTeacher2(teacher2);
 			user.setMajor(major);
