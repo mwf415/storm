@@ -81,7 +81,7 @@ public class ActivesController {
 	/**
 	 * 首页 ，主要是用来渲染页面，和进行放置查询条件的
 	 */
-	@RequestMapping("/activesCont/index.htm") 
+	@RequestMapping("/activesCont/index.htm")
 	public String activesIndex(HttpServletRequest request,
 			HttpServletResponse response, ModelMap model, String teachernum,
 			String li, String div, Integer menuOrder, String type) {
@@ -97,7 +97,7 @@ public class ActivesController {
 		model.put("menuOrder", menuOrder);
 		int pageIndex = 1;
 		if (null != pageNum && !"".equals(pageNum)) {
-			pageIndex = Integer.valueOf(pageNum);
+			pageIndex = Integer.valueOf(pageNum.trim());
 		}
 		model.put("type", type);
 		model.put("li", li);
@@ -143,10 +143,10 @@ public class ActivesController {
 		if ("s" == type || "s".equals(type)) {
 			String isIn= request.getParameter("isIn");
 			if("1".equals(isIn)|| "1"==isIn){// 查看参加过得
-				
+
 				List<ActivesUser> auList = activesUserService.getByUserLoginName(loginName, status);
 				PageInfo<ActivesUser> page = new PageInfo<ActivesUser>(auList);
-				model.put("isIn", 0);
+				model.put("isIn", 1);
 				model.put("page", page);
 				if ("p".equals(path) || "p" == path) {
 					return "/phone/actives/self";
@@ -291,7 +291,7 @@ public class ActivesController {
 
 	/**
 	 * 提交 教学活动
-	 * 
+	 *
 	 */
 	@RequestMapping("/activesController/sum.htm")
 	public String activesAddSum(HttpServletResponse response,
@@ -305,7 +305,7 @@ public class ActivesController {
 		String div_last = div.substring(div.length() - 1);
 		Integer menuOrder = (Integer) session.getAttribute("menuOrder");
 		Integer status = (Integer) session.getAttribute("status");
-		
+
 		Actives actives = new Actives();
 		ActivesUser activesUser = new ActivesUser();
 		activesUser.setStatus(status);
@@ -560,14 +560,14 @@ public class ActivesController {
 		String rNum = JSON.toJSONString(list);
 		try {
 			response.getWriter().write(rNum.toString());
-			response.getWriter().close();  
-			response.getWriter().flush();  
+			response.getWriter().close();
+			response.getWriter().flush();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally{
-			
-		}  
+
+		}
 	}
 
 	@RequestMapping("/inLearn/ziliao_detail.htm")
