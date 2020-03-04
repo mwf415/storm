@@ -16,15 +16,17 @@ public class MD5Utils {
 	 * @return
 	 */
 	public static String md5(String msg){
-		try
-		{
-			MessageDigest md = MessageDigest.getInstance("MD5");
-			byte[] output = md.digest(msg.getBytes());
-			return Base64.encodeBase64String(output);
-		}
-		catch (NoSuchAlgorithmException e) {}
-		return null;
+//		try
+//		{
+//			MessageDigest md = MessageDigest.getInstance("MD5");
+//			byte[] output = md.digest(msg.getBytes());
+//			return Base64.encodeBase64String(output);
+//		}
+//		catch (NoSuchAlgorithmException e) {}
+//		return null;
 
+
+		return new SimpleHash(algorithmName, msg).toHex();
 	}
 
 	@Deprecated
@@ -45,5 +47,10 @@ public class MD5Utils {
 
 		System.out.println(s);
 	}
+
+	public static String md6(String msg){
+		return new SimpleHash(algorithmName, msg).toHex();
+	}
+
 
 }
