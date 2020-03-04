@@ -17,21 +17,21 @@
 				<div style="border: 0px solid silver;height: 30px;padding-top: 3px;">
 					开始时间：
 						<input id="searchStart" type="text" name="searchStart" />
-							<img onclick="WdatePicker({el:'searchStart',dateFmt:'yyyy-MM-dd'})" 
-									src="${uri.jssite}/My97DatePicker/skin/datePicker.gif" width="16" height="22" align="absmiddle">	
-									
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp; 	
+							<img onclick="WdatePicker({el:'searchStart',dateFmt:'yyyy-MM-dd'})"
+									src="${uri.jssite}/My97DatePicker/skin/datePicker.gif" width="16" height="22" align="absmiddle">
+
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;
 					结束时间：
 						<input id="searchEnd" type="text" name="searchEnd" />
-							<img onclick="WdatePicker({el:'searchEnd',dateFmt:'yyyy-MM-dd'})" 
-									src="${uri.jssite}/My97DatePicker/skin/datePicker.gif" width="16" height="22" align="absmiddle">	
+							<img onclick="WdatePicker({el:'searchEnd',dateFmt:'yyyy-MM-dd'})"
+									src="${uri.jssite}/My97DatePicker/skin/datePicker.gif" width="16" height="22" align="absmiddle">
 					&nbsp;&nbsp;&nbsp;&nbsp;
-					
+
 						<input type="hidden" name="li" value="${li!}"/>
 						<input type="hidden" name="div" value="${div!}"/>
 						<input type="hidden" name="type" value="${type!}"/>
 						<input type="hidden" name="pageIndex" value="${pageIndex!'1'}"/>
-						
+
 						<#if type?? && type=="s">
 							<div class="btn-group btn-group-sm">
 							    <button type="button" class="btn btn-primary"  onclick="sQuery('0')">未参加</button>
@@ -55,7 +55,7 @@
 								<td width="7%">学生情况</td>
 							</#if>
 							<td width="10%">开始时间</td>
-							<#if status ?? && (status ==6 || status ==7)> 
+							<#if status ?? && (status ==6 || status ==7)>
 								<td width="15%">疾病名称</td>
 								<td width="7%">病人姓名</td>
 								<td width="5%">病案号</td>
@@ -78,13 +78,13 @@
 							<td>
 								<#if au.actives ?? >
 									<#if status ?? && status==5>
-									<#else>		
-										<a href="javaScript:activesDetail('${au.actives.id!}');" > 
+									<#else>
+										<a href="javaScript:activesDetail('${au.actives.id!}');" >
 								          	<span class="glyphicon glyphicon-align-justify"></span>
 								        </a>&nbsp;&nbsp;
 								     </#if>
-								
-								
+
+
 									<#if au.actives.activesUsers??>
 									<#list au.actives.activesUsers as au1>
 											<#if au1.identityId==1>${au1.name}&nbsp;</#if>
@@ -99,11 +99,11 @@
 										<#if status ?? && status==5>
 											<#if au.actives.activesUsers??>
 											<#list au.actives.activesUsers as au1>
-											<#if au1.identityId==2>${au1.name}&nbsp;</#if>								
+											<#if au1.identityId==2>${au1.name}&nbsp;</#if>
 											</#list>
 											</#if>
 										<#else>
-											<button type="button" class="btn btn-primary btn-xs"  onclick="pop_userinfo(event,'<@spring.url '/questCont/questSee.htm?li=${li!}&div=${div!}&menuOrder=${menuOrder!}&type=${type!}&activesId=${au.actives.id}'/>')">查看详情</button> 
+											<button type="button" class="btn btn-primary btn-xs"  onclick="pop_userinfo(event,'<@spring.url '/questCont/questSee.htm?li=${li!}&div=${div!}&menuOrder=${menuOrder!}&type=${type!}&activesId=${au.actives.id}'/>')">查看详情</button>
 										</#if>
 									</#if>
 								</td>
@@ -113,7 +113,7 @@
 									${au.actives.startTime[0..15]}
 								</#if>
 							</td>
-							<#if status?? && (status ==6 || status ==7)> 
+							<#if status?? && (status ==6 || status ==7)>
 								<#if au.actives ?? >
 									<td>${au.actives.title!}</td>
 									<td>${au.actives.sickPerson!}</td>
@@ -129,20 +129,20 @@
 									${au.actives.address!}
 								</#if>
 							</td>
-							
+
 							<td>
 								<#if au.actives ?? >
 									${au.actives.takeTime!}
 								</#if>
 							</td>
-							
-							
+
+
 							<td>
 							<#if status?? && status==4>
 								<#if au.actives ?? >
 									<button type="button" class="btn btn-primary btn-xs"  onclick="pop_userinfo(event,'<@spring.url '/inLearn/ziliao_detail.htm?roomName=${au.actives.roomName!}'/>')">入科资料</button>
 								</#if>
-								
+
 							<#else>
 								<#if type?? && type=="t">
 									<#if au.actives ?? >
@@ -158,14 +158,14 @@
 									</#if>
 								</#if>
 							</#if>
-							</td> 
+							</td>
 							<td>
 								<#if au.actives ?? >
-									${au.actives.org!}					
+									${au.actives.org!}
 								</#if>
 							</td>
 						</tr>
-						
+
 						<tr class="contentTr">
 			      	    	<td colspan="12" >
 			      	    		<div id="${au.activesId!}" class="showViewStyle"></div>
@@ -191,7 +191,10 @@ function sQuery(id){
 }
 
 function targetPage(pageIndex){
-	window.location = '<@spring.url "/activesCont/index.htm?li=${li!}&type=${type!}&div=${div!}&menuOrder=0&searchEnd=${searchEnd!}&searchStart=${searchStart!}&teachernum=${teachernum!}&pageIndex='+pageIndex+'"/>';
+	var searchStart=$("#searchStart").val();
+	var searchEnd=$("#searchEnd").val();
+	var id = '${isIn}';
+	window.location = "<@spring.url '/activesCont/index.htm?isIn="+id+"&searchStart="+searchStart+"&searchEnd="+searchEnd+"&type=${type!}&div=${div!}&li=${li!}&menuOrder=${menuOrder}&pageIndex= "+pageIndex+"'/>";
 }
 
 function queryList(){
